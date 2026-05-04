@@ -10,7 +10,7 @@ use jasonw4331\LuckPerms\context\ImmutableContextSetImpl;
 
 class QueryOptionsBuilderImpl implements Builder{
 	private QueryMode $mode;
-	private ImmutableContextSet $context;
+	private ?ImmutableContextSet $context;
 	private int $flags;
 	/** @var array<Flag>|null */
 	private ?array $flagsSet;
@@ -19,7 +19,7 @@ class QueryOptionsBuilderImpl implements Builder{
 
 	public function __construct(QueryMode $mode){
 		$this->mode = $mode;
-		$this->context = $mode === QueryMode::CONTEXTUAL() ? ImmutableContextSetImpl::EMPTY() : null;
+				$this->context = $mode === QueryMode::CONTEXTUAL() ? ImmutableContextSetImpl::empty() : null;
 		$this->flags = FlagUtils::ALL_FLAGS();
 		$this->flagsSet = null;
 		$this->options = null;
@@ -32,7 +32,7 @@ class QueryOptionsBuilderImpl implements Builder{
 		}
 
 		$this->mode = $mode;
-		$this->context = $this->mode === QueryMode::CONTEXTUAL() ? ImmutableContextSetImpl::EMPTY() : null;
+				$this->context = $this->mode === QueryMode::CONTEXTUAL() ? ImmutableContextSetImpl::empty() : null;
 		return $this;
 	}
 
@@ -87,18 +87,6 @@ class QueryOptionsBuilderImpl implements Builder{
 	public function build() : QueryOptions{
 		$flags = $this->flagsSet !== null ? FlagUtils::toByte($this->flagsSet) : $this->flags;
 
-		if($this->options === null){
-			if($this->mode === QueryMode::NON_CONTEXTUAL()){
-				if(FlagUtils::ALL_FLAGS() === $flags){
-					return QueryOptionsImpl::DEFAULT_NON_CONTEXTUAL();
-				}
-			}elseif($this->mode === QueryMode::CONTEXTUAL()){
-				if(FlagUtils::ALL_FLAGS() === $flags && empty($this->context)){
-					return QueryOptionsImpl::DEFAULT_CONTEXTUAL();
-				}
-			}
-		}
-
-		return new QueryOptionsImpl($this->mode, $this->context, $flags, $this->options);
+		return new QueryOptionsImpl();
 	}
 }

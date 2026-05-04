@@ -9,7 +9,7 @@ use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
 
 final class ImmutableContextSetImpl extends ImmutableContextSet{
 
-	public static function EMPTY() : ImmutableContextSet{
+	public static function empty() : ImmutableContextSet{
 		return new self([]);
 	}
 
@@ -37,7 +37,7 @@ final class ImmutableContextSetImpl extends ImmutableContextSet{
 	 * @return array<string, array<string>>
 	 */
 	public function toMultimap() : array{
-		if(empty($this->cachedMap)){
+				if($this->cachedMap === []){
 			foreach($this->array as $entry){
 				$this->cachedMap[$entry->getKey()][] = $entry->getValue();
 			}

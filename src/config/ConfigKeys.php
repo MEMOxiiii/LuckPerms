@@ -284,7 +284,7 @@ final class ConfigKeys{
 			$rawMap = $c->getStringMap('world-rewrite', []);
 			$rewrites = [];
 			foreach($rawMap as $key => $value){
-				$rewrites[mb_strtolower((string) $key)] = mb_strtolower((string) $value);
+								$rewrites[mb_strtolower($key)] = mb_strtolower($value);
 			}
 			return WorldNameRewriter::of($rewrites);
 		}));
