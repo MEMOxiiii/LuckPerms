@@ -7,7 +7,7 @@ namespace jasonw4331\LuckPerms\context;
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
 
-final class ImmutableContextSetImpl extends AbstractContextSet implements ImmutableContextSet{
+final class ImmutableContextSetImpl extends ImmutableContextSet{
 
 	public static function EMPTY() : ImmutableContextSet{
 		return new self([]);

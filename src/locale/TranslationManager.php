@@ -50,7 +50,7 @@ final class TranslationManager{
 	}
 
 	public function getRepositoryStatusFile() : string{
-		return Path::join($this->repositoryTranslationsDirectory, "status.json");
+				return $this->repositoryTranslationsDirectory . "status.json";
 	}
 
 	public function getInstalledLocales() : array{

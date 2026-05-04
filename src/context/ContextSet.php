@@ -127,7 +127,7 @@ abstract class ContextSet implements \IteratorAggregate{
 	 */
 	public function getAnyValue(string $key) : Optional{
 		$values = $this->getValues($key);
-		return Optional::ofNullable(empty($values) ? null : reset($values));
+		return Optional::ofNullable($values === [] ? null : reset($values));
 	}
 
 	/**
