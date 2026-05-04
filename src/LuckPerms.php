@@ -12,6 +12,9 @@ use jasonw4331\LuckPerms\calculator\CalculatorFactory;
 use jasonw4331\LuckPerms\commands\generic\permission\CommandPermission;
 use jasonw4331\LuckPerms\config\ConfigKeys;
 use jasonw4331\LuckPerms\config\LuckPermsConfiguration;
+use jasonw4331\LuckPerms\config\generic\adapter\EnvironmentVariableConfigAdapter;
+use jasonw4331\LuckPerms\config\generic\adapter\MultiConfigurationAdapter;
+use jasonw4331\LuckPerms\config\generic\adapter\SystemPropertyConfigAdapter;
 use jasonw4331\LuckPerms\context\ConfigurationContextCalculator;
 use jasonw4331\LuckPerms\context\ContextManager;
 use jasonw4331\LuckPerms\context\PlayerCalculator;
@@ -155,7 +158,7 @@ class LuckPerms extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents($this->connectionListener, $this);
 		$this->getServer()->getPluginManager()->registerEvents(new PlatformListener($this), $this);
 
-		if($this->getConfiguration()->get(ConfigKeys::WATCH_FILES())){
+				if((bool) $this->getConfiguration()->get(ConfigKeys::WATCH_FILES())){
 			try{
 				$this->fileWatcher = new FileWatcher($this, $this->getDataFolder());
 			}catch(\Throwable $e){
@@ -236,19 +239,19 @@ class LuckPerms extends PluginBase{
 		$this->getScheduler()->scheduleRepeatingTask(new CacheHousekeepingTask($this), 2 * 20);
 
 		$pluginManager = $this->getServer()->getPluginManager();
-		$permDefault = $this->getConfiguration()->get(ConfigKeys::COMMANDS_ALLOW_OP()) ? DefaultPermissions::ROOT_OPERATOR : null;
+				$permDefault = ((bool) $this->getConfiguration()->get(ConfigKeys::COMMANDS_ALLOW_OP())) ? DefaultPermissions::ROOT_OPERATOR : null;
 		foreach(CommandPermission::getAll() as $permission){
 			$bukkitPermission = new Permission($permission->getPermission(), null, $permDefault);
 			$pluginManager->removePermission($bukkitPermission);
 			$pluginManager->addPermission($bukkitPermission);
 		}
 
-		if(!$this->getConfiguration()->get(ConfigKeys::OPS_ENABLED())){
+				if(!(bool) $this->getConfiguration()->get(ConfigKeys::OPS_ENABLED())){
 			$ops = $this->getServer()->getOps();
 			$ops->setAll([]);
 		}
 
-		if($this->getConfiguration()->get(ConfigKeys::AUTO_OP())){
+		if((bool) $this->getConfiguration()->get(ConfigKeys::AUTO_OP())){
 			$this->getApiProvider()->getEventBus()->subscribe(new AutoOpListener($this));
 		}
 
@@ -296,7 +299,7 @@ class LuckPerms extends PluginBase{
 				$this->getLogger()->logException($e);
 			}
 
-			if($this->getConfiguration()->get(ConfigKeys::AUTO_OP())){
+						if((bool) $this->getConfiguration()->get(ConfigKeys::AUTO_OP())){
 				// TODO: deop players
 				$player->unsetBasePermission(DefaultPermissions::ROOT_OPERATOR);
 				$player->setBasePermission(DefaultPermissions::ROOT_USER, true);
@@ -352,7 +355,7 @@ class LuckPerms extends PluginBase{
 
 		$this->getEventDispatcher()->dispatchUniqueIdLookup($username, $uniqueId);
 
-		if($uniqueId == null && $this->getConfiguration()->get(ConfigKeys::USE_SERVER_UUID_CACHE())){
+				if($uniqueId == null && (bool) $this->getConfiguration()->get(ConfigKeys::USE_SERVER_UUID_CACHE())){
 			$uniqueId = null; // PocketMine has no UUID cache yet
 		}
 
@@ -364,7 +367,7 @@ class LuckPerms extends PluginBase{
 
 		$username = $this->getEventDispatcher()->dispatchUsernameLookup($uniqueId, $username);
 
-		if($username === null && $this->getConfiguration()->get(ConfigKeys::USE_SERVER_UUID_CACHE())){
+				if($username === null && (bool) $this->getConfiguration()->get(ConfigKeys::USE_SERVER_UUID_CACHE())){
 			$username = null;
 		}
 
@@ -376,7 +379,7 @@ class LuckPerms extends PluginBase{
 			return false;
 		}
 
-		$valid = $this->getConfiguration()->get(ConfigKeys::ALLOW_INVALID_USERNAMES()) || DataConstraints::PLAYER_USERNAME_TEST()->test($username);
+				$valid = (bool) $this->getConfiguration()->get(ConfigKeys::ALLOW_INVALID_USERNAMES()) || DataConstraints::PLAYER_USERNAME_TEST()->test($username);
 
 		return $this->getEventDispatcher()->dispatchUsernameValidityCheck($username, $valid);
 	}

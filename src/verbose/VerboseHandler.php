@@ -15,23 +15,23 @@ use jasonw4331\LuckPerms\verbose\event\VerboseEvent;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\scheduler\TaskHandler;
 use pocketmine\scheduler\TaskScheduler;
-use Ramsey\Collection\Queue;
-use Ramsey\Collection\Set;
+use jasonw4331\LuckPerms\util\SimpleQueue;
+use jasonw4331\LuckPerms\util\SimpleSet;
 use function microtime;
 
 final class VerboseHandler{
 
-	/** @var Set<VerboseListener> $listeners */
-	private Set $listeners;
-	/** @var Queue<VerboseEvent> $queue */
-	private Queue $queue;
+	/** @var SimpleSet $listeners */
+	private SimpleSet $listeners;
+	/** @var SimpleQueue $queue */
+	private SimpleQueue $queue;
 	private bool $listening = false;
 
 	private TaskHandler $task;
 
 	public function __construct(TaskScheduler $scheduler){
-		$this->listeners = new Set(VerboseListener::class);
-		$this->queue = new Queue(VerboseEvent::class);
+		$this->listeners = new SimpleSet(VerboseListener::class);
+		$this->queue = new SimpleQueue(VerboseEvent::class);
 		$this->task = $scheduler->scheduleRepeatingTask(new ClosureTask(\Closure::fromCallable([$this, 'tick'])), 2); // 100 milliseconds if at 20 TPS
 	}
 
@@ -57,7 +57,6 @@ final class VerboseHandler{
 		$trace = new \Exception();
 		$thread = (string) \Thread::getCurrentThreadId();
 
-		// add the check data to a queue to be processed later.
 		$this->queue->offer(new PermissionCheckEvent($origin, $checkTarget, $checkQueryOptions, $time, $trace, $thread, $permission, $result));
 	}
 
@@ -83,7 +82,6 @@ final class VerboseHandler{
 		$trace = new \Exception();
 		$thread = (string) \Thread::getCurrentThreadId();
 
-		// add the check data to a queue to be processed later.
 		$this->queue->offer(new MetaCheckEvent($origin, $checkTarget, $checkQueryOptions, $time, $trace, $thread, $key, $result));
 	}
 
@@ -98,7 +96,7 @@ final class VerboseHandler{
 		// flush out anything before this listener was added
 		$this->flush();
 
-		$this->listeners->offsetSet($sender->getUniqueId()->toString(), new VerboseListener($sender, $filter, $notify));
+		$this->listeners->add(new VerboseListener($sender, $filter, $notify));
 		$this->listening = true;
 	}
 
@@ -113,15 +111,25 @@ final class VerboseHandler{
 		// flush out anything before this listener was removed
 		$this->flush();
 
-		$listener = $this->listeners->offsetGet($sender->getUniqueId()->toString());
-		$this->listeners->offsetUnset($sender->getUniqueId()->toString());
+		/** @var VerboseListener|null $listener */
+		$listener = null;
+		foreach($this->listeners as $l){
+			if($l->getNotifiedSender()->getUniqueId()->equals($sender->getUniqueId())){
+				$listener = $l;
+				break;
+			}
+		}
+		if($listener !== null) $this->listeners->remove($listener);
 		return $listener;
 	}
 
 	private function tick() : void{
 		// remove listeners where the sender is no longer valid
-		/** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-		$this->listeners = $this->listeners->filter(static fn(VerboseListener $l) => !$l->getNotifiedSender()->isValid());
+		$remaining = new SimpleSet(VerboseListener::class);
+		foreach($this->listeners as $l){
+			if($l->getNotifiedSender()->isValid()) $remaining->add($l);
+		}
+		$this->listeners = $remaining;
 
 		// handle all events in the queue
 		$this->flush();

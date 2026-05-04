@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\webeditor\store;
 
-use jasonw4331\LuckPerms\config\ConfigKeys;
-use jasonw4331\LuckPerms\CryptographyUtils;
 use jasonw4331\LuckPerms\LuckPerms;
+use RuntimeException;
 
 class WebEditorStore{
 
@@ -17,19 +16,7 @@ class WebEditorStore{
 	public function __construct(LuckPerms $plugin) {
 		$this->sessions = new WebEditorSessionMap();
 		$this->sockets = new WebEditorSocketMap();
-		$this->keystore = new WebEditorKeystore($plugin->getDataFolder().'editor-keystore.json');
-
-		$keyPair = fn() => CompletableFuture::supplyAsync(
-			[CryptographyUtils::class, 'generateKeyPair'],
-			$plugin->getScheduler()
-		);
-
-		if($plugin->getConfiguration()->get(ConfigKeys::EDITOR_LAZILY_GENERATE_KEY())) {
-			$this->keyPair = Suppliers::memoize($keyPair);
-		}else{
-			$future = $keyPair->get();
-			$this->keyPair = fn() => $future;
-		}
+		$this->keystore = new WebEditorKeystore($plugin->getDataFolder() . 'editor-keystore.json');
 	}
 
 	public function sessions() : WebEditorSessionMap{
@@ -44,11 +31,17 @@ class WebEditorStore{
 		return $this->keystore;
 	}
 
-	public function keyPair() : CompletableFuture{
-		if(!$this->keyPair->get()->isDone()) {
-			throw new \RuntimeException('Web editor keypair has not been generated yet! Has the server just started?');
+	/**
+	 * The original Java implementation uses async keypair generation.
+	 * This port does not ship that layer yet, so callers should use the keystore directly.
+	 */
+	public function keyPair() : array{
+		$keyPair = $this->keystore->get('default');
+		if($keyPair === null){
+			throw new RuntimeException('Web editor keypair is not available in keystore');
 		}
-		return $this->keyPair->get()->join();
+
+		return $keyPair;
 	}
 
 }

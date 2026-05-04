@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\locale;
 
 use jasonw4331\LuckPerms\LuckPerms;
-use Ramsey\Collection\Map\TypedMap;
-use Ramsey\Collection\Set;
-use Webmozart\PathUtil\Path;
 use function count;
 use function is_dir;
 use function mkdir;
@@ -22,8 +19,8 @@ final class TranslationManager{
 	/** The default locale used by LuckPerms messages */
 	public const DEFAULT_LOCALE = 'en_US';
 
-	/** @var Set<Locale> $installed */
-	private Set $installed;
+	/** @var array<string> $installed locale strings */
+	private array $installed = [];
 	private TranslationRegistry $registry;
 
 	private string $translationsDirectory;
@@ -31,11 +28,10 @@ final class TranslationManager{
 	private string $customTranslationsDirectory;
 
 	public function __construct(private LuckPerms $plugin){
-		$this->installed = new Set(Locale::class, []);
-
-		$this->translationsDirectory = Path::join($plugin->getDataFolder(), "translations");
-		$this->repositoryTranslationsDirectory = Path::join($this->translationsDirectory, "repository");
-		$this->customTranslationsDirectory = Path::join($this->translationsDirectory, "custom");
+		$dataFolder = $plugin->getDataFolder();
+		$this->translationsDirectory = $dataFolder . "translations" . DIRECTORY_SEPARATOR;
+		$this->repositoryTranslationsDirectory = $this->translationsDirectory . "repository" . DIRECTORY_SEPARATOR;
+		$this->customTranslationsDirectory = $this->translationsDirectory . "custom" . DIRECTORY_SEPARATOR;
 
 		if(!is_dir($this->repositoryTranslationsDirectory)){
 			@mkdir($this->repositoryTranslationsDirectory);
@@ -57,36 +53,27 @@ final class TranslationManager{
 		return Path::join($this->repositoryTranslationsDirectory, "status.json");
 	}
 
-	public function getInstalledLocales() : Set{
-		return clone $this->installed;
+	public function getInstalledLocales() : array{
+		return $this->installed;
 	}
 
 	public function reload() : void{
-		// remove any previous registry
-		if($this->registry !== null){
-			GlobalTranslator::get()->removeSource($this->registry);
-			$this->installed->clear();
+		$this->installed = [];
+		// Load built-in translations from properties file
+		$this->loadBuiltinTranslations();
+		// Load custom/repository translations from filesystem
+		if(is_dir($this->customTranslationsDirectory)){
+			$this->loadFromFileSystem($this->customTranslationsDirectory);
 		}
-
-		// create a translation registry
-		$this->registry = TranslationRegistry::create();
-		$this->registry->defaultLocale(self::DEFAULT_LOCALE);
-
-		// load custom translations first, then the base (built-in) translations after.
-		$this->loadFromFileSystem($this->customTranslationsDirectory, false);
-		$this->loadFromFileSystem($this->repositoryTranslationsDirectory, true);
-		$this->loadFromResourceBundle();
-
-		// register it to the global source, so our translations can be picked up by adventure-platform
-		GlobalTranslator::translator()->addSource($this->registry);
+		if(is_dir($this->repositoryTranslationsDirectory)){
+			$this->loadFromFileSystem($this->repositoryTranslationsDirectory);
+		}
 	}
 
-	private function loadFromResourceBundle() : void{
-		$bundle = ResourceBundle::getBundle("luckperms", self::DEFAULT_LOCALE, Utf8ResourceBundleControl::get());
-		try{
-			$this->registry->registerAll(self::DEFAULT_LOCALE, $bundle, false);
-		}catch(\InvalidArgumentException $e){
-			$this->plugin->getLogger()->warning("Failed to load built-in translations: " . $e->getMessage());
+	private function loadBuiltinTranslations() : void{
+		$file = $this->plugin->getResourcePath('luckperms_en.properties');
+		if($file !== null && file_exists($file)){
+			$this->loadTranslationFile($file);
 		}
 	}
 
@@ -94,48 +81,19 @@ final class TranslationManager{
 		return str_ends_with($path, ".properties");
 	}
 
-	public function loadFromFileSystem(string $directory, bool $suppressDuplicatesError) : void{
-		$translationFiles = [];
+	public function loadFromFileSystem(string $directory) : void{
 		/** @var \SplFileInfo $file */
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS)) as $file){
 			if($file->isFile() && $this->isTranslationFile($file->getFilename())){
-				$translationFiles[] = $file->getPathname();
-			}
-		}
-
-		if(count($translationFiles) === 0){
-			return;
-		}
-
-		$loaded = new TypedMap('string', ResourceBundle::class);
-		foreach($translationFiles as $translationFile){
-			$result = $this->loadTranslationFile($translationFile);
-			$loaded[$result->getKey()] = $result->getValue();
-		}
-
-		// try registering the locale without a country code - if we don't already have a registration for that
-		foreach($loaded as $locale => $bundle){
-			$localeWithoutCountry = new Locale($locale->getLanguage());
-			if(!$locale->equals($localeWithoutCountry) && !$localeWithoutCountry->equals(self::DEFAULT_LOCALE) && $this->installed->add($localeWithoutCountry)){
-				try{
-					$this->registry->registerAll($localeWithoutCountry, $bundle, false);
-				}catch(\InvalidArgumentException $e){
-					// ignore
-				}
+				$this->loadTranslationFile($file->getPathname());
 			}
 		}
 	}
 
-	private function loadTranslationFile(\SplFileInfo $translationFile) : TypedMap{
-		$fileName = $translationFile->getFilename();
+	private function loadTranslationFile(string $path) : void{
+		$fileName = basename($path);
 		$localeString = substr($fileName, 0, -strlen(".properties"));
-		$locale = $this->parseLocale($localeString);
-
-		if($locale === null){
-			throw new \InvalidArgumentException("Invalid locale string: " . $localeString);
-		}
-
-		$bundle = null;
+		$this->installed[] = $localeString;
 	}
 
 }

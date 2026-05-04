@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\graph;
 
-use Ramsey\Collection\DoubleEndedQueue;
+use jasonw4331\LuckPerms\util\SimpleDoubleEndedQueue;
 
 final class BreadthFirstIterator implements \Iterator{
 	private Graph $graph;
 
-	private DoubleEndedQueue $queue;
+	private SimpleDoubleEndedQueue $queue;
 	private array $visited = [];
 
 	public function __construct(Graph $graph, $root){
 		$this->graph = $graph;
-		$this->queue = new DoubleEndedQueue($root::class, [$root]);
+				$this->queue = new SimpleDoubleEndedQueue($root::class, [$root]);
 		$this->visited[] = $root;
 	}
 
 	public function valid() : bool{
-		return !empty($this->queue);
+		return !$this->queue->isEmpty();
 	}
 
 	public function next() : Graph{

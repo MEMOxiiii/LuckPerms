@@ -7,11 +7,12 @@ namespace jasonw4331\LuckPerms\http;
 use pocketmine\utils\Internet;
 use pocketmine\utils\InternetException;
 use pocketmine\utils\InternetRequestResult;
+use function array_key_exists;
+use function array_reverse;
+use function basename;
 use function json_decode;
+use function ltrim;
 use function str_ends_with;
-use function var_dump;
-use const CURLOPT_ENCODING;
-use const CURLOPT_POST;
 use const JSON_OBJECT_AS_ARRAY;
 use const JSON_THROW_ON_ERROR;
 
@@ -31,10 +32,6 @@ class BytebinClient extends AbstractHttpClient{
 		return $this->userAgent;
 	}
 
-	public function makeHttpRequest(string $url) : InternetRequestResult {
-		return parent::makeHttpRequest($url);
-	}
-
 	/**
 	 * POSTs GZIP compressed content to bytebin.
 	 *
@@ -45,16 +42,22 @@ class BytebinClient extends AbstractHttpClient{
 	 */
 	public function postContent(string $buffer, string $contentType, ?string $extraUserAgent = null) : Content {
 		$userAgent = $this->userAgent . ($extraUserAgent !== null ? "/$extraUserAgent" : "");
-		$response = Internet::simpleCurl($this->url . 'post', 10, [$userAgent], [
-			CURLOPT_POST => 1,
-			CURLOPT_ENCODING => 'gzip'
-		]);
+		$headers = [
+			"User-Agent: {$userAgent}",
+			"Content-Type: {$contentType}",
+			"Content-Encoding: gzip",
+		];
 
-		var_dump($response->getHeaders()); // TODO
-		if(!isset($response->getHeaders()['Location'])) {
-			throw new InternetException('Key not returned');
+		$err = null;
+		$response = Internet::postURL($this->url . 'post', $buffer, 10, $headers, $err);
+		if($response === null){
+			throw new InternetException('Bytebin POST request failed: ' . (string) $err);
 		}
-		$key = $response->getHeaders()['Location'];
+
+		$key = $this->extractContentKey($response);
+		if($key === null){
+			throw new InternetException('Bytebin did not return a content key in the Location header');
+		}
 		return new Content($key);
 	}
 
@@ -67,7 +70,21 @@ class BytebinClient extends AbstractHttpClient{
 	 * @throws \JsonException
 	 */
 	public function getJsonContent(string $id) : array {
-		$response = Internet::simpleCurl($this->url . $id, 10, [$this->userAgent]);
+		$response = Internet::simpleCurl($this->url . ltrim($id, '/'), 10, ["User-Agent: {$this->userAgent}"]);
 		return json_decode($response->getBody(), true, flags: JSON_OBJECT_AS_ARRAY | JSON_THROW_ON_ERROR);
+	}
+
+	private function extractContentKey(InternetRequestResult $response) : ?string{
+		foreach(array_reverse($response->getHeaders()) as $headerGroup){
+			if(array_key_exists('location', $headerGroup)){
+				$location = $headerGroup['location'];
+				$location = basename($location);
+				if($location !== ''){
+					return $location;
+				}
+			}
+		}
+
+		return null;
 	}
 }

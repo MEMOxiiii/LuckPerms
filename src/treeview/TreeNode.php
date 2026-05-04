@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\treeview;
 
-use Ramsey\Collection\Map\TypedMap;
 
 class TreeNode{
 
@@ -22,8 +21,8 @@ class TreeNode{
 		}
 	}
 
-	/** @var TypedMap<string, TreeNode>|null $children */
-	private ?TypedMap $children;
+	/** @var array<string, TreeNode>|null $children */
+	private ?array $children = null;
 	private int $level;
 
 	public function __construct(?TreeNode $parent = null){
@@ -31,32 +30,37 @@ class TreeNode{
 	}
 
 	// lazy init
-	private function getChildMap() : TypedMap{
+	private function getChildMap() : array{
 		if($this->children === null){
-			$this->children = new TypedMap("string", TreeNode::class);
+			$this->children = [];
 		}
 		return $this->children;
 	}
 
 	public function tryInsert(string $s) : ?TreeNode{
-		$childMap = $this->getChildMap();
 		if(!$this->allowInsert($this)){
 			return null;
 		}
-		return $childMap->putIfAbsent($s, new TreeNode($this));
+		if($this->children === null) $this->children = [];
+		if(!isset($this->children[$s])){
+			$this->children[$s] = new TreeNode($this);
+		}
+		return $this->children[$s];
 	}
 
-	public function getChildren() : ?TypedMap{
+	public function getChildren() : ?array{
 		return $this->children;
 	}
 
 	public function getChildrenSize() : int{
-		return $this->children?->count() ?? 0;
+				return $this->children !== null ? count($this->children) : 0;
 	}
 
 	public function makeImmutableCopy() : ImmutableTreeNode{
-		$array = $this->children?->toArray() ?? [];
-		\array_walk($array, static fn(TreeNode $node) : ImmutableTreeNode => $node->makeImmutableCopy()); // use array walk to keep the keys
-		return new ImmutableTreeNode(new TypedMap("string", ImmutableTreeNode::class, $array));
+		$array = [];
+		foreach($this->children ?? [] as $key => $node){
+			$array[$key] = $node->makeImmutableCopy();
+		}
+		return new ImmutableTreeNode($array);
 	}
 }

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\context;
 
 use jasonw4331\LuckPerms\api\context\Context;
-use Ramsey\Collection\Map\AssociativeArrayMap;
-use Ramsey\Collection\Set;
-use function ImmutableMapBuilder;
+use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
 
 final class ImmutableContextSetImpl extends AbstractContextSet implements ImmutableContextSet{
 
@@ -18,15 +16,13 @@ final class ImmutableContextSetImpl extends AbstractContextSet implements Immuta
 	/** @var Context[] $array */
 	private array $array;
 	private int $size;
-	private int $hashCode;
 
-	/** @var ImmutableSetMultimap<String, String> $cachedMap */
-	private ImmutableSetMultimap $cachedMap;
+	/** @var array<string, array<string>> $cachedMap */
+	private array $cachedMap = [];
 
 	public function __construct(array $contexts = []){
-		$this->array = $contexts; // always sorted
+		$this->array = $contexts;
 		$this->size = \count($this->array);
-		//$this->hashCode = Arrays::hashCode($this->array);
 	}
 
 	public function isImmutable() : bool{
@@ -38,50 +34,48 @@ final class ImmutableContextSetImpl extends AbstractContextSet implements Immuta
 	}
 
 	/**
-	 * @return ImmutableSetMultimap<String, String>
+	 * @return array<string, array<string>>
 	 */
-	public function toMultimap() : ImmutableSetMultimap{
-		if($this->cachedMap === null){
-			/** @var ImmutableSetMultimapBuilder<String, String> $builder */
-			$builder = new ImmutableSetMultimapBuilder();
-			/** @var Context $entry */
+	public function toMultimap() : array{
+		if(empty($this->cachedMap)){
 			foreach($this->array as $entry){
-				$builder->put($entry->getKey(), $entry->getValue());
+				$this->cachedMap[$entry->getKey()][] = $entry->getValue();
 			}
-			$this->cachedMap = $builder->build();
 		}
 		return $this->cachedMap;
 	}
 
 	public function mutableCopy() : MutableContextSet{
-		return new MutableContextSetImpl($this->toMultimap());
-	}
-
-	/**
-	 * @return Set<Context>
-	 */
-	public function toSet() : Set{
-		return ImmutableSet::copyOf($this->array);
-	}
-
-	/**
-	 * @return AssociativeArrayMap<String, Set<String>>
-	 */
-	public function toMap() : AssociativeArrayMap{
-		return Multimaps::asMap($this->toMultimap());
-	}
-
-	/**
-	 * @return AssociativeArrayMap<String, String>
-	 */
-	public function toFlattenedMap() : AssociativeArrayMap{
-		/** @var ImmutableMapBuilder<String, String> $m */
-		$m = \ImmutableMapBuilder();
-		/** @var Context $e */
-		foreach($this->array as $e){
-			$m->put($e->getKey(), $e->getValue());
+		$copy = new MutableContextSetImpl();
+		foreach($this->array as $ctx){
+			$copy->addContext($ctx);
 		}
-		return $m->build();
+		return $copy;
+	}
+
+	/**
+	 * @return Context[]
+	 */
+	public function toSet() : array{
+		return $this->array;
+	}
+
+	/**
+	 * @return array<string, array<string>>
+	 */
+	public function toMap() : array{
+		return $this->toMultimap();
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	public function toFlattenedMap() : array{
+		$m = [];
+		foreach($this->array as $e){
+			$m[$e->getKey()] = $e->getValue();
+		}
+		return $m;
 	}
 
 	/**
@@ -89,5 +83,47 @@ final class ImmutableContextSetImpl extends AbstractContextSet implements Immuta
 	 */
 	public function toArray() : array{
 		return $this->array; // only used read-only & internally
+	}
+
+	public function getIterator() : \ArrayIterator{
+		return new \ArrayIterator($this->array);
+	}
+
+	public function containsKey(string $key) : bool{
+		foreach($this->array as $ctx){
+			if($ctx->getKey() === $key) return true;
+		}
+		return false;
+	}
+
+	public function getValues(string $key) : array{
+		$values = [];
+		foreach($this->array as $ctx){
+			if($ctx->getKey() === $key) $values[] = $ctx->getValue();
+		}
+		return $values;
+	}
+
+	public function contains(string $key, string $value) : bool{
+		foreach($this->array as $ctx){
+			if($ctx->getKey() === $key && $ctx->getValue() === $value) return true;
+		}
+		return false;
+	}
+
+	public function isSatisfiedByMode(ContextSet $other, ContextSatisfyMode $mode) : bool{
+		if($this->isEmpty()) return true;
+		foreach($this->array as $ctx){
+			if(!$other->contains($ctx->getKey(), $ctx->getValue())) return false;
+		}
+		return true;
+	}
+
+	public function isEmpty() : bool{
+		return $this->size === 0;
+	}
+
+	public function size() : int{
+		return $this->size;
 	}
 }

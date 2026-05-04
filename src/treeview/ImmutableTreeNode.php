@@ -4,42 +4,22 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\treeview;
 
-use Ramsey\Collection\Map\TypedMap;
 
 class ImmutableTreeNode{
-	/** @var TypedMap<string, ImmutableTreeNode>|null $children */
-	private ?TypedMap $children;
+	/** @var array<string, ImmutableTreeNode>|null $children */
+	private ?array $children;
 
-	public function __construct(?TypedMap $children){
-		if($children !== null && $children->getValueType() === ImmutableTreeNode::class){
-			$sortedMap = [];
-			foreach($children->toArray() as $k1 => $o1){
-				foreach($children->toArray() as $k2 => $o2){
-					// sort first by if the node has any children
-					$childStatus = $o1->compareTo($o2);
-					if($childStatus < 0){
-						$sortedMap[$k2] = $o2;
-						continue;
-					}elseif($childStatus > 0){
-						$sortedMap[$k1] = $o1;
-						continue;
-					}
-
-					// then sort alphabetically
-					if(\strcasecmp($k1, $k2) > 0){
-						$sortedMap[$k2] = $o2;
-					}else{
-						$sortedMap[$k1] = $o1;
-					}
-				}
-			}
-
-			$this->children = new TypedMap("string", ImmutableTreeNode::class, $sortedMap);
+	public function __construct(?array $children){
+		if($children !== null){
+			uksort($children, 'strcasecmp');
+			$this->children = $children;
+		}else{
+			$this->children = null;
 		}
 	}
 
-	public function getChildren() : ?TypedMap{
-		return clone $this->children;
+	public function getChildren() : ?array{
+		return $this->children !== null ? $this->children : null;
 	}
 
 	public function getNodeEndings() : array{

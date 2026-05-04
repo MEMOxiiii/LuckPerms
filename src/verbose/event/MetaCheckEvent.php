@@ -20,7 +20,7 @@ class MetaCheckEvent extends VerboseEvent {
 		return $this->result;
 	}
 
-	public function getType() : string{
+	public function getType() : VerboseEventType{
 		return VerboseEventType::META();
 	}
 

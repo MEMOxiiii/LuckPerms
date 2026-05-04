@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\query;
 
 use jasonw4331\LuckPerms\util\traits\MixedRegistryTrait;
-use Ramsey\Collection\Set;
 
 /**
  * This doc-block is generated automatically, do not modify it manually.
@@ -37,8 +36,8 @@ final class FlagUtils{
 	}
 
 	protected static function setup() : void{
-		self::register("ALL_FLAGS_SET", new Set(Flag::class, Flag::getAll()));
-		self::register("ALL_FLAGS_SIZE", self::ALL_FLAGS_SET()->count());
+		self::register("ALL_FLAGS_SET", Flag::getAll());
+		self::register("ALL_FLAGS_SIZE", count(self::ALL_FLAGS_SET()));
 		self::register("ALL_FLAGS", self::toByte0(self::ALL_FLAGS_SET()));
 	}
 
@@ -47,19 +46,19 @@ final class FlagUtils{
 	}
 
 	/**
-	 * @param Set<Flag> $settings
+	 * @param array<Flag> $settings
 	 */
-	public static function toByte(Set $settings) : int{
-		if($settings->count() === self::ALL_FLAGS_SIZE()){
+	public static function toByte(array $settings) : int{
+		if(count($settings) === self::ALL_FLAGS_SIZE()){
 			return self::ALL_FLAGS();
 		}
 		return self::toByte0($settings);
 	}
 
 	/**
-	 * @param Set<Flag> $settings
+	 * @param array<Flag> $settings
 	 */
-	private static function toByte0(Set $settings) : int{
+	private static function toByte0(array $settings) : int{
 		$b = 0;
 		foreach($settings as $setting){
 			$b |= 1 << $setting->ordinal();
@@ -67,11 +66,11 @@ final class FlagUtils{
 		return $b;
 	}
 
-	public static function toSet(int $b) : Set{
-		$settings = new Set(Flag::class, Flag::getAll());
-		foreach($settings as $setting){
+	public static function toSet(int $b) : array{
+		$settings = [];
+		foreach(Flag::getAll() as $setting){
 			if(self::read($b, $setting)){
-				$settings->add($setting);
+				$settings[] = $setting;
 			}
 		}
 		return $settings;

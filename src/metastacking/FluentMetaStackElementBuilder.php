@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\metastacking;
 
 use jasonw4331\LuckPerms\api\metastacking\MetaStackElement;
-use Ramsey\Collection\Map\AbstractTypedMap;
-use Ramsey\Collection\Map\TypedMap;
 
 final class FluentMetaStackElementBuilder{
 	private array $elements = [];
-	private AbstractTypedMap $params;
+	/** @var array<string, string> */
+	private array $params = [];
 
-	public function __construct(private string $name){
-		$this->params = new TypedMap('string', 'string', []);
-	}
+	public function __construct(private string $name){ }
 
 	public function with(MetaStackElement $element) : self{
 		$this->elements[] = $element;
@@ -22,7 +19,7 @@ final class FluentMetaStackElementBuilder{
 	}
 
 	public function param(string $name, string $value) : self{
-		$this->params->put($name, $value);
+		$this->params[$name] = $value;
 		return $this;
 	}
 

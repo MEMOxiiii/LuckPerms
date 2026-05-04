@@ -7,13 +7,13 @@ namespace jasonw4331\LuckPerms\query;
 use jasonw4331\LuckPerms\api\query\QueryOptions;
 use jasonw4331\LuckPerms\context\ImmutableContextSet;
 use jasonw4331\LuckPerms\context\ImmutableContextSetImpl;
-use Ramsey\Collection\Set;
 
 class QueryOptionsBuilderImpl implements Builder{
 	private QueryMode $mode;
 	private ImmutableContextSet $context;
 	private int $flags;
-	private ?Set $flagsSet;
+	/** @var array<Flag>|null */
+	private ?array $flagsSet;
 	private ?array $options;
 	private bool $copyOptions;
 
@@ -45,20 +45,21 @@ class QueryOptionsBuilderImpl implements Builder{
 			$this->flagsSet = FlagUtils::toSet($this->flags);
 		}
 		if($value){
-			$this->flagsSet->add($flag);
+			// add if not already present
+			if(!in_array($flag, $this->flagsSet, true)){
+				$this->flagsSet[] = $flag;
+			}
 		}else{
-			$this->flagsSet->remove($flag);
+			$this->flagsSet = array_values(array_filter($this->flagsSet, fn($f) => $f !== $flag));
 		}
 
 		return $this;
 	}
 
 	/**
-	 * @param Set<Flag> $flags
+	 * @param array<Flag> $flags
 	 */
-	public function flags(Set $flags) : Builder{
-		foreach($flags as $flag)
-			\assert($flag instanceof Flag);
+	public function flags(array $flags) : Builder{
 		$this->flagsSet = $flags;
 		return $this;
 	}

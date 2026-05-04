@@ -1,6 +1,8 @@
 <?php
 
-public
+declare(strict_types=1);
+
+namespace jasonw4331\LuckPerms\dependencies;
 
 abstract class DependencyManager{
 

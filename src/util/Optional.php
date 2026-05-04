@@ -317,7 +317,7 @@ final class Optional{
 	 *         present
 	 */
 	public function hashCode() : int{
-		return $this->value !== null ? hash($this->value) : 0;
+			return $this->value !== null ? crc32(serialize($this->value)) : 0;
 	}
 
 	/**

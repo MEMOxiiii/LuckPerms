@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\config\generic\adapter;
 
 use jasonw4331\LuckPerms\LuckPerms;
-use Ramsey\Collection\Map\AbstractTypedMap;
 
 interface ConfigurationAdapter{
 	public function getPlugin() : LuckPerms;
@@ -29,9 +28,9 @@ interface ConfigurationAdapter{
 	public function getStringList(string $path, array $def) : array;
 
 	/**
-	 * @param AbstractTypedMap<string, string> $def
+	 * @param array<string, string> $def
 	 *
-	 * @return AbstractTypedMap<string, string>
+	 * @return array<string, string>
 	 */
-	public function getStringMap(string $path, AbstractTypedMap $def) : AbstractTypedMap;
+	public function getStringMap(string $path, array $def) : array;
 }

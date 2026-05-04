@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\graph;
 
-use Ramsey\Collection\DoubleEndedQueue;
+use jasonw4331\LuckPerms\util\SimpleDoubleEndedQueue;
 use function in_array;
 
 final class DepthFirstIterator extends AbstractIterator{
 	private Graph $graph;
 
-	private DoubleEndedQueue $stack;
+	private SimpleDoubleEndedQueue $stack;
 	private array $visited = [];
 	private Order $order;
 
 	public function __construct(Graph $graph, $root, Order $order){
 		$this->graph = $graph;
-		$this->stack = new DoubleEndedQueue($root::class, [$this->withSuccessors($root)]);
+				$this->stack = new SimpleDoubleEndedQueue($root::class, [$this->withSuccessors($root)]);
 		$this->order = $order;
 	}
 

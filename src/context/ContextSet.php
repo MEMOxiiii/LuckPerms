@@ -7,8 +7,6 @@ namespace jasonw4331\LuckPerms\context;
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
 use jasonw4331\LuckPerms\util\Optional;
-use Ramsey\Collection\Map\MapInterface;
-use Ramsey\Collection\Set;
 
 /**
  * Abstract class ContextSet.
@@ -55,7 +53,7 @@ abstract class ContextSet implements \IteratorAggregate{
 	 *
 	 * @return Set<Context> an immutable set
 	 */
-	public abstract function toSet() : Set;
+	public abstract function toSet() : array;
 
 	/**
 	 * Returns a {@link MapInterface} representing the current state of this
@@ -66,7 +64,7 @@ abstract class ContextSet implements \IteratorAggregate{
 	 *
 	 * @return MapInterface<string, Set<string>> a map
 	 */
-	public abstract function toMap() : MapInterface;
+	public abstract function toMap() : array;
 
 	/**
 	 * Returns a {@link MapInterface} <b>loosely</b> representing the current state of
@@ -81,7 +79,7 @@ abstract class ContextSet implements \IteratorAggregate{
 	 * @return MapInterface<string, string> an immutable map
 	 * @deprecated Deprecated because the returned map may not contain all data in the ContextSet
 	 */
-	public abstract function toFlattenedMap() : MapInterface;
+	public abstract function toFlattenedMap() : array;
 
 	/**
 	 * Returns an {@link Iterator} over each of the context pairs in this set.
@@ -115,7 +113,7 @@ abstract class ContextSet implements \IteratorAggregate{
 	 *
 	 * @return Set<string> a set of values
 	 */
-	abstract public function getValues(string $key) : Set;
+	abstract public function getValues(string $key) : array;
 
 	/**
 	 * Returns any value from this ContextSet matching the key, if present.
@@ -128,7 +126,8 @@ abstract class ContextSet implements \IteratorAggregate{
 	 * @return Optional<string> an optional containing any match
 	 */
 	public function getAnyValue(string $key) : Optional{
-		return Optional::ofNullable($this->getValues($key)->stream()->findAny());
+		$values = $this->getValues($key);
+		return Optional::ofNullable(empty($values) ? null : reset($values));
 	}
 
 	/**

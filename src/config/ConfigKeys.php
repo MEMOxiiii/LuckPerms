@@ -29,8 +29,6 @@ use jasonw4331\LuckPerms\storage\implementation\split\SplitStorageType;
 use jasonw4331\LuckPerms\storage\misc\StorageCredentials;
 use jasonw4331\LuckPerms\storage\StorageType;
 use pocketmine\utils\RegistryTrait;
-use Ramsey\Collection\Map\TypedMap;
-use Ramsey\Collection\Set;
 use function array_filter;
 use function array_keys;
 use function array_map;
@@ -156,12 +154,12 @@ final class ConfigKeys{
 			return $val;
 		})));
 		self::register("global_query_options", ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : QueryOptions{
-			$flags = new Set(Flag::class, [Flag::RESOLVE_INHERITANCE()]);
+			$flags = [Flag::RESOLVE_INHERITANCE()];
 			if($c->getBoolean('include-global', true)){
-				$flags->add(Flag::INCLUDE_NODES_WITHOUT_SERVER_CONTEXT());
+				$flags[] = Flag::INCLUDE_NODES_WITHOUT_SERVER_CONTEXT();
 			}
 			if($c->getBoolean('include-global-world', true)){
-				$flags->add(Flag::INCLUDE_NODES_WITHOUT_WORLD_CONTEXT());
+				$flags[] = Flag::INCLUDE_NODES_WITHOUT_WORLD_CONTEXT();
 			}
 			if($c->getBoolean('apply-global-groups', true)){
 				$flags->add(Flag::APPLY_INHERITANCE_NODES_WITHOUT_SERVER_CONTEXT());
@@ -173,10 +171,9 @@ final class ConfigKeys{
 			return (new QueryOptionsBuilderImpl(QueryMode::CONTEXTUAL()))->flags($flags)->build();
 		}));
 		self::register("context_satisfy_mode", ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : ContextSatisfyMode => mb_strtolower($c->getString('context-satisfy-mode', 'at-least-one-value-per-key')) === 'all-values-per-key' ? ContextSatisfyMode::ALL_VALUES_PER_KEY() : ContextSatisfyMode::AT_LEAST_ONE_VALUE_PER_KEY()));
-		self::register("disabled_contexts", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : Set{
+		self::register("disabled_contexts", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : array{
 			$contexts = $c->getStringList('disabled-contexts', []);
-			$contexts = array_map('mb_strtolower', $contexts);
-			return new Set("string", $contexts);
+			return array_unique(array_map('mb_strtolower', $contexts));
 		})));
 		self::register("use_server_uuid_cache", ConfigKeyFactory::booleanKey('use-server-uuid-cache', false));
 		self::register("allow_invalid_usernames", ConfigKeyFactory::booleanKey('allow-invalid-usernames', false));
@@ -229,14 +226,14 @@ final class ConfigKeys{
 		self::register("post_traversal_inheritance_sort", ConfigKeyFactory::booleanKey('post-traversal-inheritance-sort', false));
 		self::register("meta_value_selector", ConfigKeyFactory::key(static function(ConfigurationAdapter $c){
 			$defaultStrategy = Strategy::parse($c->getString('meta-value-selection-default', 'inheritance'));
-			$strategies = $c->getStringMap('meta-value-selection', new TypedMap("string", Strategy::class, []));
+						$strategies = $c->getStringMap('meta-value-selection', []);
 			/** @var Strategy[] $strategies */
 			$strategies = array_filter(array_map(static fn(string $value) => Strategy::parse($value) ?? null, array_values($strategies)), 'is_object');
 			return new SimpleMetaValueSelector($strategies, $defaultStrategy);
 		}));
 		self::register("group_weights", ConfigKeyFactory::key(static function(ConfigurationAdapter $c){
 			/** @var array<string, int> $weights */
-			$weights = $c->getStringMap('group-weight', new TypedMap("string", "int", []));
+						$weights = $c->getStringMap('group-weight', []);
 			return array_map(static fn(string $key, int $value) => [mb_strtolower($key), intval($value)], array_keys($weights), array_values($weights));
 		}));
 		self::register("prefix_formatting_options", ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : MetaStackDefinition{
@@ -283,7 +280,14 @@ final class ConfigKeys{
 		self::register("vault_ignore_world", ConfigKeyFactory::booleanKey('vault-ignore-world', false));
 		self::register("fabric_integrated_server_owner_bypasss_checks", ConfigKeyFactory::booleanKey('integrated-server-owner-bypasses-checks', true));
 		self::register("disabled_context_calculators", ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : array => array_map(static fn(string $value) : string => mb_strtolower($value), $c->getStringList('disabled-context-calculators', []))));
-		self::register("world_rewrites", ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : WorldNameRewriter => WorldNameRewriter::of(new TypedMap('string', 'string', array_map(static fn(string $key, string $value) => [mb_strtolower($key), mb_strtolower($value)], array_keys($array = $c->getStringMap('world-rewrite', new TypedMap("string", "string", []))), array_values($array))))));
+		self::register("world_rewrites", ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : WorldNameRewriter{
+			$rawMap = $c->getStringMap('world-rewrite', []);
+			$rewrites = [];
+			foreach($rawMap as $key => $value){
+				$rewrites[mb_strtolower((string) $key)] = mb_strtolower((string) $value);
+			}
+			return WorldNameRewriter::of($rewrites);
+		}));
 		self::register("group_name_rewrites", ConfigKeyFactory::mapKey('group-name-rewrite'));
 		self::register("database_values", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : StorageCredentials{
 			$maxPoolSize = $c->getInteger("data.pool-settings.maximum-pool-size", $c->getInteger("data.pool-size", 10));
@@ -291,7 +295,7 @@ final class ConfigKeys{
 			$maxLifetime = $c->getInteger("data.pool-settings.maximum-lifetime", 1800000);
 			$keepAliveTime = $c->getInteger("data.pool-settings.keepalive-time", 0);
 			$connectionTimeout = $c->getInteger("data.pool-settings.connection-timeout", 5000);
-			$props = $c->getStringMap("data.pool-settings.properties", new TypedMap("string", "string", []));
+						$props = $c->getStringMap("data.pool-settings.properties", []);
 
 			return new StorageCredentials(
 				$c->getString("data.address", null),
@@ -307,14 +311,14 @@ final class ConfigKeys{
 		self::register("storage_method", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : StorageType => StorageType::parse($c->getString('storage-method', 'sqlite'), StorageType::SQLITE()))));
 		self::register("watch_files", ConfigKeyFactory::booleanKey('watch-files', true));
 		self::register("split_storage", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('split-storage.enabled', false)));
-		self::register("split_storage_options", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : TypedMap{
-			$map = new TypedMap(SplitStorageType::class, StorageType::class, []);
-			$map->put(SplitStorageType::USER()->name(), StorageType::parse($c->getString('split-storage.user', 'sqlite'), StorageType::SQLITE()));
-			$map->put(SplitStorageType::GROUP()->name(), StorageType::parse($c->getString('split-storage.group', 'sqlite'), StorageType::SQLITE()));
-			$map->put(SplitStorageType::TRACK()->name(), StorageType::parse($c->getString('split-storage.track', 'sqlite'), StorageType::SQLITE()));
-			$map->put(SplitStorageType::UUID()->name(), StorageType::parse($c->getString('split-storage.uuid', 'sqlite'), StorageType::SQLITE()));
-			$map->put(SplitStorageType::LOG()->name(), StorageType::parse($c->getString('split-storage.log', 'sqlite'), StorageType::SQLITE()));
-			return clone $map;
+		self::register("split_storage_options", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : array{
+			return [
+				SplitStorageType::USER()->name() => StorageType::parse($c->getString('split-storage.user', 'sqlite'), StorageType::SQLITE()),
+				SplitStorageType::GROUP()->name() => StorageType::parse($c->getString('split-storage.group', 'sqlite'), StorageType::SQLITE()),
+				SplitStorageType::TRACK()->name() => StorageType::parse($c->getString('split-storage.track', 'sqlite'), StorageType::SQLITE()),
+				SplitStorageType::UUID()->name() => StorageType::parse($c->getString('split-storage.uuid', 'sqlite'), StorageType::SQLITE()),
+				SplitStorageType::LOG()->name() => StorageType::parse($c->getString('split-storage.log', 'sqlite'), StorageType::SQLITE()),
+			];
 		})));
 		self::register("messaging_service", ConfigKeyFactory::notReloadable(ConfigKeyFactory::lowercaseStringKey('messaging-service', 'auto')));
 		self::register("auto_push_updates", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('auto-push-updates', true)));

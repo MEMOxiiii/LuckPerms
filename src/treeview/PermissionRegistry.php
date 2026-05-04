@@ -7,18 +7,18 @@ namespace jasonw4331\LuckPerms\treeview;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\scheduler\TaskHandler;
 use pocketmine\scheduler\TaskScheduler;
-use Ramsey\Collection\Queue;
+use jasonw4331\LuckPerms\util\SimpleQueue;
 
 class PermissionRegistry{
 
 	private TreeNode $rootNode;
-	/** @var Queue<string> $queue */
-	private Queue $queue;
+	/** @var SimpleQueue $queue */
+	private SimpleQueue $queue;
 	private TaskHandler $task;
 
 	public function __construct(TaskScheduler $scheduler){
 		$this->rootNode = new TreeNode();
-		$this->queue = new Queue("string");
+		$this->queue = new SimpleQueue("string");
 		$this->task = $scheduler->scheduleRepeatingTask(new ClosureTask(\Closure::fromCallable([$this, 'tick'])), 20); // tick every second
 	}
 

@@ -29,23 +29,23 @@ class SimpleMetaStackDefinition implements MetaStackDefinition{
 	}
 
 	public function getElements() : array{
-		// TODO: Implement getElements() method.
+		return $this->elements;
 	}
 
 	public function getDuplicateRemovalFunction() : DuplicateRemovalFunction{
-		// TODO: Implement getDuplicateRemovalFunction() method.
+		return $this->duplicateRemovalFunction;
 	}
 
 	public function getStartSpacer() : string{
-		// TODO: Implement getStartSpacer() method.
+		return $this->startSpacer;
 	}
 
 	public function getMiddleSpacer() : string{
-		// TODO: Implement getMiddleSpacer() method.
+		return $this->middleSpacer;
 	}
 
 	public function getEndSpacer() : string{
-		// TODO: Implement getEndSpacer() method.
+		return $this->endSpacer;
 	}
 
 	private function calculateHashCode() : int{

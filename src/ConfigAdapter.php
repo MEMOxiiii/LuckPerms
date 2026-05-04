@@ -6,7 +6,6 @@ namespace jasonw4331\LuckPerms;
 
 use jasonw4331\LuckPerms\config\generic\adapter\ConfigurationAdapter;
 use pocketmine\utils\Config;
-use Ramsey\Collection\Map\AbstractTypedMap;
 use function mb_strtolower;
 
 class ConfigAdapter implements ConfigurationAdapter{
@@ -47,8 +46,9 @@ class ConfigAdapter implements ConfigurationAdapter{
 	/**
 	 * @inheritDoc
 	 */
-	public function getStringMap(string $path, AbstractTypedMap $def) : AbstractTypedMap{
-		return $this->configuration->getNested($path, $def);
+	public function getStringMap(string $path, array $def) : array{
+		$val = $this->configuration->getNested($path, $def);
+		return is_array($val) ? $val : $def;
 	}
 
 	public function getPlugin() : LuckPerms{

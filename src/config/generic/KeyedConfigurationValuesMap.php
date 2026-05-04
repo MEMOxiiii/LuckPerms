@@ -5,33 +5,31 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\config\generic;
 
 use jasonw4331\LuckPerms\config\generic\key\ConfigKey;
-use Ramsey\Collection\Map\TypedMap;
-use function array_fill;
 
 /**
  * @template Tvalue of object
  */
 class KeyedConfigurationValuesMap{
 
-	/** @var TypedMap<int, Tvalue> $values */
-	private TypedMap $values;
+	/** @var array<int, mixed> $values */
+	private array $values;
 
 	public function __construct(int $size){
-		$this->values = new TypedMap('int', 'object', array_fill(0, $size, null));
+		$this->values = array_fill(0, $size, null);
 	}
 
 	/**
 	 * @phpstan-param ConfigKey<Tvalue> $key
 	 * @phpstan-return Tvalue
 	 */
-	public function get(ConfigKey $key) : object{
-		return $this->values->offsetGet($key->ordinal());
+	public function get(ConfigKey $key) : mixed{
+		return $this->values[$key->ordinal()];
 	}
 
 	/**
 	 * @phpstan-param ConfigKey<Tvalue> $key
 	 */
-	public function put(ConfigKey $key, object $value) : void{
-		$this->values->put($key->ordinal(), $value);
+	public function put(ConfigKey $key, mixed $value) : void{
+		$this->values[$key->ordinal()] = $value;
 	}
 }
