@@ -10,5 +10,7 @@ use pocketmine\event\Listener;
 
 class ConnectionListener extends AbstractConnectionListener implements Listener{
 
-	public function __construct(LuckPerms $param){ }
+	public function __construct(LuckPerms $plugin){
+		parent::__construct($plugin);
+	}
 }

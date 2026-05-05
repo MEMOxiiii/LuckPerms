@@ -11,6 +11,7 @@ use jasonw4331\LuckPerms\commands\misc\EditorCommand;
 use jasonw4331\LuckPerms\commands\track\TrackParentCommand;
 use jasonw4331\LuckPerms\commands\user\UserParentCommand;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 
 class LuckPermsCommand extends BaseCommand{
 
@@ -24,7 +25,7 @@ class LuckPermsCommand extends BaseCommand{
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		// show usage/help
+		$sender->sendMessage(TextFormat::YELLOW . 'Usage: /' . $aliasUsed . ' <user|group|track|editor|applyedits> ...');
 	}
 
 	public function getPermission() : ?string{

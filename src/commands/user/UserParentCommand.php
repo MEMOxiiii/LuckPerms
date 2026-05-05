@@ -13,6 +13,7 @@ use CortexPE\Commando\args\TextArgument;
 use CortexPE\Commando\BaseSubCommand;
 use jasonw4331\LuckPerms\command\SingleValueEnum;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 
 class UserParentCommand extends BaseSubCommand{
 
@@ -107,6 +108,7 @@ class UserParentCommand extends BaseSubCommand{
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		// TODO: Implement onRun() method.
+		$user = isset($args['user']) ? (string) $args['user'] : '<user>';
+		$sender->sendMessage(TextFormat::YELLOW . 'User command received for ' . $user . '.');
 	}
 }

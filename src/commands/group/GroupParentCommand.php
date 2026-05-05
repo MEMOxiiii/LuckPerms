@@ -10,6 +10,7 @@ use CortexPE\Commando\args\StringEnumArgument;
 use CortexPE\Commando\args\TextArgument;
 use CortexPE\Commando\BaseSubCommand;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 
 class GroupParentCommand extends BaseSubCommand{
 
@@ -94,6 +95,7 @@ class GroupParentCommand extends BaseSubCommand{
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		// TODO: Implement onRun() method.
+		$group = isset($args['user']) ? (string) $args['user'] : '<group>';
+		$sender->sendMessage(TextFormat::YELLOW . 'Group command received for ' . $group . '.');
 	}
 }

@@ -22,9 +22,14 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/ConfigAdapter.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\ConfigAdapter\\:\\:getStringMap\\(\\) should return Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap\\<string, string\\> but returns mixed\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\EventBus\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/ConfigAdapter.php',
+	'path' => __DIR__ . '/src/EventBus.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\EventBus\\:\\:\\$provider is never read, only written\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/EventBus.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getClassPathAppender\\(\\)\\.$#',
@@ -33,51 +38,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:registerApiOnPlatform\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsApiProvider\\:\\:getEventBus\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\config\\\\LuckPermsConfiguration\\:\\:get\\(\\)\\.$#',
-	'count' => 12,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager\\:\\:getQueryOptions\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager\\:\\:registerCalculator\\(\\)\\.$#',
-	'count' => 2,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\event\\\\EventDispatcher\\:\\:dispatchUniqueIdLookup\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\event\\\\EventDispatcher\\:\\:dispatchUsernameLookup\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\event\\\\EventDispatcher\\:\\:dispatchUsernameValidityCheck\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\extension\\\\SimpleExtensionManager\\:\\:close\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\extension\\\\SimpleExtensionManager\\:\\:loadExtensions\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -92,67 +52,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRepository\\:\\:scheduleRefresh\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\messaging\\\\InternalMessagingService\\:\\:close\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\messaging\\\\MessagingFactory\\:\\:getInstance\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\User\\:\\:getUniqueId\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:getIfLoaded\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:unload\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:getPlayerName\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:getPlayerUniqueId\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:shutdown\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\StorageFactory\\:\\:getInstance\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\implementation\\\\file\\\\watcher\\\\FileWatcher\\:\\:close\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\tasks\\\\SyncTask\\:\\:run\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\util\\\\AbstractConnectionListener\\:\\:loadUser\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -163,16 +63,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to an undefined method pocketmine\\\\plugin\\\\PluginManager\\:\\:removePermission\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\ApiRegistrationUtil\\:\\:registerProvider\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\ApiRegistrationUtil\\:\\:unregisterProvider\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -222,47 +112,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to method request\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\Buffer\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to static method register\\(\\) on an unknown class CortexPE\\\\Commando\\\\PacketHooker\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\EnvironmentVariableConfigAdapter does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\EventBus does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\LuckPermsCommand does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\MultiConfigurationAdapter does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\SystemPropertyConfigAdapter does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\actionlog\\\\LogDispatcher does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\config\\\\LuckPermsConfiguration does not have a constructor and must be instantiated without any parameters\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -272,27 +122,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRepository does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\messaging\\\\MessagingFactory does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\storage\\\\implementation\\\\file\\\\watcher\\\\FileWatcher does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\tasks\\\\SyncTask does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class jasonw4331\\\\LuckPerms\\\\Buffer not found\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -312,12 +142,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getSyncTaskBuffer\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\Buffer\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getTranslationManager\\(\\) return type with generic class jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager does not specify its types\\: T$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getTranslationManager\\(\\) return type with generic class jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager does not specify its types\\: T$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:lookupUniqueId\\(\\) should return Ramsey\\\\Uuid\\\\Uuid\\|null but returns Ramsey\\\\Uuid\\\\UuidInterface\\|null\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -332,6 +162,11 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$host of class jasonw4331\\\\LuckPerms\\\\http\\\\BytesocksClient constructor expects string, mixed given\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/LuckPerms.php',
+];
+$ignoreErrors[] = [
 	'message' => '#^Parameter \\#1 \\$listener of method pocketmine\\\\plugin\\\\PluginManager\\:\\:registerEvents\\(\\) expects pocketmine\\\\event\\\\Listener, jasonw4331\\\\LuckPerms\\\\context\\\\PlayerCalculator given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
@@ -342,7 +177,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#2 \\$command of method pocketmine\\\\command\\\\SimpleCommandMap\\:\\:register\\(\\) expects pocketmine\\\\command\\\\Command, jasonw4331\\\\LuckPerms\\\\LuckPermsCommand given\\.$#',
+	'message' => '#^Parameter \\#1 \\$uniqueId of method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getPlayer\\(\\) expects Ramsey\\\\Uuid\\\\Uuid, Ramsey\\\\Uuid\\\\UuidInterface given\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/LuckPerms.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$url of class jasonw4331\\\\LuckPerms\\\\http\\\\BytebinClient constructor expects string, mixed given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
@@ -362,11 +202,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:\\$syncTaskBuffer has unknown class jasonw4331\\\\LuckPerms\\\\Buffer as its type\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPerms.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:\\$translationManager with generic class jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager does not specify its types\\: T$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPerms.php',
@@ -377,31 +212,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/LuckPerms.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPermsCommand\\:\\:registerSubCommand\\(\\)\\.$#',
-	'count' => 3,
-	'path' => __DIR__ . '/src/LuckPermsCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPermsCommand\\:\\:setPermission\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPermsCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\commands\\\\group\\\\GroupParentCommand does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPermsCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\commands\\\\track\\\\TrackParentCommand does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPermsCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\commands\\\\user\\\\UserParentCommand does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/LuckPermsCommand.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\LuckPermsCommand\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/LuckPermsCommand.php',
@@ -410,11 +220,6 @@ $ignoreErrors[] = [
 	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:render\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/SenderFactory.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsApiProvider has an unused parameter \\$param\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/api/LuckPermsApiProvider.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\api\\\\metastacking\\\\DuplicateRemovalFunction\\:\\:\\$func has no type specified\\.$#',
@@ -432,7 +237,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/api/metastacking/MetaStackDefinition.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsProvider\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsApiProvider\\:\\:getNodeBuilderRegistry\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/api/node/Node.php',
 ];
@@ -472,7 +277,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/api/node/types/InheritanceNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsProvider\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsApiProvider\\:\\:getNodeBuilderRegistry\\(\\)\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/src/api/node/types/MetaNode.php',
 ];
@@ -482,7 +287,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/api/node/types/PermissionNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsProvider\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsApiProvider\\:\\:getNodeBuilderRegistry\\(\\)\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/src/api/node/types/PrefixNode.php',
 ];
@@ -562,7 +367,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/cacheddata/result/TristateResult.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\cacheddata\\\\result\\\\TristateResult\\:\\:jsonSerialize\\(\\) should return mixed but return statement is missing\\.$#',
+	'message' => '#^Cannot cast jasonw4331\\\\LuckPerms\\\\api\\\\node\\\\Node to string\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/cacheddata/result/TristateResult.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\cacheddata\\\\result\\\\TristateResult\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/cacheddata/result/TristateResult.php',
 ];
@@ -637,79 +447,9 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/calculator/CalculatorFactory.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Access to an undefined property jasonw4331\\\\LuckPerms\\\\command\\\\SingleValueEnum\\:\\:\\$name\\.$#',
-	'count' => 2,
-	'path' => __DIR__ . '/src/command/SingleValueEnum.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\command\\\\SingleValueEnum\\:\\:getEnumValues\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/command/SingleValueEnum.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^jasonw4331\\\\LuckPerms\\\\command\\\\SingleValueEnum\\:\\:__construct\\(\\) calls parent constructor but does not extend any class\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/command/SingleValueEnum.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^jasonw4331\\\\LuckPerms\\\\command\\\\SingleValueEnum\\:\\:__construct\\(\\) calls parent\\:\\:__construct\\(\\) but jasonw4331\\\\LuckPerms\\\\command\\\\SingleValueEnum does not extend any class\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/command/SingleValueEnum.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\commands\\\\group\\\\GroupParentCommand\\:\\:registerArgument\\(\\)\\.$#',
-	'count' => 14,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:19 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:30 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:41 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:52 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:63 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:74 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/group/GroupParentCommand\\.php\\:85 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\IntegerArgument not found\\.$#',
-	'count' => 3,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\RawStringArgument not found\\.$#',
-	'count' => 3,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\TextArgument not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\commands\\\\group\\\\GroupParentCommand\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#',
@@ -717,49 +457,34 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/commands/group/GroupParentCommand.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\commands\\\\track\\\\TrackParentCommand\\:\\:registerArgument\\(\\)\\.$#',
-	'count' => 13,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:18 does not have a constructor and must be instantiated without any parameters\\.$#',
+	'message' => '#^Call to function is_array\\(\\) with array will always evaluate to true\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
+	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:30 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
+	'message' => '#^Call to function is_array\\(\\) with array\\<string, mixed\\> will always evaluate to true\\.$#',
+	'count' => 2,
+	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:41 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:52 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:63 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/track/TrackParentCommand\\.php\\:74 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\IntegerArgument not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\RawStringArgument not found\\.$#',
+	'message' => '#^Cannot cast mixed to string\\.$#',
 	'count' => 6,
-	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
+	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\commands\\\\misc\\\\ApplyEditsCommand\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Cannot cast mixed to string\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/commands/misc/EditorCommand.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\commands\\\\misc\\\\EditorCommand\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/commands/misc/EditorCommand.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\commands\\\\track\\\\TrackParentCommand\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#',
@@ -767,58 +492,8 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/commands/track/TrackParentCommand.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\commands\\\\user\\\\UserParentCommand\\:\\:registerArgument\\(\\)\\.$#',
-	'count' => 32,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\commands\\\\user\\\\UserParentCommand\\:\\:setPermission\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/user/UserParentCommand\\.php\\:38 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/user/UserParentCommand\\.php\\:56 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/user/UserParentCommand\\.php\\:73 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class class@anonymous/commands/user/UserParentCommand\\.php\\:98 does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\BooleanArgument not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\IntegerArgument not found\\.$#',
-	'count' => 3,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\RawStringArgument not found\\.$#',
-	'count' => 6,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\TargetArgument not found\\.$#',
 	'count' => 2,
-	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class CortexPE\\\\Commando\\\\args\\\\TextArgument not found\\.$#',
-	'count' => 6,
 	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
 ];
 $ignoreErrors[] = [
@@ -827,13 +502,18 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @throws with type CortexPE\\\\Commando\\\\exception\\\\ArgumentOrderException is not subtype of Throwable$#',
-	'count' => 1,
+	'message' => '#^Parameter \\#2 \\$argument of method CortexPE\\\\Commando\\\\BaseSubCommand\\:\\:registerArgument\\(\\) expects CortexPE\\\\Commando\\\\args\\\\BaseArgument, CortexPE\\\\Commando\\\\args\\\\TargetArgument given\\.$#',
+	'count' => 2,
 	'path' => __DIR__ . '/src/commands/user/UserParentCommand.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\query\\\\Builder\\:\\:build\\(\\)\\.$#',
 	'count' => 1,
+	'path' => __DIR__ . '/src/config/ConfigKeys.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Cannot call method add\\(\\) on array\\<int, jasonw4331\\\\LuckPerms\\\\query\\\\Flag\\>\\.$#',
+	'count' => 2,
 	'path' => __DIR__ . '/src/config/ConfigKeys.php',
 ];
 $ignoreErrors[] = [
@@ -857,22 +537,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/config/ConfigKeys.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$array of function array_keys expects array, Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap\\<string, string\\> given\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/config/ConfigKeys.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$array of function array_values expects array, Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap\\<string, string\\> given\\.$#',
-	'count' => 2,
-	'path' => __DIR__ . '/src/config/ConfigKeys.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Parameter \\#1 \\$keysClass of static method jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\KeyedConfiguration\\:\\:initialise\\(\\) expects class\\-string\\<pocketmine\\\\utils\\\\EnumTrait\\>, string given\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/config/ConfigKeys.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$rewrites of static method jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\WorldNameRewriter\\:\\:of\\(\\) expects Ramsey\\\\Collection\\\\Map\\\\TypedMap\\<string, string\\>, Ramsey\\\\Collection\\\\Map\\\\TypedMap\\<int, array\\{string, string\\}\\> given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/config/ConfigKeys.php',
 ];
@@ -885,6 +550,11 @@ $ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\config\\\\ConfigKeys\\:\\:\\$KEYS with generic class jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\key\\\\SimpleConfigKey does not specify its types\\: T$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/config/ConfigKeys.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Call to function method_exists\\(\\) with jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\adapter\\\\ConfigurationAdapter and \'reload\' will always evaluate to true\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/config/LuckPermsConfiguration.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\KeyedConfiguration\\:\\:__construct\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#',
@@ -927,12 +597,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/config/generic/KeyedConfiguration.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#2 \\$value of method Ramsey\\\\Collection\\\\Map\\\\AbstractMap\\<int,Tvalue of object\\>\\:\\:put\\(\\) expects Tvalue of object, object given\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/config/generic/KeyedConfigurationValuesMap.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\KeyedConfigurationValuesMap\\<Tvalue of object\\>\\:\\:\\$values \\(Ramsey\\\\Collection\\\\Map\\\\TypedMap\\<int, Tvalue of object\\>\\) does not accept Ramsey\\\\Collection\\\\Map\\\\TypedMap\\<int, null\\>\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\config\\\\generic\\\\KeyedConfigurationValuesMap\\:\\:get\\(\\) should return Tvalue of object but returns mixed\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/config/generic/KeyedConfigurationValuesMap.php',
 ];
@@ -1032,14 +697,19 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/context/ConfigurationContextCalculator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager has an unused parameter \\$param\\.$#',
+	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager has an unused parameter \\$plugin\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/context/ContextManager.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method Ramsey\\\\Collection\\\\Set\\<string\\>\\:\\:stream\\(\\)\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager\\:\\:\\$calculators is never read, only written\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/context/ContextSet.php',
+	'path' => __DIR__ . '/src/context/ContextManager.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\context\\\\ContextManager\\:\\:\\$calculators type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextManager.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#',
@@ -1047,9 +717,69 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/context/ContextSet.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsProvider\\:\\:get\\(\\)\\.$#',
-	'count' => 3,
-	'path' => __DIR__ . '/src/context/ImmutableContextSet.php',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:getValues\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\context\\\\Set\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toFlattenedMap\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\context\\\\MapInterface\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toFlattenedMap\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toMap\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\context\\\\MapInterface\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toMap\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\context\\\\Set\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toMap\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toSet\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\context\\\\Set\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ContextSet\\:\\:toSet\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @return with type jasonw4331\\\\LuckPerms\\\\context\\\\MapInterface\\<string, jasonw4331\\\\LuckPerms\\\\context\\\\Set\\<string\\>\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @return with type jasonw4331\\\\LuckPerms\\\\context\\\\MapInterface\\<string, string\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @return with type jasonw4331\\\\LuckPerms\\\\context\\\\Set\\<jasonw4331\\\\LuckPerms\\\\api\\\\context\\\\Context\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @return with type jasonw4331\\\\LuckPerms\\\\context\\\\Set\\<string\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ContextSet.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ImmutableContextSetBuilder\\:\\:addAll\\(\\) has parameter \\$iterable with no value type specified in iterable type iterable\\.$#',
@@ -1057,9 +787,19 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/context/ImmutableContextSetBuilder.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\api\\\\LuckPermsProvider\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ImmutableContextSetImpl\\:\\:__construct\\(\\) has parameter \\$contexts with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/context/MutableContextSet.php',
+	'path' => __DIR__ . '/src/context/ImmutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ImmutableContextSetImpl\\:\\:getIterator\\(\\) return type with generic class ArrayIterator does not specify its types\\: TKey, TValue$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ImmutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\ImmutableContextSetImpl\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/ImmutableContextSetImpl.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSet\\:\\:add\\(\\) invoked with 1 parameter, 2 required\\.$#',
@@ -1070,6 +810,36 @@ $ignoreErrors[] = [
 	'message' => '#^Parameter \\#1 \\$key of method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSet\\:\\:add\\(\\) expects string, jasonw4331\\\\LuckPerms\\\\api\\\\context\\\\Context given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/context/MutableContextSet.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Instanceof between jasonw4331\\\\LuckPerms\\\\api\\\\context\\\\Context and jasonw4331\\\\LuckPerms\\\\api\\\\context\\\\Context will always evaluate to true\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSetImpl\\:\\:getIterator\\(\\) return type with generic class ArrayIterator does not specify its types\\: TKey, TValue$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSetImpl\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSetImpl\\:\\:toFlattenedMap\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSetImpl\\:\\:toMap\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\MutableContextSetImpl\\:\\:toSet\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/MutableContextSetImpl.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\context\\\\PlayerCalculator has an unused parameter \\$get\\.$#',
@@ -1107,9 +877,44 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\event\\\\EventDispatcher has an unused parameter \\$param\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\NonEmptyWorldNameRewriter\\:\\:__construct\\(\\) has parameter \\$rewrites with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/event/EventDispatcher.php',
+	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @param for parameter \\$rewrites with type jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap\\<string, string\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc type for property jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\NonEmptyWorldNameRewriter\\:\\:\\$rewrites with type jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap\\<string, string\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\$rewrites of method jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\NonEmptyWorldNameRewriter\\:\\:__construct\\(\\) has invalid type jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\NonEmptyWorldNameRewriter\\:\\:\\$rewrites has unknown class jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap as its type\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/NonEmptyWorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\WorldNameRewriter\\:\\:of\\(\\) has parameter \\$rewrites with no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/WorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @param for parameter \\$rewrites with type jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap\\<string, string\\> is incompatible with native type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/WorldNameRewriter.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\$rewrites of method jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\WorldNameRewriter\\:\\:of\\(\\) has invalid type jasonw4331\\\\LuckPerms\\\\context\\\\calculator\\\\TypedMap\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/context/calculator/WorldNameRewriter.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\event\\\\gen\\\\GeneratedEventClass has an unused parameter \\$param\\.$#',
@@ -1117,7 +922,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/event/gen/GeneratedEventClass.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\extension\\\\SimpleExtensionManager has an unused parameter \\$param\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\extension\\\\SimpleExtensionManager\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/extension/SimpleExtensionManager.php',
 ];
@@ -1127,27 +932,32 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:current\\(\\) should return mixed but return statement is missing\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:computerNext\\(\\) has no return type specified\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:key\\(\\) should return mixed but return statement is missing\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:endOfData\\(\\) has no return type specified\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:valid\\(\\) should return bool but return statement is missing\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\AbstractIterator\\:\\:next\\(\\) with return type void returns mixed but should not return anything\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Strict comparison using \\!\\=\\= between 4 and 3 will always evaluate to true\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Unreachable statement \\- code above always terminates\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/AbstractIterator.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\graph\\\\BreadthFirstIterator implements generic interface Iterator but does not specify its types\\: TKey, TValue$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
 ];
@@ -1167,11 +977,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\graph\\\\BreadthFirstIterator\\:\\:\\$queue with generic class Ramsey\\\\Collection\\\\DoubleEndedQueue does not specify its types\\: T$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\graph\\\\BreadthFirstIterator\\:\\:\\$visited is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
@@ -1182,12 +987,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/graph/BreadthFirstIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method Iterator\\:\\:hasNext\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method object\\:\\:hasNext\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\graph\\\\DepthFirstIterator\\:\\:endOfData\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method object\\:\\:next\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
 ];
@@ -1207,17 +1012,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\graph\\\\DepthFirstIterator\\:\\:\\$stack with generic class Ramsey\\\\Collection\\\\DoubleEndedQueue does not specify its types\\: T$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\graph\\\\DepthFirstIterator\\:\\:\\$visited type has no value type specified in iterable type array\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Result of method Iterator\\<mixed,mixed\\>\\:\\:next\\(\\) \\(void\\) is used\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/DepthFirstIterator.php',
 ];
@@ -1240,6 +1035,16 @@ $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\Graph\\:\\:traverse\\(\\) return type has no value type specified in iterable type Traversable\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/graph/Graph.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method class@anonymous/graph/NodeAndSuccessors\\.php\\:13\\:\\:__construct\\(\\) has parameter \\$successors with no value type specified in iterable type Traversable\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/graph/NodeAndSuccessors.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method class@anonymous/graph/NodeAndSuccessors\\.php\\:13\\:\\:next\\(\\) has no return type specified\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/graph/NodeAndSuccessors.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\graph\\\\NodeAndSuccessors\\:\\:__construct\\(\\) has parameter \\$node with no type specified\\.$#',
@@ -1303,16 +1108,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\http\\\\BytebinClient\\:\\:getJsonContent\\(\\) should return array but returns mixed\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/http/BytebinClient.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Offset \'Location\' on array\\<int, array\\<string, string\\>\\> in isset\\(\\) does not exist\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/http/BytebinClient.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Unreachable statement \\- code above always terminates\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/http/BytebinClient.php',
 ];
@@ -1392,107 +1187,22 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/listeners/AutoOpListener.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\listeners\\\\ConnectionListener has an unused parameter \\$param\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/listeners/ConnectionListener.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\listeners\\\\PlatformListener has an unused parameter \\$param\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/listeners/PlatformListener.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method Ramsey\\\\Collection\\\\Map\\\\TypedMap\\:\\:getKey\\(\\)\\.$#',
+	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getResourcePath\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/locale/TranslationManager.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method Ramsey\\\\Collection\\\\Map\\\\TypedMap\\:\\:getValue\\(\\)\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:getInstalledLocales\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/locale/TranslationManager.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\<T\\>\\:\\:parseLocale\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRegistry\\:\\:registerAll\\(\\)\\.$#',
-	'count' => 2,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\locale\\\\GlobalTranslator\\:\\:get\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\locale\\\\GlobalTranslator\\:\\:translator\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRegistry\\:\\:create\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to method equals\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\locale\\\\Locale\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to static method get\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\locale\\\\Utf8ResourceBundleControl\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to static method getBundle\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\locale\\\\ResourceBundle\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to static method join\\(\\) on an unknown class Webmozart\\\\PathUtil\\\\Path\\.$#',
-	'count' => 4,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\locale\\\\Locale not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\locale\\\\ResourceBundle not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Instantiated class jasonw4331\\\\LuckPerms\\\\locale\\\\Locale not found\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:getInstalledLocales\\(\\) return type with generic class Ramsey\\\\Collection\\\\Set does not specify its types\\: T$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:loadTranslationFile\\(\\) return type with generic class Ramsey\\\\Collection\\\\Map\\\\TypedMap does not specify its types\\: K, T$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$translationFile of method jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\<T\\>\\:\\:loadTranslationFile\\(\\) expects SplFileInfo, string given\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:\\$installed has unknown class jasonw4331\\\\LuckPerms\\\\locale\\\\Locale as its type\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/locale/TranslationManager.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Strict comparison using \\!\\=\\= between jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRegistry and null will always evaluate to true\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationManager\\:\\:\\$registry is unused\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/locale/TranslationManager.php',
 ];
@@ -1517,6 +1227,16 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/locale/TranslationRegistry.php',
 ];
 $ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\locale\\\\TranslationRepository\\:\\:\\$plugin is never read, only written\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/locale/TranslationRepository.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\messaging\\\\MessagingFactory\\:\\:\\$plugin is never read, only written\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/messaging/MessagingFactory.php',
+];
+$ignoreErrors[] = [
 	'message' => '#^Cannot call method getKey\\(\\) on string\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/FluentMetaStackElement.php',
@@ -1532,12 +1252,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/metastacking/FluentMetaStackElement.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\FluentMetaStackElementBuilder\\:\\:\\$elements type has no value type specified in iterable type array\\.$#',
+	'message' => '#^Parameter \\#2 \\$params of class jasonw4331\\\\LuckPerms\\\\metastacking\\\\FluentMetaStackElement constructor expects Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap\\<string, string\\>, array\\<string, string\\> given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/FluentMetaStackElementBuilder.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\FluentMetaStackElementBuilder\\:\\:\\$params with generic class Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap does not specify its types\\: K, T$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\FluentMetaStackElementBuilder\\:\\:\\$elements type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/FluentMetaStackElementBuilder.php',
 ];
@@ -1552,32 +1272,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$duplicateRemovalFunction is never read, only written\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$elements is never read, only written\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$elements type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$endSpacer is never read, only written\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$hashCode is never read, only written\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$middleSpacer is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
 ];
@@ -1588,11 +1288,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$parseList is unused\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\metastacking\\\\SimpleMetaStackDefinition\\:\\:\\$startSpacer is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/metastacking/SimpleMetaStackDefinition.php',
 ];
@@ -1672,17 +1367,17 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/model/ParentsByWeight.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\group\\\\StandardGroupManager has an unused parameter \\$param\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\group\\\\StandardGroupManager\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/model/manager/group/StandardGroupManager.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\track\\\\StandardTrackManager has an unused parameter \\$param\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\track\\\\StandardTrackManager\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/model/manager/track/StandardTrackManager.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager has an unused parameter \\$param\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/model/manager/user/StandardUserManager.php',
 ];
@@ -1692,9 +1387,39 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/query/FlagUtils.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\query\\\\FlagUtils\\:\\:toSet\\(\\) return type with generic class Ramsey\\\\Collection\\\\Set does not specify its types\\: T$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\query\\\\FlagUtils\\:\\:toSet\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/query/FlagUtils.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$settings of static method jasonw4331\\\\LuckPerms\\\\query\\\\FlagUtils\\:\\:toByte0\\(\\) expects array\\<jasonw4331\\\\LuckPerms\\\\query\\\\Flag\\>, jasonw4331\\\\LuckPerms\\\\query\\\\Set given\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/FlagUtils.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$value of function count expects array\\|Countable, jasonw4331\\\\LuckPerms\\\\query\\\\Set given\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/FlagUtils.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\query\\\\QueryOptionsBuilderImpl\\:\\:option\\(\\) has parameter \\$key with no type specified\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/QueryOptionsBuilderImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\query\\\\QueryOptionsBuilderImpl\\:\\:option\\(\\) has parameter \\$value with no type specified\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/QueryOptionsBuilderImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\query\\\\QueryOptionsBuilderImpl\\:\\:\\$context is never read, only written\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/QueryOptionsBuilderImpl.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\query\\\\QueryOptionsBuilderImpl\\:\\:\\$options type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/query/QueryOptionsBuilderImpl.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to method execute\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\scheduler\\\\Executor\\.$#',
@@ -1732,9 +1457,9 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/sender/Sender.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\storage\\\\StorageFactory has an unused parameter \\$param\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/storage/StorageFactory.php',
+	'path' => __DIR__ . '/src/storage/Storage.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\storage\\\\StorageType\\:\\:\\$identifiers type has no value type specified in iterable type array\\.$#',
@@ -1792,62 +1517,17 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/storage/misc/StorageCredentials.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\group\\\\StandardGroupManager\\:\\:getAll\\(\\)\\.$#',
+	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\tasks\\\\SyncTask\\:\\:\\$plugin is never read, only written\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/CacheHousekeepingTask.php',
+	'path' => __DIR__ . '/src/tasks/SyncTask.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:getAll\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/CacheHousekeepingTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\group\\\\StandardGroupManager\\:\\:getAll\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\group\\\\StandardGroupManager\\:\\:invalidateAllGroupCaches\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:getAll\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\model\\\\manager\\\\user\\\\StandardUserManager\\:\\:invalidateAllUserCaches\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:saveGroup\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\storage\\\\Storage\\:\\:saveUser\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/tasks/ExpireTemporaryTask.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Cannot call method compareTo\\(\\) on mixed\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\ImmutableTreeNode\\:\\:__construct\\(\\) has parameter \\$children with no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/ImmutableTreeNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Cannot clone Ramsey\\\\Collection\\\\Map\\\\TypedMap\\<string, jasonw4331\\\\LuckPerms\\\\treeview\\\\ImmutableTreeNode\\>\\|null\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/treeview/ImmutableTreeNode.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\ImmutableTreeNode\\:\\:__construct\\(\\) has parameter \\$children with generic class Ramsey\\\\Collection\\\\Map\\\\TypedMap but does not specify its types\\: K, T$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/treeview/ImmutableTreeNode.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\ImmutableTreeNode\\:\\:getChildren\\(\\) return type with generic class Ramsey\\\\Collection\\\\Map\\\\TypedMap does not specify its types\\: K, T$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\ImmutableTreeNode\\:\\:getChildren\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/ImmutableTreeNode.php',
 ];
@@ -1862,6 +1542,11 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/treeview/PermissionRegistry.php',
 ];
 $ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$permission of method jasonw4331\\\\LuckPerms\\\\treeview\\\\PermissionRegistry\\:\\:insert\\(\\) expects string, mixed given\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/treeview/PermissionRegistry.php',
+];
+$ignoreErrors[] = [
 	'message' => '#^Dynamic call to static method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:allowInsert\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
@@ -1872,17 +1557,17 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:getChildMap\\(\\) return type with generic class Ramsey\\\\Collection\\\\Map\\\\TypedMap does not specify its types\\: K, T$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:getChildMap\\(\\) is unused\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:getChildren\\(\\) return type with generic class Ramsey\\\\Collection\\\\Map\\\\TypedMap does not specify its types\\: K, T$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:getChildMap\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:tryInsert\\(\\) should return jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\|null but returns mixed\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\treeview\\\\TreeNode\\:\\:getChildren\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
 ];
@@ -1892,12 +1577,52 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/treeview/TreeNode.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Else branch is unreachable because previous condition is always true\\.$#',
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleDoubleEndedQueue extends generic class Ramsey\\\\Collection\\\\AbstractArray but does not specify its types\\: T$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/util/Optional.php',
+	'path' => __DIR__ . '/src/util/Compat.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Function hash invoked with 1 parameter, 2\\-4 required\\.$#',
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleDoubleEndedQueue implements generic interface Ramsey\\\\Collection\\\\DoubleEndedQueueInterface but does not specify its types\\: T$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleQueue extends generic class Ramsey\\\\Collection\\\\AbstractArray but does not specify its types\\: T$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleQueue implements generic interface Ramsey\\\\Collection\\\\QueueInterface but does not specify its types\\: T$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleSet extends generic class Ramsey\\\\Collection\\\\AbstractSet but does not specify its types\\: T$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\util\\\\SimpleTypedMap extends generic class Ramsey\\\\Collection\\\\Map\\\\AbstractTypedMap but does not specify its types\\: K, T$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\util\\\\SimpleDoubleEndedQueue\\:\\:exchangeArray\\(\\) has parameter \\$arr with no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\util\\\\SimpleDoubleEndedQueue\\:\\:getArrayCopy\\(\\) return type has no value type specified in iterable type array\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$offset of method Ramsey\\\\Collection\\\\AbstractArray\\<mixed\\>\\:\\:offsetUnset\\(\\) expects \\(int\\|string\\), int\\|string\\|null given\\.$#',
+	'count' => 2,
+	'path' => __DIR__ . '/src/util/Compat.php',
+];
+$ignoreErrors[] = [
+	'message' => '#^Else branch is unreachable because previous condition is always true\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/util/Optional.php',
 ];
@@ -1912,17 +1637,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/util/Optional.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\util\\\\Optional\\:\\:hashCode\\(\\) should return int but returns int\\|string\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/util/Optional.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\util\\\\Optional\\:\\:ofNullable\\(\\) should return jasonw4331\\\\LuckPerms\\\\util\\\\Optional\\<T\\> but returns jasonw4331\\\\LuckPerms\\\\util\\\\Optional\\<null\\>\\|jasonw4331\\\\LuckPerms\\\\util\\\\Optional\\<T of mixed\\>\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/util/Optional.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$algo of function hash expects string, Tvalue of mixed given\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/util/Optional.php',
 ];
@@ -1937,8 +1652,8 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/verbose/VerboseHandler.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseListener\\:\\:getNotifiedSender\\(\\)\\.$#',
-	'count' => 1,
+	'message' => '#^Cannot call method getNotifiedSender\\(\\) on mixed\\.$#',
+	'count' => 2,
 	'path' => __DIR__ . '/src/verbose/VerboseHandler.php',
 ];
 $ignoreErrors[] = [
@@ -1952,7 +1667,7 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/verbose/VerboseHandler.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseHandler\\:\\:\\$listeners \\(Ramsey\\\\Collection\\\\Set\\<jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseListener\\>\\) does not accept Ramsey\\\\Collection\\\\CollectionInterface\\<jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseListener\\>\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseHandler\\:\\:unregisterListener\\(\\) should return jasonw4331\\\\LuckPerms\\\\verbose\\\\VerboseListener but returns mixed\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/verbose/VerboseHandler.php',
 ];
@@ -2077,47 +1792,37 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/verbose/event/PermissionCheckEvent.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Access to an undefined property jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorStore\\:\\:\\$keyPair\\.$#',
-	'count' => 4,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Call to an undefined method Closure\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\WebEditorResponse\\:\\:__construct\\(\\) has parameter \\$groupDeletions with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/WebEditorResponse.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\config\\\\LuckPermsConfiguration\\:\\:get\\(\\)\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\WebEditorResponse\\:\\:__construct\\(\\) has parameter \\$permissionHolders with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/WebEditorResponse.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined static method jasonw4331\\\\LuckPerms\\\\config\\\\ConfigKeys\\:\\:EDITOR_LAZILY_GENERATE_KEY\\(\\)\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\WebEditorResponse\\:\\:__construct\\(\\) has parameter \\$tracks with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/WebEditorResponse.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to static method memoize\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\Suppliers\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\WebEditorResponse\\:\\:__construct\\(\\) has parameter \\$userDeletions with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/WebEditorResponse.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to static method supplyAsync\\(\\) on an unknown class jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\CompletableFuture\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorKeystore\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/store/WebEditorKeystore.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\CryptographyUtils not found\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorKeystore\\:\\:set\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
+	'path' => __DIR__ . '/src/webeditor/store/WebEditorKeystore.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Class jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorKeystore does not have a constructor and must be instantiated without any parameters\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorStore\\:\\:keyPair\\(\\) has invalid return type jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\CompletableFuture\\.$#',
+	'message' => '#^Method jasonw4331\\\\LuckPerms\\\\webeditor\\\\store\\\\WebEditorStore\\:\\:keyPair\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/webeditor/store/WebEditorStore.php',
 ];

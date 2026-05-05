@@ -9,6 +9,7 @@ use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\args\StringEnumArgument;
 use CortexPE\Commando\BaseSubCommand;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 
 class TrackParentCommand extends BaseSubCommand{
 
@@ -83,6 +84,7 @@ class TrackParentCommand extends BaseSubCommand{
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		// TODO: Implement onRun() method.
+		$track = isset($args['track']) ? (string) $args['track'] : '<track>';
+		$sender->sendMessage(TextFormat::YELLOW . 'Track command received for ' . $track . '.');
 	}
 }

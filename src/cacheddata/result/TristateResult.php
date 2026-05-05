@@ -64,7 +64,12 @@ class TristateResult implements \JsonSerializable{
 		return "TristateResult(result=" . $this->result . ", node=" . $this->node . ", processorClass=" . $this->processorClassFriendly() . ", overriddenResult=" . $this->overriddenResult . ")";
 	}
 
-	public function jsonSerialize(){
-		// TODO: Implement jsonSerialize() method.
+	public function jsonSerialize() : array{
+		return [
+			'result' => $this->result()->name(),
+			'node' => $this->node() !== null ? (string) $this->node() : null,
+			'processorClass' => $this->processorClassFriendly(),
+			'overriddenResult' => $this->overriddenResult()?->result()->name(),
+		];
 	}
 }

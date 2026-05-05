@@ -7,6 +7,11 @@ namespace jasonw4331\LuckPerms\extension;
 use jasonw4331\LuckPerms\LuckPerms;
 
 class SimpleExtensionManager{
+	public function __construct(private LuckPerms $plugin){ }
 
-	public function __construct(LuckPerms $param){ }
+	public function loadExtensions(string $directory) : void{
+	}
+
+	public function close() : void{
+	}
 }

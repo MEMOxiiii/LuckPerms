@@ -5,38 +5,82 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\graph;
 
 abstract class AbstractIterator implements \Iterator{
+	private const STATE_READY = 1;
+	private const STATE_NOT_READY = 2;
+	private const STATE_DONE = 3;
+	private const STATE_FAILED = 4;
+
+	private int $state = self::STATE_NOT_READY;
+	private mixed $nextValue = null;
+	private int $position = 0;
+
+	abstract protected function computerNext();
+
+	protected function endOfData(){
+		$this->state = self::STATE_DONE;
+		return null;
+	}
+
+	private function tryToComputeNext() : bool{
+		$this->state = self::STATE_FAILED;
+		$this->nextValue = $this->computerNext();
+		if($this->state !== self::STATE_DONE){
+			$this->state = self::STATE_READY;
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
 	public function current(){
-		// TODO: Implement current() method.
+		if(!$this->valid()){
+			return null;
+		}
+		return $this->nextValue;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function next(){
-		// TODO: Implement next() method.
+		if($this->valid()){
+			$this->position++;
+		}
+		$this->state = self::STATE_NOT_READY;
+		return $this->current();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function key(){
-		// TODO: Implement key() method.
+		return $this->position;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function valid(){
-		// TODO: Implement valid() method.
+		if($this->state === self::STATE_FAILED){
+			throw new \RuntimeException('Iterator is in failed state');
+		}
+		if($this->state === self::STATE_DONE){
+			return false;
+		}
+		if($this->state === self::STATE_READY){
+			return true;
+		}
+		return $this->tryToComputeNext();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function rewind(){
-		// TODO: Implement rewind() method.
+		if($this->position !== 0 || $this->state !== self::STATE_NOT_READY){
+			throw new \LogicException('This iterator does not support rewind');
+		}
 	}
 }
