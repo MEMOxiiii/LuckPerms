@@ -1,0 +1,57 @@
+name: LuckPerms
+main: jasonw4331\LuckPerms\LuckPerms
+src-namespace-prefix: jasonw4331\LuckPerms
+version: 1.0.0
+api: [5.0.0]
+load: STARTUP
+author: jasonw4331
+description: A permissions plugin for PocketMine-MP servers based on lucko/LuckPerms
+website: https://luckperms.net
+
+commands:
+  luckperms:
+    description: Manage permissions
+    usage: /luckperms <user|group|track|editor|applyedits> ...
+    aliases: [lp, perm, perms, permission, permissions]
+    permission: luckperms.command
+
+permissions:
+  luckperms.command:
+    description: Allows use of LuckPerms commands
+    default: op
+  luckperms.user.info:
+    description: Allows viewing user info
+    default: op
+  luckperms.user.parent.add:
+    description: Allows adding a parent group to a user
+    default: op
+  luckperms.user.parent.remove:
+    description: Allows removing a parent group from a user
+    default: op
+  luckperms.user.permission.set:
+    description: Allows setting a permission for a user
+    default: op
+  luckperms.user.permission.unset:
+    description: Allows unsetting a permission for a user
+    default: op
+  luckperms.group.info:
+    description: Allows viewing group info
+    default: op
+  luckperms.group.parent.add:
+    description: Allows adding a parent group to a group
+    default: op
+  luckperms.group.parent.remove:
+    description: Allows removing a parent group from a group
+    default: op
+  luckperms.group.permission.set:
+    description: Allows setting a permission for a group
+    default: op
+  luckperms.group.permission.unset:
+    description: Allows unsetting a permission for a group
+    default: op
+  luckperms.editor:
+    description: Allows using the web editor
+    default: op
+  luckperms.sync:
+    description: Allows syncing data
+    default: op
