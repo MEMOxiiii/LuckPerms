@@ -51,6 +51,69 @@ permissions:
   luckperms.editor:
     description: Allows using the web editor
     default: op
+  luckperms.applyedits:
+    description: Allows applying web editor changes
+    default: op
   luckperms.sync:
     description: Allows syncing data
+    default: op
+  luckperms.info:
+    description: Allows viewing LuckPerms info
+    default: op
+  luckperms.creategroup:
+    description: Allows creating groups
+    default: op
+  luckperms.deletegroup:
+    description: Allows deleting groups
+    default: op
+  luckperms.listgroups:
+    description: Allows listing groups
+    default: op
+  luckperms.createtrack:
+    description: Allows creating tracks
+    default: op
+  luckperms.deletetrack:
+    description: Allows deleting tracks
+    default: op
+  luckperms.listtracks:
+    description: Allows listing tracks
+    default: op
+  luckperms.track.info:
+    description: Allows viewing track info
+    default: op
+  luckperms.track.append:
+    description: Allows appending a group to a track
+    default: op
+  luckperms.track.insert:
+    description: Allows inserting a group into a track
+    default: op
+  luckperms.track.remove:
+    description: Allows removing a group from a track
+    default: op
+  luckperms.user.setweight:
+    description: Allows setting user weight
+    default: op
+  luckperms.group.setweight:
+    description: Allows setting group weight
+    default: op
+  luckperms.group.setdisplayname:
+    description: Allows setting group display name
+    default: op
+  luckperms.user.meta.set:
+    description: Allows setting meta for a user
+    default: op
+  luckperms.user.meta.unset:
+    description: Allows unsetting meta for a user
+    default: op
+  luckperms.user.meta.clear:
+    description: Allows clearing meta for a user
+    default: op
+  luckperms.group.meta.set:
+    description: Allows setting meta for a group
+    default: op
+  luckperms.group.meta.unset:
+    description: Allows unsetting meta for a group
+    default: op
+  luckperms.group.meta.clear:
+    description: Allows clearing meta for a group
     default: op

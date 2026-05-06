@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\http;
 
-use pocketmine\utils\Internet;
 use pocketmine\utils\InternetException;
 use function basename;
 use function curl_close;
@@ -15,6 +14,7 @@ use function curl_init;
 use function curl_setopt;
 use function explode;
 use function json_decode;
+use function gzdecode;
 use function ltrim;
 use function str_ends_with;
 use function stripos;
@@ -123,7 +123,24 @@ class BytebinClient extends AbstractHttpClient{
 	 * @throws \JsonException
 	 */
 	public function getJsonContent(string $id) : array {
-		$response = Internet::simpleCurl($this->url . ltrim($id, '/'), 10, ["User-Agent: {$this->userAgent}"]);
-		return json_decode($response->getBody(), true, flags: JSON_OBJECT_AS_ARRAY | JSON_THROW_ON_ERROR);
+		$ch = curl_init($this->url . ltrim($id, '/'));
+		if($ch === false) throw new InternetException('Failed to initialise cURL');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["User-Agent: {$this->userAgent}"]);
+		$raw = curl_exec($ch);
+		if($raw === false){
+			$err = curl_error($ch);
+			curl_close($ch);
+			throw new InternetException('Bytebin GET failed: ' . $err);
+		}
+		curl_close($ch);
+		// auto-decompress gzip (bytebin stores content as-is when uploaded with Content-Encoding: gzip)
+		if(strlen($raw) > 2 && $raw[0] === "\x1f" && $raw[1] === "\x8b"){
+			$decompressed = @gzdecode($raw);
+			if($decompressed !== false) $raw = $decompressed;
+		}
+		return json_decode($raw, true, 512, JSON_OBJECT_AS_ARRAY | JSON_THROW_ON_ERROR);
 	}
 }
