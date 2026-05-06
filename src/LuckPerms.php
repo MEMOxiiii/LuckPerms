@@ -175,6 +175,9 @@ class LuckPerms extends PluginBase{
 		$this->verboseHandler = new VerboseHandler($this->getScheduler());
 		$this->logDispatcher = new LogDispatcher($this);
 
+		// ensure default config.yml is generated from resources/config.yml
+		$this->saveDefaultConfig();
+
 		// load configuration
 		$this->getLogger()->debug("Loading configuration...");
 		$this->configuration = new LuckPermsConfiguration($this, new MultiConfigurationAdapter(
@@ -194,7 +197,7 @@ class LuckPerms extends PluginBase{
 
 		$this->connectionListener = new ConnectionListener($this);
 		$this->getServer()->getPluginManager()->registerEvents($this->connectionListener, $this);
-		$this->getServer()->getPluginManager()->registerEvents(new PlatformListener($this), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new PlatformListener(), $this);
 
 				if((bool) $this->getConfiguration()->get(ConfigKeys::WATCH_FILES())){
 			try{
@@ -322,6 +325,12 @@ class LuckPerms extends PluginBase{
 					$this->getLogger()->logException($e);
 				}
 			}));
+		}
+
+		// Populate permission registry with all currently registered PocketMine permissions
+		// so the web editor shows all available permissions instead of an empty list
+		foreach(\pocketmine\permission\PermissionManager::getInstance()->getPermissions() as $perm){
+			$this->permissionRegistry->insert($perm->getName());
 		}
 
 		$timeTaken = microtime(true) - $this->getServer()->getStartTime();
