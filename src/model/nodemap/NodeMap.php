@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\model\nodemap;
 abstract class NodeMap{
 
 }
-

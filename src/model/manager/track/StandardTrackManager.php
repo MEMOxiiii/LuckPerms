@@ -6,6 +6,8 @@ namespace jasonw4331\LuckPerms\model\manager\track;
 
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Track;
+use function array_values;
+use function strtolower;
 
 class StandardTrackManager{
 	/** @var array<string, Track> */

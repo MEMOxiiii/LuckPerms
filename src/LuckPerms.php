@@ -11,10 +11,10 @@ use jasonw4331\LuckPerms\api\LuckPermsApiProvider;
 use jasonw4331\LuckPerms\calculator\CalculatorFactory;
 use jasonw4331\LuckPerms\commands\generic\permission\CommandPermission;
 use jasonw4331\LuckPerms\config\ConfigKeys;
-use jasonw4331\LuckPerms\config\LuckPermsConfiguration;
 use jasonw4331\LuckPerms\config\generic\adapter\EnvironmentVariableConfigAdapter;
 use jasonw4331\LuckPerms\config\generic\adapter\MultiConfigurationAdapter;
 use jasonw4331\LuckPerms\config\generic\adapter\SystemPropertyConfigAdapter;
+use jasonw4331\LuckPerms\config\LuckPermsConfiguration;
 use jasonw4331\LuckPerms\context\ConfigurationContextCalculator;
 use jasonw4331\LuckPerms\context\ContextManager;
 use jasonw4331\LuckPerms\context\PlayerCalculator;
@@ -58,7 +58,6 @@ use jasonw4331\LuckPerms\util\AbstractConnectionListener;
 use jasonw4331\LuckPerms\verbose\VerboseHandler;
 use jasonw4331\LuckPerms\webeditor\store\WebEditorStore;
 use pocketmine\console\ConsoleCommandSender;
-use pocketmine\lang\Language;
 use pocketmine\permission\DefaultPermissions;
 use pocketmine\permission\Permission;
 use pocketmine\player\Player;
@@ -69,8 +68,17 @@ use pocketmine\utils\SingletonTrait;
 use Ramsey\Uuid\Uuid;
 use function array_map;
 use function array_merge;
+use function file_exists;
+use function is_array;
 use function microtime;
+use function spl_autoload_functions;
+use function spl_autoload_register;
+use function spl_autoload_unregister;
+use function str_replace;
+use function strlen;
+use function strncmp;
 use function strtolower;
+use function substr;
 use const DIRECTORY_SEPARATOR;
 
 class LuckPerms extends PluginBase{
@@ -140,7 +148,9 @@ class LuckPerms extends PluginBase{
 				if(!is_array($loader)) continue;
 				$obj = $loader[0] ?? null;
 				if(!($obj instanceof \Composer\Autoload\ClassLoader)) continue;
+				// @phpstan-ignore-next-line
 				spl_autoload_unregister($loader);
+				// @phpstan-ignore-next-line
 				spl_autoload_register($loader, true, false);
 				break;
 			}

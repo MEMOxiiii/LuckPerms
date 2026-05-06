@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\webeditor;
 
 use jasonw4331\LuckPerms\LuckPerms;
+use jasonw4331\LuckPerms\model\Group;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use function array_map;
+use function count;
 use function gzencode;
 use function json_encode;
 use function microtime;
 use function sprintf;
+use function strcmp;
+use function usort;
 use const JSON_THROW_ON_ERROR;
 
 /**
@@ -50,17 +54,17 @@ class WebEditorRequest{
 
 		// All loaded groups (sorted by weight descending, then name)
 		$groups = $plugin->getGroupManager()->getAll();
-		usort($groups, static function($a, $b) {
+		usort($groups, static function(Group $a, Group $b) : int {
 			$wDiff = $b->getWeight() - $a->getWeight();
 			return $wDiff !== 0 ? $wDiff : strcmp($a->getName(), $b->getName());
 		});
 		foreach($groups as $group){
 			$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $group->getNodes());
 			$permissionHolders[] = [
-				'type'        => 'group',
-				'id'          => $group->getName(),
+				'type' => 'group',
+				'id' => $group->getName(),
 				'displayName' => $group->getDisplayName() ?? $group->getName(),
-				'nodes'       => $nodes,
+				'nodes' => $nodes,
 			];
 		}
 
@@ -69,7 +73,7 @@ class WebEditorRequest{
 			$uuid = $player->getUniqueId();
 			$user = $plugin->getUserManager()->load($uuid, $player->getName());
 			// Try to load from storage if user has no nodes yet
-			if(empty($user->getNodes())){
+			if(count($user->getNodes()) === 0){
 				$loaded = $plugin->getStorage()->loadUser($uuid);
 				if($loaded !== null){
 					$user->setNodes($loaded->getNodes());
@@ -77,10 +81,10 @@ class WebEditorRequest{
 			}
 			$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $user->getNodes());
 			$permissionHolders[] = [
-				'type'        => 'user',
-				'id'          => $uuid->toString(),
+				'type' => 'user',
+				'id' => $uuid->toString(),
 				'displayName' => $player->getName(),
-				'nodes'       => $nodes,
+				'nodes' => $nodes,
 			];
 		}
 
@@ -88,8 +92,8 @@ class WebEditorRequest{
 		$tracksData = [];
 		foreach($plugin->getTrackManager()->getAll() as $track){
 			$tracksData[] = [
-				'type'   => 'track',
-				'id'     => $track->getName(),
+				'type' => 'track',
+				'id' => $track->getName(),
 				'groups' => $track->getGroups(),
 			];
 		}
@@ -100,18 +104,18 @@ class WebEditorRequest{
 
 		$payload = [
 			'metadata' => [
-				'commandAlias'  => $cmdLabel,
-				'uploader'      => [
+				'commandAlias' => $cmdLabel,
+				'uploader' => [
 					'name' => $sender->getName(),
 					'uuid' => $uploaderUuid,
 				],
-				'time'          => (int) sprintf('%.0f', microtime(true) * 1000),
+				'time' => (int) sprintf('%.0f', microtime(true) * 1000),
 				'pluginVersion' => $plugin->getDescription()->getVersion(),
-				'platform'      => 'PocketMine-MP',
+				'platform' => 'PocketMine-MP',
 			],
 			'permissionHolders' => $permissionHolders,
-			'tracks'            => $tracksData,
-			'knownPermissions'  => $plugin->getPermissionRegistry()->rootAsList(),
+			'tracks' => $tracksData,
+			'knownPermissions' => $plugin->getPermissionRegistry()->rootAsList(),
 			'potentialContexts' => [],
 		];
 

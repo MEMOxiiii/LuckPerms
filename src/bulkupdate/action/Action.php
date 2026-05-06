@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\bulkupdate\action;
 abstract class Action{
 
 }
-

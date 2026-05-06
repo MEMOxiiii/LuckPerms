@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\cacheddata\type;
 
 use jasonw4331\LuckPerms\api\query\meta\MetaValueSelector;
+use function count;
+use function ctype_digit;
 
 class SimpleMetaValueSelector implements MetaValueSelector{
 	/** @var Strategy[] */
@@ -20,7 +22,7 @@ class SimpleMetaValueSelector implements MetaValueSelector{
 	}
 
 	public function selectValue(string $key, array $values) : string{
-		switch(\count($values)){
+		switch(count($values)){
 			case 0:
 				throw new \InvalidArgumentException('values is empty');
 			case 1:
@@ -35,7 +37,7 @@ class SimpleMetaValueSelector implements MetaValueSelector{
 		$selected = null;
 
 		foreach($values as $value){
-			if(\ctype_digit($value)){
+			if(ctype_digit($value)){
 				$parse = (float) $value;
 				if($selected === null || $selection->shouldSelect($parse, $current)){
 					$selected = $value;

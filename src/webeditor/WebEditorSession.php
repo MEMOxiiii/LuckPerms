@@ -8,6 +8,7 @@ use jasonw4331\LuckPerms\config\ConfigKeys;
 use jasonw4331\LuckPerms\LuckPerms;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use function is_string;
 use function rtrim;
 
 /**
@@ -46,7 +47,8 @@ class WebEditorSession{
 
 		$base = 'https://luckperms.net/editor/';
 		try{
-			$configured = (string) $this->plugin->getConfiguration()->get(ConfigKeys::WEB_EDITOR_URL_PATTERN());
+			$configuredRaw = $this->plugin->getConfiguration()->get(ConfigKeys::WEB_EDITOR_URL_PATTERN());
+			$configured = is_string($configuredRaw) ? $configuredRaw : '';
 			if($configured !== ''){
 				$base = $configured;
 			}

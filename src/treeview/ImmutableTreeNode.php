@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\treeview;
 
+use function uksort;
 
 class ImmutableTreeNode{
 	/** @var array<string, ImmutableTreeNode>|null $children */

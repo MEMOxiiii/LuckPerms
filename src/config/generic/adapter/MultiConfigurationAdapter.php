@@ -6,7 +6,6 @@ namespace jasonw4331\LuckPerms\config\generic\adapter;
 
 use jasonw4331\LuckPerms\LuckPerms;
 
-
 class MultiConfigurationAdapter implements ConfigurationAdapter{
 
 	/** @var ConfigurationAdapter[] */

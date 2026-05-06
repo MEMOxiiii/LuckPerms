@@ -6,6 +6,9 @@ namespace jasonw4331\LuckPerms\context;
 
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
+use function array_filter;
+use function array_values;
+use function count;
 
 class MutableContextSetImpl extends MutableContextSet{
 

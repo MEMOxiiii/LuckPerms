@@ -8,6 +8,8 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
 use jasonw4331\LuckPerms\cacheddata\result\StringResult;
 use jasonw4331\LuckPerms\cacheddata\result\TristateResult;
 use jasonw4331\LuckPerms\sender\Sender;
+use jasonw4331\LuckPerms\util\SimpleQueue;
+use jasonw4331\LuckPerms\util\SimpleSet;
 use jasonw4331\LuckPerms\verbose\event\CheckOrigin;
 use jasonw4331\LuckPerms\verbose\event\MetaCheckEvent;
 use jasonw4331\LuckPerms\verbose\event\PermissionCheckEvent;
@@ -15,15 +17,12 @@ use jasonw4331\LuckPerms\verbose\event\VerboseEvent;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\scheduler\TaskHandler;
 use pocketmine\scheduler\TaskScheduler;
-use jasonw4331\LuckPerms\util\SimpleQueue;
-use jasonw4331\LuckPerms\util\SimpleSet;
 use function microtime;
 
 final class VerboseHandler{
 
-	/** @var SimpleSet $listeners */
 	private SimpleSet $listeners;
-	/** @var SimpleQueue $queue */
+
 	private SimpleQueue $queue;
 	private bool $listening = false;
 
@@ -41,11 +40,11 @@ final class VerboseHandler{
 	 * <p>The check data is added to a queue to be processed later, to avoid blocking
 	 * the main thread each time a permission check is made.</p>
 	 *
-	 * @param CheckOrigin        $origin the origin of the check
-	 * @param VerboseCheckTarget $checkTarget the target of the permission check
+	 * @param CheckOrigin        $origin            the origin of the check
+	 * @param VerboseCheckTarget $checkTarget       the target of the permission check
 	 * @param QueryOptions       $checkQueryOptions the query options used for the check
-	 * @param string             $permission the permission which was checked for
-	 * @param TristateResult     $result the result of the permission check
+	 * @param string             $permission        the permission which was checked for
+	 * @param TristateResult     $result            the result of the permission check
 	 */
 	public function offerPermissionCheckEvent(CheckOrigin $origin, VerboseCheckTarget $checkTarget, QueryOptions $checkQueryOptions, string $permission, TristateResult $result) : void{
 		// don't bother even processing the check if there are no listeners registered
@@ -66,11 +65,11 @@ final class VerboseHandler{
 	 * <p>The check data is added to a queue to be processed later, to avoid blocking
 	 * the main thread each time a meta check is made.</p>
 	 *
-	 * @param CheckOrigin        $origin the origin of the check
-	 * @param VerboseCheckTarget $checkTarget the target of the meta check
+	 * @param CheckOrigin        $origin            the origin of the check
+	 * @param VerboseCheckTarget $checkTarget       the target of the meta check
 	 * @param QueryOptions       $checkQueryOptions the query options used for the check
-	 * @param string             $key the meta key which was checked for
-	 * @param StringResult             $result the result of the meta check
+	 * @param string             $key               the meta key which was checked for
+	 * @param StringResult       $result            the result of the meta check
 	 */
 	public function offerMetaCheckEvent(CheckOrigin $origin, VerboseCheckTarget $checkTarget, QueryOptions $checkQueryOptions, string $key, StringResult $result) : void{
 		// don't bother even processing the check if there are no listeners registered

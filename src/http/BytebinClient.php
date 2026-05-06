@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\http;
 
 use pocketmine\utils\InternetException;
+use function assert;
 use function basename;
 use function curl_close;
 use function curl_error;
@@ -13,11 +14,14 @@ use function curl_getinfo;
 use function curl_init;
 use function curl_setopt;
 use function explode;
-use function json_decode;
 use function gzdecode;
+use function is_array;
+use function is_string;
+use function json_decode;
 use function ltrim;
 use function str_ends_with;
 use function stripos;
+use function strlen;
 use function substr;
 use function trim;
 use const CURLINFO_HEADER_SIZE;
@@ -87,6 +91,7 @@ class BytebinClient extends AbstractHttpClient{
 		}
 		$httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$headerSize = (int) curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		assert(is_string($raw));
 		$rawHeaders = substr($raw, 0, $headerSize);
 		$body = substr($raw, $headerSize);
 		curl_close($ch);
@@ -102,12 +107,14 @@ class BytebinClient extends AbstractHttpClient{
 		// Fallback: bytebin may return {"key":"..."} or {"url":"..."} in body
 		try{
 			$json = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
-			if(isset($json['key']) && is_string($json['key']) && $json['key'] !== ''){
-				return new Content($json['key']);
-			}
-			if(isset($json['url']) && is_string($json['url'])){
-				$key = basename($json['url']);
-				if($key !== '') return new Content($key);
+			if(is_array($json)){
+				if(isset($json['key']) && is_string($json['key']) && $json['key'] !== ''){
+					return new Content($json['key']);
+				}
+				if(isset($json['url']) && is_string($json['url'])){
+					$key = basename($json['url']);
+					if($key !== '') return new Content($key);
+				}
 			}
 		}catch(\Throwable){}
 
@@ -136,6 +143,7 @@ class BytebinClient extends AbstractHttpClient{
 			throw new InternetException('Bytebin GET failed: ' . $err);
 		}
 		curl_close($ch);
+		assert(is_string($raw));
 		// auto-decompress gzip (bytebin stores content as-is when uploaded with Content-Encoding: gzip)
 		if(strlen($raw) > 2 && $raw[0] === "\x1f" && $raw[1] === "\x8b"){
 			$decompressed = @gzdecode($raw);

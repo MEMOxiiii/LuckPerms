@@ -12,4 +12,3 @@ abstract class Handler{
 	/** @param array<string, mixed> $msg */
 	abstract public function handle(array $msg) : void;
 }
-

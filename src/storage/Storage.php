@@ -17,7 +17,10 @@ use function basename;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function is_array;
 use function is_dir;
+use function is_int;
+use function is_string;
 use function json_decode;
 use function json_encode;
 use function mkdir;
@@ -49,20 +52,27 @@ class Storage{
 		return $dir;
 	}
 
-	/** @param NodeEntry[] $nodes */
+	/**
+	 * @param NodeEntry[] $nodes
+	 * @return array<int, array{key: string, value: bool, context: mixed, expiry: int|null}>
+	 */
 	private function serializeNodes(array $nodes) : array{
 		return array_values(array_map(static fn(NodeEntry $n) => [
-			'key'     => $n->getKey(),
-			'value'   => $n->getValue(),
+			'key' => $n->getKey(),
+			'value' => $n->getValue(),
 			'context' => $n->getContext(),
-			'expiry'  => $n->getExpiry(),
+			'expiry' => $n->getExpiry(),
 		], $nodes));
 	}
 
-	/** @return NodeEntry[] */
+	/**
+	 * @param array<mixed> $rawNodes
+	 * @return NodeEntry[]
+	 */
 	private function deserializeNodes(array $rawNodes) : array{
 		$nodes = [];
 		foreach($rawNodes as $nodeData){
+			if(!is_array($nodeData)) continue;
 			$node = NodeEntry::fromArray($nodeData);
 			if($node !== null) $nodes[] = $node;
 		}
@@ -79,7 +89,7 @@ class Storage{
 		$data = [
 			'uniqueId' => $uuid,
 			'username' => $user->getUsername(),
-			'nodes'    => $this->serializeNodes($user->getNodes()),
+			'nodes' => $this->serializeNodes($user->getNodes()),
 		];
 		file_put_contents(
 			$this->getUserDir() . $uuid . '.json',
@@ -91,14 +101,19 @@ class Storage{
 		$file = $this->getUserDir() . $uniqueId->toString() . '.json';
 		if(!file_exists($file)) return null;
 		try{
-			$data = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
+			$rawContent = file_get_contents($file);
+			if($rawContent === false) return null;
+			$decoded = json_decode($rawContent, true, 512, JSON_THROW_ON_ERROR);
+			if(!is_array($decoded)) return null;
+			$data = $decoded;
 		}catch(\Throwable){
 			return null;
 		}
-		$user = new User($uniqueId, $data['username'] ?? 'Unknown');
-		$user->setNodes($this->deserializeNodes($data['nodes'] ?? []));
-		$this->uuidToName[$uniqueId->toString()] = $data['username'] ?? 'Unknown';
-		$this->nameToUuid[strtolower($data['username'] ?? 'Unknown')] = $uniqueId->toString();
+		$username = is_string($data['username'] ?? null) ? $data['username'] : 'Unknown';
+		$user = new User($uniqueId, $username);
+		$user->setNodes($this->deserializeNodes(is_array($data['nodes'] ?? null) ? $data['nodes'] : []));
+		$this->uuidToName[$uniqueId->toString()] = $username;
+		$this->nameToUuid[strtolower($username)] = $uniqueId->toString();
 		return $user;
 	}
 
@@ -106,10 +121,10 @@ class Storage{
 
 	public function saveGroup(Group $group) : void{
 		$data = [
-			'name'        => $group->getName(),
-			'weight'      => $group->getWeight(),
+			'name' => $group->getName(),
+			'weight' => $group->getWeight(),
 			'displayName' => $group->getDisplayName(),
-			'nodes'       => $this->serializeNodes($group->getNodes()),
+			'nodes' => $this->serializeNodes($group->getNodes()),
 		];
 		file_put_contents(
 			$this->getGroupDir() . strtolower($group->getName()) . '.json',
@@ -126,20 +141,26 @@ class Storage{
 		$file = $this->getGroupDir() . strtolower($name) . '.json';
 		if(!file_exists($file)) return null;
 		try{
-			$data = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
+			$rawContent = file_get_contents($file);
+			if($rawContent === false) return null;
+			$decoded = json_decode($rawContent, true, 512, JSON_THROW_ON_ERROR);
+			if(!is_array($decoded)) return null;
+			$data = $decoded;
 		}catch(\Throwable){
 			return null;
 		}
-		$group = new Group($data['name'] ?? $name);
-		$group->setNodes($this->deserializeNodes($data['nodes'] ?? []));
-		$group->setWeight((int) ($data['weight'] ?? 0));
-		$group->setDisplayName($data['displayName'] ?? null);
+		$group = new Group(is_string($data['name'] ?? null) ? $data['name'] : $name);
+		$group->setNodes($this->deserializeNodes(is_array($data['nodes'] ?? null) ? $data['nodes'] : []));
+		$group->setWeight(is_int($data['weight'] ?? null) ? $data['weight'] : (int) ($data['weight'] ?? 0));
+		$displayName = $data['displayName'] ?? null;
+		$group->setDisplayName(is_string($displayName) ? $displayName : null);
 		return $group;
 	}
 
 	public function loadAllGroups() : void{
 		$dir = $this->getGroupDir();
-		foreach(scandir($dir) ?: [] as $file){
+		$scanResult = scandir($dir);
+		foreach(($scanResult !== false ? $scanResult : []) as $file){
 			if(!str_ends_with($file, '.json')) continue;
 			$name = basename($file, '.json');
 			$group = $this->loadGroup($name);
@@ -169,7 +190,10 @@ class Storage{
 		$file = $this->getTracksFile();
 		if(!file_exists($file)) return [];
 		try{
-			return json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR) ?? [];
+			$rawContent = file_get_contents($file);
+			if($rawContent === false) return [];
+			$decoded = json_decode($rawContent, true, 512, JSON_THROW_ON_ERROR);
+			return is_array($decoded) ? $decoded : [];
 		}catch(\Throwable){
 			return [];
 		}
@@ -178,7 +202,7 @@ class Storage{
 	public function saveTrack(Track $track) : void{
 		$allTracks = $this->loadTracksData();
 		$allTracks[strtolower($track->getName())] = [
-			'name'   => $track->getName(),
+			'name' => $track->getName(),
 			'groups' => $track->getGroups(),
 		];
 		file_put_contents(
@@ -192,8 +216,8 @@ class Storage{
 
 	public function loadAllTracks() : void{
 		foreach($this->loadTracksData() as $data){
-			$track = $this->plugin->getTrackManager()->getOrMake($data['name'] ?? '');
-			$track->setGroups($data['groups'] ?? []);
+			$track = $this->plugin->getTrackManager()->getOrMake($data['name']);
+			$track->setGroups($data['groups']);
 		}
 	}
 
@@ -223,4 +247,3 @@ class Storage{
 		// All data is saved immediately on change — nothing to flush
 	}
 }
-

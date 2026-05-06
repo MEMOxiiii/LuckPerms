@@ -10,8 +10,10 @@ use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use jasonw4331\LuckPerms\webeditor\WebEditorResponse;
 use pocketmine\command\CommandSender;
-use Ramsey\Uuid\Uuid;
 use pocketmine\utils\TextFormat;
+use Ramsey\Uuid\Uuid;
+use function array_map;
+use function array_values;
 use function is_array;
 use function is_string;
 use function strtolower;
@@ -58,53 +60,53 @@ class ApplyEditsCommand extends BaseSubCommand{
 				continue;
 			}
 			$type = isset($holder['type']) && is_string($holder['type']) ? strtolower($holder['type']) : '';
-                        $rawNodes = isset($holder['nodes']) && is_array($holder['nodes']) ? $holder['nodes'] : [];
+						$rawNodes = isset($holder['nodes']) && is_array($holder['nodes']) ? $holder['nodes'] : [];
 
-                        if($type === 'user'){
-                                $id = isset($holder['id']) ? (string) $holder['id'] : '';
-                                $name = isset($holder['displayName']) ? (string) $holder['displayName'] : (isset($holder['name']) ? (string) $holder['name'] : $id);
-                                try{
-                                        $uuid = Uuid::fromString($id);
-                                        $user = $plugin->getUserManager()->load($uuid, $name);
-                                        $nodes = [];
-                                        foreach($rawNodes as $rawNode){
-                                                if(is_array($rawNode)){
-                                                        $entry = NodeEntry::fromArray($rawNode);
-                                                        if($entry !== null){
-                                                                $nodes[] = $entry;
-                                                        }
-                                                }
-                                        }
-                                        $user->setNodes($nodes);
-                                        $plugin->getStorage()->saveUser($user);
-                                        $usersApplied++;
-                                }catch(\Throwable){
-                                        // ignore invalid user ids in lightweight mode
-                                }
-                        }elseif($type === 'group'){
-                                $name = isset($holder['id']) ? (string) $holder['id'] : (isset($holder['displayName']) ? (string) $holder['displayName'] : 'default');
-                                $group = $plugin->getGroupManager()->getOrMake($name);
-                                $nodes = [];
-                                foreach($rawNodes as $rawNode){
-                                        if(is_array($rawNode)){
-                                                $entry = NodeEntry::fromArray($rawNode);
-                                                if($entry !== null){
-                                                        $nodes[] = $entry;
-                                                }
-                                        }
-                                }
-                                $group->setNodes($nodes);
-                                $plugin->getStorage()->saveGroup($group);
-                                $groupsApplied++;
-                        }
-                }
+						if($type === 'user'){
+								$id = isset($holder['id']) ? (string) $holder['id'] : '';
+								$name = isset($holder['displayName']) ? (string) $holder['displayName'] : (isset($holder['name']) ? (string) $holder['name'] : $id);
+								try{
+										$uuid = Uuid::fromString($id);
+										$user = $plugin->getUserManager()->load($uuid, $name);
+										$nodes = [];
+										foreach($rawNodes as $rawNode){
+												if(is_array($rawNode)){
+														$entry = NodeEntry::fromArray($rawNode);
+														if($entry !== null){
+																$nodes[] = $entry;
+														}
+												}
+										}
+										$user->setNodes($nodes);
+										$plugin->getStorage()->saveUser($user);
+										$usersApplied++;
+								}catch(\Throwable){
+										// ignore invalid user ids in lightweight mode
+								}
+						}elseif($type === 'group'){
+								$name = isset($holder['id']) ? (string) $holder['id'] : (isset($holder['displayName']) ? (string) $holder['displayName'] : 'default');
+								$group = $plugin->getGroupManager()->getOrMake($name);
+								$nodes = [];
+								foreach($rawNodes as $rawNode){
+										if(is_array($rawNode)){
+												$entry = NodeEntry::fromArray($rawNode);
+												if($entry !== null){
+														$nodes[] = $entry;
+												}
+										}
+								}
+								$group->setNodes($nodes);
+								$plugin->getStorage()->saveGroup($group);
+								$groupsApplied++;
+						}
+				}
 
-                foreach($response->tracks() as $track){
+				foreach($response->tracks() as $track){
 			if(!is_array($track)){
 				continue;
 			}
 			// web editor uses 'id', older format used 'name'
-			$trackName = isset($track['id']) ? (string) $track['id'] : (isset($track['name']) ? (string) $track['name'] : '');
+			$trackName = (is_string($track['id'] ?? null) ? $track['id'] : (is_string($track['name'] ?? null) ? $track['name'] : ''));
 			if($trackName === '') continue;
 			$trackObj = $plugin->getTrackManager()->getOrMake($trackName);
 			if(isset($track['groups']) && is_array($track['groups'])){

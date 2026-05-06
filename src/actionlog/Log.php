@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\actionlog;
 
+use function array_filter;
+use function array_slice;
+use function array_values;
+use function count;
+use function strtolower;
+
 /**
  * In-memory circular log holding recent actions (max 500 entries).
  */

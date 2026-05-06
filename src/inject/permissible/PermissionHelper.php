@@ -6,9 +6,9 @@ namespace jasonw4331\LuckPerms\inject\permissible;
 
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\User;
-use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\permission\PermissionAttachment;
 use pocketmine\player\Player;
+use function str_starts_with;
 use function strtolower;
 use function substr;
 use function time;

@@ -16,6 +16,7 @@ use function ceil;
 use function count;
 use function date;
 use function is_numeric;
+use function is_string;
 use function max;
 use function min;
 use function strtolower;
@@ -29,13 +30,14 @@ class LogParentCommand extends BaseSubCommand{
 		$this->registerArgument(2, new RawStringArgument('arg2', true));
 	}
 
+	/** @param array<mixed> $args */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$action = strtolower((string) ($args['action'] ?? ''));
-		$arg1   = isset($args['arg1']) ? (string) $args['arg1'] : null;
-		$arg2   = isset($args['arg2']) ? (string) $args['arg2'] : null;
+		$action = strtolower(is_string($args['action'] ?? null) ? $args['action'] : '');
+		$arg1 = isset($args['arg1']) && is_string($args['arg1']) ? $args['arg1'] : null;
+		$arg2 = isset($args['arg2']) && is_string($args['arg2']) ? $args['arg2'] : null;
 
 		$plugin = LuckPerms::getInstance();
-		$log    = $plugin->getLogDispatcher()->getLog();
+		$log = $plugin->getLogDispatcher()->getLog();
 
 		switch($action){
 			case '':
@@ -49,7 +51,7 @@ class LogParentCommand extends BaseSubCommand{
 					$sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' log user <username> [page]');
 					return;
 				}
-				$page    = ($arg2 !== null && is_numeric($arg2)) ? (int) $arg2 : 1;
+				$page = ($arg2 !== null && is_numeric($arg2)) ? (int) $arg2 : 1;
 				$entries = array_reverse($log->searchByUser($arg1));
 				$this->showEntries($sender, $entries, $page, 'Log for user ' . $arg1);
 				break;
@@ -59,7 +61,7 @@ class LogParentCommand extends BaseSubCommand{
 					$sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' log group <groupname> [page]');
 					return;
 				}
-				$page    = ($arg2 !== null && is_numeric($arg2)) ? (int) $arg2 : 1;
+				$page = ($arg2 !== null && is_numeric($arg2)) ? (int) $arg2 : 1;
 				$entries = array_reverse($log->searchByGroup($arg1));
 				$this->showEntries($sender, $entries, $page, 'Log for group ' . $arg1);
 				break;
@@ -80,14 +82,14 @@ class LogParentCommand extends BaseSubCommand{
 
 	/** @param LoggedAction[] $entries */
 	private function showEntries(CommandSender $sender, array $entries, int $page, string $title) : void{
-		if(empty($entries)){
+		if(count($entries) === 0){
 			$sender->sendMessage(TF::YELLOW . 'No log entries found.');
 			return;
 		}
 		$perPage = 10;
-		$total   = count($entries);
-		$pages   = (int) ceil($total / $perPage);
-		$page    = max(1, min($page, $pages));
+		$total = count($entries);
+		$pages = (int) ceil($total / $perPage);
+		$page = max(1, min($page, $pages));
 		$sender->sendMessage(TF::GOLD . "--- $title [$page/$pages] (total: $total) ---");
 		foreach(array_slice($entries, ($page - 1) * $perPage, $perPage) as $entry){
 			$time = date('H:i:s', $entry->getTimestamp());

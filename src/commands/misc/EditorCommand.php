@@ -12,6 +12,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use function array_map;
+use function count;
 use function gzencode;
 use function json_encode;
 use function microtime;
@@ -35,10 +36,10 @@ class EditorCommand extends BaseSubCommand{
 			foreach($plugin->getGroupManager()->getAll() as $group){
 				$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $group->getNodes());
 				$permissionHolders[] = [
-					'type'        => 'group',
-					'id'          => $group->getName(),
+					'type' => 'group',
+					'id' => $group->getName(),
 					'displayName' => $group->getDisplayName() ?? $group->getName(),
-					'nodes'       => $nodes,
+					'nodes' => $nodes,
 				];
 			}
 
@@ -48,10 +49,10 @@ class EditorCommand extends BaseSubCommand{
 				$user = $plugin->getUserManager()->load($uuid, $player->getName());
 				$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $user->getNodes());
 				$permissionHolders[] = [
-					'type'        => 'user',
-					'id'          => $uuid->toString(),
+					'type' => 'user',
+					'id' => $uuid->toString(),
 					'displayName' => $player->getName(),
-					'nodes'       => $nodes,
+					'nodes' => $nodes,
 				];
 			}
 
@@ -59,8 +60,8 @@ class EditorCommand extends BaseSubCommand{
 			$tracksData = [];
 			foreach($plugin->getTrackManager()->getAll() as $track){
 				$tracksData[] = [
-					'type'   => 'track',
-					'id'     => $track->getName(),
+					'type' => 'track',
+					'id' => $track->getName(),
 					'groups' => $track->getGroups(),
 				];
 			}
@@ -69,17 +70,17 @@ class EditorCommand extends BaseSubCommand{
 			$payload = json_encode([
 				'metadata' => [
 					'commandAlias' => $aliasUsed,
-					'uploader'     => [
+					'uploader' => [
 						'name' => $sender->getName(),
 						'uuid' => $uploaderUuid,
 					],
-					'time'          => (int) sprintf('%.0f', microtime(true) * 1000),
+					'time' => (int) sprintf('%.0f', microtime(true) * 1000),
 					'pluginVersion' => $plugin->getDescription()->getVersion(),
-					'platform'      => 'PocketMine-MP',
+					'platform' => 'PocketMine-MP',
 				],
 				'permissionHolders' => $permissionHolders,
-				'tracks'            => $tracksData,
-				'knownPermissions'  => $plugin->getPermissionRegistry()->rootAsList(),
+				'tracks' => $tracksData,
+				'knownPermissions' => $plugin->getPermissionRegistry()->rootAsList(),
 				'potentialContexts' => [],
 			], JSON_THROW_ON_ERROR);
 
@@ -111,4 +112,3 @@ class EditorCommand extends BaseSubCommand{
 	}
 
 }
-

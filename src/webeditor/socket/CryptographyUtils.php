@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\webeditor\socket;
 
+use function bin2hex;
+use function random_bytes;
+
 /**
  * Cryptography utilities for the web editor socket connection.
  * Stub — WebSocket/signature verification is not available in the PocketMine-MP port.

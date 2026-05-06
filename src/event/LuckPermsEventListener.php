@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\event;
 abstract class LuckPermsEventListener{
 
 }
-

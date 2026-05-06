@@ -22,6 +22,7 @@ class Bound{
 	 */
 	public function __invoke(ConfigurationAdapter $adapter) : mixed{
 		$method = $this->factory->getFunctionName();
+		// @phpstan-ignore-next-line
 		return $adapter->$method($this->path, $this->def);
 	}
 }

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\webeditor;
 
+use function array_map;
+use function array_values;
+use function is_array;
+
 class WebEditorResponse{
 	/** @param array<int, array<string, mixed>> $permissionHolders */
 	/** @param array<int, array<string, mixed>> $tracks */

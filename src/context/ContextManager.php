@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\context;
 
-use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\api\implementation\ApiContextSetFactory;
 use jasonw4331\LuckPerms\api\query\QueryOptions;
+use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\query\QueryOptionsImpl;
 
 class ContextManager{

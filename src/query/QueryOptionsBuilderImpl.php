@@ -7,6 +7,10 @@ namespace jasonw4331\LuckPerms\query;
 use jasonw4331\LuckPerms\api\query\QueryOptions;
 use jasonw4331\LuckPerms\context\ImmutableContextSet;
 use jasonw4331\LuckPerms\context\ImmutableContextSetImpl;
+use function array_filter;
+use function array_values;
+use function count;
+use function in_array;
 
 class QueryOptionsBuilderImpl implements Builder{
 	private QueryMode $mode;
@@ -77,7 +81,7 @@ class QueryOptionsBuilderImpl implements Builder{
 			$this->options[$key] = $value;
 		}
 
-		if(\count($this->options) < 1){
+		if(count($this->options) < 1){
 			$this->options = null;
 		}
 

@@ -17,11 +17,14 @@ use function array_filter;
 use function array_map;
 use function array_slice;
 use function array_values;
+use function ceil;
 use function count;
+use function date;
 use function implode;
 use function in_array;
 use function is_numeric;
-use function str_contains;
+use function max;
+use function min;
 use function str_starts_with;
 use function strtolower;
 use function substr;
@@ -41,13 +44,13 @@ $this->registerArgument(6, new RawStringArgument('arg4', true));
 }
 
 public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-$plugin   = LuckPerms::getInstance();
+$plugin = LuckPerms::getInstance();
 $username = (string) ($args['user'] ?? '');
-$action   = strtolower((string) ($args['action'] ?? ''));
-$sub      = strtolower((string) ($args['sub'] ?? ''));
-$arg1     = isset($args['arg1']) ? (string) $args['arg1'] : null;
-$arg2     = isset($args['arg2']) ? (string) $args['arg2'] : null;
-$arg3     = isset($args['arg3']) ? (string) $args['arg3'] : null;
+$action = strtolower((string) ($args['action'] ?? ''));
+$sub = strtolower((string) ($args['sub'] ?? ''));
+$arg1 = isset($args['arg1']) ? (string) $args['arg1'] : null;
+$arg2 = isset($args['arg2']) ? (string) $args['arg2'] : null;
+$arg3 = isset($args['arg3']) ? (string) $args['arg3'] : null;
 
 if($username === ''){
 $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user <user> <action> ...');
@@ -61,16 +64,16 @@ return;
 }
 
 match($action){
-'', 'info'   => $this->cmdInfo($sender, $user, $plugin),
-'editor'     => $this->cmdEditor($sender, $user),
+'', 'info' => $this->cmdInfo($sender, $user, $plugin),
+'editor' => $this->cmdEditor($sender, $user),
 'showtracks' => $this->cmdShowTracks($sender, $user, $plugin),
-'clear'      => $this->cmdClear($sender, $user, $plugin),
-'clone'      => $sub !== '' ? $this->cmdClone($sender, $user, $sub, $plugin) : $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user ' . $username . ' clone <target>'),
+'clear' => $this->cmdClear($sender, $user, $plugin),
+'clone' => $sub !== '' ? $this->cmdClone($sender, $user, $sub, $plugin) : $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user ' . $username . ' clone <target>'),
 'promote', 'demote' => $sub !== '' ? $this->cmdPromoteDemote($sender, $user, $action, $sub, $plugin) : $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user ' . $username . ' ' . $action . ' <track>'),
 'permission' => $this->handlePermission($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $arg3, $plugin),
-'parent'     => $this->handleParent($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $plugin),
-'meta'       => $this->handleMeta($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $arg3, $plugin),
-default      => $sender->sendMessage(TF::RED . "Unknown action '$action'. Use: info, editor, showtracks, clear, clone, promote, demote, permission, parent, meta"),
+'parent' => $this->handleParent($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $plugin),
+'meta' => $this->handleMeta($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $arg3, $plugin),
+default => $sender->sendMessage(TF::RED . "Unknown action '$action'. Use: info, editor, showtracks, clear, clone, promote, demote, permission, parent, meta"),
 };
 }
 
@@ -109,18 +112,18 @@ if($player !== null) PermissionHelper::applyPermissions($player, $user, $plugin)
 }
 
 private function removeNodeByKey(User $user, string $key) : bool{
-$key   = strtolower($key);
+$key = strtolower($key);
 $nodes = $user->getNodes();
-$new   = array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $key));
+$new = array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $key));
 $user->setNodes($new);
 return count($new) < count($nodes);
 }
 
 /* info */
 private function cmdInfo(CommandSender $sender, User $user, LuckPerms $plugin) : void{
-$nodes   = $user->getNodes();
+$nodes = $user->getNodes();
 $parents = array_filter($nodes, static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.'));
-$perms   = array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'));
+$perms = array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'));
 $sender->sendMessage(TF::GOLD . '=== User Info: ' . TF::WHITE . $user->getUsername() . TF::GOLD . ' ===');
 $sender->sendMessage(TF::YELLOW . 'UUID: ' . TF::WHITE . $user->getUniqueId()->toString());
 if(count($parents) > 0){
@@ -140,11 +143,11 @@ $sender->sendMessage(TF::YELLOW . 'Per-user editor: use ' . TF::WHITE . '/lp edi
 /* showtracks */
 private function cmdShowTracks(CommandSender $sender, User $user, LuckPerms $plugin) : void{
 $tracks = $plugin->getTrackManager()->getAll();
-if(empty($tracks)){ $sender->sendMessage(TF::YELLOW . 'No tracks defined.'); return; }
+if(count($tracks) === 0){ $sender->sendMessage(TF::YELLOW . 'No tracks defined.'); return; }
 $userGroups = array_map(static fn(NodeEntry $n) => strtolower(substr($n->getKey(), 6)),
 array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
 foreach($tracks as $track){
-if(empty($track->getGroups())) continue;
+if(count($track->getGroups()) === 0) continue;
 $rendered = array_map(static fn(string $g) => (in_array(strtolower($g), array_values($userGroups), true) ? TF::GREEN : TF::GRAY) . $g . TF::RESET, $track->getGroups());
 $sender->sendMessage(TF::YELLOW . $track->getName() . ': ' . implode(TF::WHITE . ' > ', $rendered));
 }
@@ -175,11 +178,11 @@ if(strtolower($t->getName()) === strtolower($trackName)){ $track = $t; break; }
 }
 if($track === null){ $sender->sendMessage(TF::RED . "Track '$trackName' not found."); return; }
 $groups = $track->getGroups();
-if(empty($groups)){ $sender->sendMessage(TF::RED . "Track '$trackName' has no groups."); return; }
+if(count($groups) === 0){ $sender->sendMessage(TF::RED . "Track '$trackName' has no groups."); return; }
 $currentIdx = -1;
 foreach($user->getNodes() as $node){
 if(!str_starts_with(strtolower($node->getKey()), 'group.')) continue;
-$g   = strtolower(substr($node->getKey(), 6));
+$g = strtolower(substr($node->getKey(), 6));
 $idx = $track->indexOf($g);
 if($idx !== -1) $currentIdx = $idx;
 }
@@ -204,9 +207,9 @@ private function handlePermission(CommandSender $sender, string $al, string $un,
 switch($sub){
 case '':
 				case 'info':
-$page  = is_numeric($a1) ? (int) $a1 : 1;
+$page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no permission nodes.'); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no permission nodes.'); return; }
 $perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
 $sender->sendMessage(TF::GOLD . '--- Permissions (' . $user->getUsername() . ') [' . $page . '/' . $pages . '] ---');
 foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n){
@@ -263,9 +266,9 @@ private function handleParent(CommandSender $sender, string $al, string $un, Use
 switch($sub){
 case '':
 				case 'info':
-$page  = is_numeric($a1) ? (int) $a1 : 1;
+$page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no parent groups.'); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no parent groups.'); return; }
 $perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
 $sender->sendMessage(TF::GOLD . '--- Parents (' . $user->getUsername() . ') [' . $page . '/' . $pages . '] ---');
 foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n){
@@ -329,7 +332,7 @@ switch($sub){
 case '':
 				case 'info':
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'meta.') || str_starts_with(strtolower($n->getKey()), 'prefix.') || str_starts_with(strtolower($n->getKey()), 'suffix.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no meta.'); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no meta.'); return; }
 $sender->sendMessage(TF::GOLD . '--- Meta (' . $user->getUsername() . ') ---');
 foreach($nodes as $n) $sender->sendMessage(TF::YELLOW . '  - ' . TF::WHITE . $n->getKey());
 break;

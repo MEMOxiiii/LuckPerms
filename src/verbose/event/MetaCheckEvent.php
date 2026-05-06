@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\verbose\event;
@@ -7,6 +8,8 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
 use jasonw4331\LuckPerms\cacheddata\result\StringResult;
 use jasonw4331\LuckPerms\node\utils\NodeJsonSerializer;
 use jasonw4331\LuckPerms\verbose\VerboseCheckTarget;
+use function mb_strtolower;
+use function str_starts_with;
 
 class MetaCheckEvent extends VerboseEvent {
 
@@ -58,8 +61,8 @@ class MetaCheckEvent extends VerboseEvent {
 
 	public function eval(string $variable) : bool {
 		return $variable === "meta" ||
-			\mb_strtolower($this->getCheckTarget()->description()) === \mb_strtolower($variable) ||
-			\str_starts_with(\mb_strtolower($this->getKey()), \mb_strtolower($variable)) ||
-			\mb_strtolower($this->getResult()->result()) === \mb_strtolower($variable);
+			mb_strtolower($this->getCheckTarget()->description()) === mb_strtolower($variable) ||
+			str_starts_with(mb_strtolower($this->getKey()), mb_strtolower($variable)) ||
+			mb_strtolower($this->getResult()->result()) === mb_strtolower($variable);
 	}
 }

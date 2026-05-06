@@ -6,6 +6,7 @@ namespace jasonw4331\LuckPerms;
 
 use jasonw4331\LuckPerms\config\generic\adapter\ConfigurationAdapter;
 use pocketmine\utils\Config;
+use function is_array;
 use function mb_strtolower;
 
 class ConfigAdapter implements ConfigurationAdapter{

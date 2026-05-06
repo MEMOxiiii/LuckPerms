@@ -34,6 +34,7 @@ abstract class AbstractIterator implements \Iterator{
 	/**
 	 * @inheritDoc
 	 */
+	#[\ReturnTypeWillChange]
 	public function current(){
 		if(!$this->valid()){
 			return null;
@@ -44,6 +45,7 @@ abstract class AbstractIterator implements \Iterator{
 	/**
 	 * @inheritDoc
 	 */
+	#[\ReturnTypeWillChange]
 	public function next(){
 		if($this->valid()){
 			$this->position++;
@@ -55,6 +57,7 @@ abstract class AbstractIterator implements \Iterator{
 	/**
 	 * @inheritDoc
 	 */
+	#[\ReturnTypeWillChange]
 	public function key(){
 		return $this->position;
 	}
@@ -62,6 +65,7 @@ abstract class AbstractIterator implements \Iterator{
 	/**
 	 * @inheritDoc
 	 */
+	#[\ReturnTypeWillChange]
 	public function valid(){
 		if($this->state === self::STATE_FAILED){
 			throw new \RuntimeException('Iterator is in failed state');
@@ -78,6 +82,7 @@ abstract class AbstractIterator implements \Iterator{
 	/**
 	 * @inheritDoc
 	 */
+	#[\ReturnTypeWillChange]
 	public function rewind(){
 		if($this->position !== 0 || $this->state !== self::STATE_NOT_READY){
 			throw new \LogicException('This iterator does not support rewind');

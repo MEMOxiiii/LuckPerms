@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\command;
@@ -24,7 +25,7 @@ class SingleValueEnum extends StringEnumArgument{
 		return $string;
 	}
 
-	public function getEnumValues(): array {
+	public function getEnumValues() : array {
 		return [$this->name];
 	}
 }

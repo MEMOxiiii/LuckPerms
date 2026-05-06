@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\model\manager\user;
 abstract class UserManager{
 
 }
-

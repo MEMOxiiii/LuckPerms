@@ -6,6 +6,7 @@ namespace jasonw4331\LuckPerms\context\calculator;
 
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextConsumer;
+use function in_array;
 use function mb_strtolower;
 
 class NonEmptyWorldNameRewriter extends WorldNameRewriter{

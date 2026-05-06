@@ -72,4 +72,3 @@ class ConnectionListener extends AbstractConnectionListener implements Listener{
 		PermissionHelper::clearPermissions($player, $this->plugin);
 	}
 }
-

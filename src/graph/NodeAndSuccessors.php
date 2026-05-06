@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\graph;
 
+use function count;
+
 final class NodeAndSuccessors{
 	public $node;
 	public object $successorIterator;
@@ -15,6 +17,7 @@ final class NodeAndSuccessors{
 			private array $items = [];
 			private int $index = 0;
 
+			/** @phpstan-ignore-next-line */
 			public function __construct(\Traversable $successors){
 				foreach($successors as $item){
 					$this->items[] = $item;
@@ -25,7 +28,7 @@ final class NodeAndSuccessors{
 				return $this->index < count($this->items);
 			}
 
-			public function next(){
+			public function next() : mixed{
 				if(!$this->hasNext()){
 					return null;
 				}

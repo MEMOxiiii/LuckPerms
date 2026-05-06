@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\util;
 
 use Ramsey\Collection\AbstractArray;
+use function array_pop;
+use function array_unshift;
+use function current;
+use function end;
+use function key;
+use function reset;
 
 /**
  * PHP 8.0-compatible replacement for Ramsey\Collection\DoubleEndedQueue
@@ -55,7 +61,7 @@ class SimpleDoubleEndedQueue extends AbstractArray implements \Ramsey\Collection
 		reset($arr);
 		$key = key($arr);
 		$value = current($arr);
-		$this->offsetUnset($key);
+		if($key !== null) $this->offsetUnset($key);
 		return $value;
 	}
 
@@ -115,10 +121,12 @@ class SimpleDoubleEndedQueue extends AbstractArray implements \Ramsey\Collection
 		return $this->peekFirst();
 	}
 
+	/** @return array<mixed> */
 	private function getArrayCopy() : array{
 		return $this->toArray();
 	}
 
+	/** @param array<mixed> $arr */
 	private function exchangeArray(array $arr) : void{
 		foreach($this->toArray() as $k => $_){
 			$this->offsetUnset($k);

@@ -16,9 +16,14 @@ use function array_filter;
 use function array_map;
 use function array_slice;
 use function array_values;
+use function ceil;
 use function count;
+use function date;
 use function implode;
+use function in_array;
 use function is_numeric;
+use function max;
+use function min;
 use function str_starts_with;
 use function strtolower;
 use function substr;
@@ -37,13 +42,13 @@ $this->registerArgument(5, new RawStringArgument('arg3', true));
 }
 
 public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-$plugin    = LuckPerms::getInstance();
+$plugin = LuckPerms::getInstance();
 $groupName = (string) ($args['group'] ?? '');
-$action    = strtolower((string) ($args['action'] ?? ''));
-$sub       = strtolower((string) ($args['sub'] ?? ''));
-$arg1      = isset($args['arg1']) ? (string) $args['arg1'] : null;
-$arg2      = isset($args['arg2']) ? (string) $args['arg2'] : null;
-$arg3      = isset($args['arg3']) ? (string) $args['arg3'] : null;
+$action = strtolower((string) ($args['action'] ?? ''));
+$sub = strtolower((string) ($args['sub'] ?? ''));
+$arg1 = isset($args['arg1']) ? (string) $args['arg1'] : null;
+$arg2 = isset($args['arg2']) ? (string) $args['arg2'] : null;
+$arg3 = isset($args['arg3']) ? (string) $args['arg3'] : null;
 
 if($groupName === ''){
 $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' group <group> <action> ...');
@@ -122,20 +127,20 @@ PermissionHelper::refreshAll($plugin);
 }
 
 private function removeNodeByKey(Group $group, string $key) : bool{
-$key   = strtolower($key);
+$key = strtolower($key);
 $nodes = $group->getNodes();
-$new   = array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $key));
+$new = array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $key));
 $group->setNodes($new);
 return count($new) < count($nodes);
 }
 
 private function cmdInfo(CommandSender $sender, Group $group, LuckPerms $plugin) : void{
-$nodes   = $group->getNodes();
+$nodes = $group->getNodes();
 $parents = array_filter($nodes, static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.'));
-$perms   = array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'));
+$perms = array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'));
 $sender->sendMessage(TF::GOLD . '=== Group Info: ' . TF::WHITE . $group->getName() . TF::GOLD . ' ===');
 $sender->sendMessage(TF::YELLOW . 'Weight: ' . TF::WHITE . $group->getWeight());
-if(method_exists($group, 'getDisplayName') && $group->getDisplayName() !== null)
+if($group->getDisplayName() !== null)
 $sender->sendMessage(TF::YELLOW . 'Display name: ' . TF::WHITE . $group->getDisplayName());
 $sender->sendMessage(TF::YELLOW . 'Permissions: ' . TF::WHITE . count($perms) . ' node(s)');
 if(count($parents) > 0)
@@ -151,7 +156,7 @@ $members[] = $user->getUsername(); break;
 }
 }
 }
-if(empty($members)){ $sender->sendMessage(TF::YELLOW . 'No members in group ' . $group->getName() . '.'); return; }
+if(count($members) === 0){ $sender->sendMessage(TF::YELLOW . 'No members in group ' . $group->getName() . '.'); return; }
 $sender->sendMessage(TF::GOLD . 'Members of ' . $group->getName() . ': ' . TF::WHITE . implode(', ', $members));
 }
 
@@ -174,10 +179,10 @@ case '':
 				case 'info':
 $page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no permission nodes."); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . "Group $gn has no permission nodes."); return; }
 $perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
 $sender->sendMessage(TF::GOLD . "--- Permissions ($gn) [$page/$pages] ---");
-foreach(array_slice($nodes, ($page-1)*$perPage, $perPage) as $n)
+foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n)
 $sender->sendMessage(($n->getValue() ? TF::GREEN : TF::RED) . '  ' . $n->getKey() . ($n->isTemporary() ? TF::GRAY . ' (' . date('Y-m-d H:i', $n->getExpiry() ?? 0) . ')' : ''));
 break;
 case 'set':
@@ -232,10 +237,10 @@ case '':
 				case 'info':
 $page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no parent groups."); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . "Group $gn has no parent groups."); return; }
 $perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
 $sender->sendMessage(TF::GOLD . "--- Parents ($gn) [$page/$pages] ---");
-foreach(array_slice($nodes, ($page-1)*$perPage, $perPage) as $n)
+foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n)
 $sender->sendMessage(TF::GREEN . '  - ' . substr($n->getKey(), 6) . ($n->isTemporary() ? TF::GRAY . ' (' . date('Y-m-d H:i', $n->getExpiry() ?? 0) . ')' : ''));
 break;
 case 'add':
@@ -286,7 +291,7 @@ switch($sub){
 case '':
 				case 'info':
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'meta.') || str_starts_with(strtolower($n->getKey()), 'prefix.') || str_starts_with(strtolower($n->getKey()), 'suffix.')));
-if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no meta."); return; }
+if(count($nodes) === 0){ $sender->sendMessage(TF::YELLOW . "Group $gn has no meta."); return; }
 $sender->sendMessage(TF::GOLD . "--- Meta ($gn) ---");
 foreach($nodes as $n) $sender->sendMessage(TF::YELLOW . '  - ' . TF::WHITE . $n->getKey());
 break;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\query;
 
 use jasonw4331\LuckPerms\util\traits\MixedRegistryTrait;
+use function count;
 
 /**
  * This doc-block is generated automatically, do not modify it manually.

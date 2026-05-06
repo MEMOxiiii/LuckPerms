@@ -8,8 +8,6 @@ use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
 use jasonw4331\LuckPerms\inject\permissible\PermissionHelper;
 use jasonw4331\LuckPerms\LuckPerms;
-use jasonw4331\LuckPerms\model\Track;
-use jasonw4331\LuckPerms\model\User;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
@@ -17,8 +15,9 @@ use Ramsey\Uuid\Uuid;
 use function file_exists;
 use function file_get_contents;
 use function is_array;
-use function is_dir;
+use function is_string;
 use function json_decode;
+use function str_ends_with;
 use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 
@@ -29,9 +28,10 @@ class ImportCommand extends BaseSubCommand{
 		$this->registerArgument(0, new RawStringArgument('file', false));
 	}
 
+	/** @param array<mixed> $args */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$plugin   = LuckPerms::getInstance();
-		$fileName = isset($args['file']) ? (string) $args['file'] : '';
+		$plugin = LuckPerms::getInstance();
+		$fileName = isset($args['file']) && is_string($args['file']) ? $args['file'] : '';
 
 		if($fileName === ''){
 			$sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' import <filename>');
@@ -42,7 +42,7 @@ class ImportCommand extends BaseSubCommand{
 		if(!str_ends_with($fileName, '.json')) $fileName .= '.json';
 
 		$exportDir = $plugin->getDataFolder() . 'exports' . DIRECTORY_SEPARATOR;
-		$path      = $exportDir . $fileName;
+		$path = $exportDir . $fileName;
 
 		if(!file_exists($path)){
 			$sender->sendMessage(TF::RED . "File not found: exports/$fileName");
@@ -50,7 +50,9 @@ class ImportCommand extends BaseSubCommand{
 		}
 
 		try{
-			$data = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+			$content = file_get_contents($path);
+			if($content === false) throw new \RuntimeException('Could not read file');
+			$data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 		}catch(\Throwable $e){
 			$sender->sendMessage(TF::RED . 'Failed to parse file: ' . $e->getMessage());
 			return;
@@ -62,13 +64,13 @@ class ImportCommand extends BaseSubCommand{
 		}
 
 		$groupsImported = 0;
-		$usersImported  = 0;
+		$usersImported = 0;
 		$tracksImported = 0;
 
 		// Import groups
 		foreach($data['groups'] ?? [] as $groupData){
 			if(!is_array($groupData)) continue;
-			$name  = (string) ($groupData['name'] ?? '');
+			$name = (string) ($groupData['name'] ?? '');
 			if($name === '') continue;
 			$group = $plugin->getGroupManager()->getOrMake($name);
 			$nodes = [];
@@ -86,7 +88,7 @@ class ImportCommand extends BaseSubCommand{
 		// Import tracks
 		foreach($data['tracks'] ?? [] as $trackData){
 			if(!is_array($trackData)) continue;
-			$name  = (string) ($trackData['name'] ?? '');
+			$name = (string) ($trackData['name'] ?? '');
 			if($name === '') continue;
 			$track = $plugin->getTrackManager()->getOrMake($name);
 			$track->setGroups($trackData['groups'] ?? []);
@@ -98,14 +100,14 @@ class ImportCommand extends BaseSubCommand{
 		foreach($data['users'] ?? [] as $userData){
 			if(!is_array($userData)) continue;
 			$uuidStr = (string) ($userData['uniqueId'] ?? '');
-			$name    = (string) ($userData['username'] ?? 'Unknown');
+			$name = (string) ($userData['username'] ?? 'Unknown');
 			if($uuidStr === '') continue;
 			try{
 				$uuid = Uuid::fromString($uuidStr);
 			}catch(\Throwable){
 				continue;
 			}
-			$user  = $plugin->getUserManager()->load($uuid, $name);
+			$user = $plugin->getUserManager()->load($uuid, $name);
 			$nodes = [];
 			foreach($userData['nodes'] ?? [] as $rawNode){
 				$entry = NodeEntry::fromArray($rawNode);

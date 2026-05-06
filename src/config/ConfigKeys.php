@@ -32,6 +32,7 @@ use pocketmine\utils\RegistryTrait;
 use function array_filter;
 use function array_keys;
 use function array_map;
+use function array_unique;
 use function array_values;
 use function count;
 use function intval;

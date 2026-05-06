@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\sender;
@@ -10,6 +9,8 @@ use jasonw4331\LuckPerms\commands\generic\permission\CommandPermission;
 use jasonw4331\LuckPerms\LuckPerms;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use function array_map;
+use function implode;
 
 abstract class Sender{
 
@@ -37,7 +38,7 @@ abstract class Sender{
 			if($servers->size() === 1){
 				$location = $servers->iterator()->next();
 			}else{
-				$location = \implode(';', \array_map(static fn($pair) => $pair->getKey() . "=" . $pair->getValue(), $staticContext->toSet()));
+				$location = implode(';', array_map(static fn($pair) => $pair->getKey() . "=" . $pair->getValue(), $staticContext->toSet()));
 			}
 		}
 

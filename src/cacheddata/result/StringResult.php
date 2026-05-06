@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\cacheddata\result;
@@ -37,7 +38,7 @@ class StringResult implements Result{
 	/**
 	 * @phpstan-return StringResult<N>|null
 	 */
-	public function overriddenResult() : StringResult{
+	public function overriddenResult() : ?StringResult{
 		return $this->overriddenResult;
 	}
 

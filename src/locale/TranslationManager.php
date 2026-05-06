@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\locale;
 
 use jasonw4331\LuckPerms\LuckPerms;
-use function count;
+use function basename;
+use function file_exists;
 use function is_dir;
 use function mkdir;
 use function str_ends_with;
 use function strlen;
 use function substr;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @template T

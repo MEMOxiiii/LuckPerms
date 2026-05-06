@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\treeview;
 
+use jasonw4331\LuckPerms\util\SimpleQueue;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\scheduler\TaskHandler;
 use pocketmine\scheduler\TaskScheduler;
-use jasonw4331\LuckPerms\util\SimpleQueue;
+use function array_values;
+use function explode;
+use function mb_strtolower;
 
 class PermissionRegistry{
 
 	private TreeNode $rootNode;
-	/** @var SimpleQueue $queue */
+
 	private SimpleQueue $queue;
 	private TaskHandler $task;
 
@@ -27,7 +30,7 @@ class PermissionRegistry{
 	}
 
 	public function rootAsList() : array{
-		return \array_values($this->rootNode->makeImmutableCopy()->getNodeEndings());
+		return array_values($this->rootNode->makeImmutableCopy()->getNodeEndings());
 	}
 
 	public function offer(string $permission) : void{
@@ -45,10 +48,10 @@ class PermissionRegistry{
 	}
 
 	public function insert(string $permission) : void{
-		$permission = \mb_strtolower($permission);
+		$permission = mb_strtolower($permission);
 
 		// split the permission up into parts
-		$parts = \explode(".", $permission);
+		$parts = explode(".", $permission);
 
 		// insert the permission into the node structure
 		$current = $this->rootNode;

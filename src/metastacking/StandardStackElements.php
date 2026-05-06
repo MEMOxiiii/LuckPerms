@@ -9,6 +9,12 @@ use jasonw4331\LuckPerms\api\node\ChatMetaType;
 use jasonw4331\LuckPerms\api\node\types\ChatMetaNode;
 use jasonw4331\LuckPerms\LuckPerms;
 use pocketmine\utils\CloningRegistryTrait;
+use function array_filter;
+use function array_map;
+use function strlen;
+use function strncmp;
+use function strtolower;
+use function substr;
 
 /**
  * This doc-block is generated automatically, do not modify it manually.
@@ -67,7 +73,7 @@ final class StandardStackElements{
 	}
 
 	public static function parseFromString(LuckPerms $plugin, string $s) : ?MetaStackElement{
-		$s = \strtolower($s);
+		$s = strtolower($s);
 
 		if($s === 'highest') return self::HIGHEST();
 		if($s === 'lowest') return self::LOWEST();
@@ -89,14 +95,14 @@ final class StandardStackElements{
 	}
 
 	private static function parseParam(string $s, string $prefix) : ?string{
-		if((0 === \strncmp($s, $prefix, \strlen($prefix))) && \strlen($s) > \strlen($prefix)){
-			return \substr($s, \strlen($prefix));
+		if((0 === strncmp($s, $prefix, strlen($prefix))) && strlen($s) > strlen($prefix)){
+			return substr($s, strlen($prefix));
 		}
 		return null;
 	}
 
 	public static function parseList(LuckPerms $plugin, array $strings) : array{
-		return \array_filter(\array_map(function($s) use ($plugin){
+		return array_filter(array_map(function($s) use ($plugin){
 			$parsed = self::parseFromString($plugin, $s);
 			if($parsed === null){
 				$plugin->getLogger()->warning('Unable to parse from: ' . $s);

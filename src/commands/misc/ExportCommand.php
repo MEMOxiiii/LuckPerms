@@ -12,11 +12,17 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
 use function array_map;
 use function array_values;
+use function count;
 use function date;
+use function file_get_contents;
 use function file_put_contents;
 use function is_dir;
+use function is_string;
+use function json_decode;
 use function json_encode;
 use function mkdir;
+use function scandir;
+use function str_ends_with;
 use const DIRECTORY_SEPARATOR;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
@@ -28,9 +34,10 @@ class ExportCommand extends BaseSubCommand{
 		$this->registerArgument(0, new RawStringArgument('file', true));
 	}
 
+	/** @param array<mixed> $args */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$plugin   = LuckPerms::getInstance();
-		$fileName = isset($args['file']) ? (string) $args['file'] : ('export-' . date('Y-m-d_H-i-s') . '.json');
+		$plugin = LuckPerms::getInstance();
+		$fileName = isset($args['file']) && is_string($args['file']) ? $args['file'] : ('export-' . date('Y-m-d_H-i-s') . '.json');
 
 		// Ensure .json extension
 		if(!str_ends_with($fileName, '.json')) $fileName .= '.json';
@@ -44,27 +51,27 @@ class ExportCommand extends BaseSubCommand{
 				'generatedAt' => date('c'),
 			],
 			'groups' => [],
-			'users'  => [],
+			'users' => [],
 			'tracks' => [],
 		];
 
 		foreach($plugin->getGroupManager()->getAll() as $group){
 			$data['groups'][] = [
-				'name'        => $group->getName(),
-				'weight'      => $group->getWeight(),
+				'name' => $group->getName(),
+				'weight' => $group->getWeight(),
 				'displayName' => $group->getDisplayName(),
-				'nodes'       => array_values(array_map(static fn(NodeEntry $n) => [
-					'key'     => $n->getKey(),
-					'value'   => $n->getValue(),
+				'nodes' => array_values(array_map(static fn(NodeEntry $n) => [
+					'key' => $n->getKey(),
+					'value' => $n->getValue(),
 					'context' => $n->getContext(),
-					'expiry'  => $n->getExpiry(),
+					'expiry' => $n->getExpiry(),
 				], $group->getNodes())),
 			];
 		}
 
 		foreach($plugin->getTrackManager()->getAll() as $track){
 			$data['tracks'][] = [
-				'name'   => $track->getName(),
+				'name' => $track->getName(),
 				'groups' => $track->getGroups(),
 			];
 		}
@@ -72,10 +79,13 @@ class ExportCommand extends BaseSubCommand{
 		// Export all user JSON files (includes offline players)
 		$userDir = $plugin->getDataFolder() . 'users' . DIRECTORY_SEPARATOR;
 		if(is_dir($userDir)){
-			foreach(scandir($userDir) ?: [] as $file){
+			$scanResult = scandir($userDir);
+			foreach($scanResult !== false ? $scanResult : [] as $file){
 				if(!str_ends_with($file, '.json')) continue;
 				try{
-					$userData = json_decode(file_get_contents($userDir . $file), true, 512, JSON_THROW_ON_ERROR);
+					$content = file_get_contents($userDir . $file);
+					if($content === false) continue;
+					$userData = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 					$data['users'][] = $userData;
 				}catch(\Throwable){}
 			}

@@ -10,6 +10,7 @@ use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Track;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
+use function array_keys;
 use function array_map;
 use function count;
 use function implode;
@@ -27,11 +28,11 @@ $this->registerArgument(3, new RawStringArgument('arg2', true));
 }
 
 public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-$plugin    = LuckPerms::getInstance();
+$plugin = LuckPerms::getInstance();
 $trackName = (string) ($args['track'] ?? '');
-$action    = strtolower((string) ($args['action'] ?? ''));
-$arg1      = isset($args['arg1']) ? (string) $args['arg1'] : null;
-$arg2      = isset($args['arg2']) ? (string) $args['arg2'] : null;
+$action = strtolower((string) ($args['action'] ?? ''));
+$arg1 = isset($args['arg1']) ? (string) $args['arg1'] : null;
+$arg2 = isset($args['arg2']) ? (string) $args['arg2'] : null;
 
 if($trackName === ''){
 $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' track <track> <action> ...');
@@ -108,7 +109,7 @@ $plugin->getStorage()->saveTrack($track);
 private function cmdInfo(CommandSender $sender, Track $track) : void{
 $groups = $track->getGroups();
 $sender->sendMessage(TF::GOLD . '=== Track Info: ' . TF::WHITE . $track->getName() . TF::GOLD . ' ===');
-if(empty($groups)){
+if(count($groups) === 0){
 $sender->sendMessage(TF::YELLOW . 'Groups: ' . TF::GRAY . '(none)');
 }else{
 $numbered = array_map(static fn(int $i, string $g) => TF::WHITE . ($i + 1) . '. ' . TF::GREEN . $g, array_keys($groups), $groups);

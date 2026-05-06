@@ -15,9 +15,10 @@ use function array_map;
 use function array_slice;
 use function count;
 use function implode;
+use function is_string;
+use function str_starts_with;
 use function strtolower;
 use function substr;
-use function str_starts_with;
 
 class VerboseCommand extends BaseSubCommand{
 
@@ -26,8 +27,9 @@ class VerboseCommand extends BaseSubCommand{
 		$this->registerArgument(0, new RawStringArgument('target', true));
 	}
 
+	/** @param array<mixed> $args */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$target = isset($args['target']) ? (string) $args['target'] : '';
+		$target = isset($args['target']) && is_string($args['target']) ? $args['target'] : '';
 		$plugin = LuckPerms::getInstance();
 
 		if($target === ''){
@@ -39,7 +41,7 @@ class VerboseCommand extends BaseSubCommand{
 		// Resolve group
 		if(str_starts_with(strtolower($target), 'group:')){
 			$groupName = substr($target, 6);
-			$group     = $plugin->getGroupManager()->getIfLoaded(strtolower($groupName));
+			$group = $plugin->getGroupManager()->getIfLoaded(strtolower($groupName));
 			if($group === null){
 				$sender->sendMessage(TF::RED . "Group '$groupName' is not loaded.");
 				return;
@@ -75,7 +77,7 @@ class VerboseCommand extends BaseSubCommand{
 		);
 
 		$sender->sendMessage(TF::GOLD . '=== Effective permissions for: ' . TF::WHITE . $player->getName() . TF::GOLD . ' (' . count($perms) . ' nodes) ===');
-		if(!empty($groups)){
+		if(count($groups) > 0){
 			$sender->sendMessage(TF::YELLOW . 'Groups: ' . TF::WHITE . implode(', ', $groups));
 		}
 		$lines = [];

@@ -6,6 +6,7 @@ namespace jasonw4331\LuckPerms\config;
 
 use jasonw4331\LuckPerms\config\generic\adapter\ConfigurationAdapter;
 use jasonw4331\LuckPerms\config\generic\key\ConfigKey;
+use function method_exists;
 
 class LuckPermsConfiguration{
 

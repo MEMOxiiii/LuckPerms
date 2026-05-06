@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\model\manager\user;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\User;
 use Ramsey\Uuid\UuidInterface;
+use function array_values;
 
 class StandardUserManager{
 	/** @var array<string, User> */

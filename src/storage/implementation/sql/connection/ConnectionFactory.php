@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\storage\implementation\sql\connection;
 abstract class ConnectionFactory{
 
 }
-

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\webeditor\store;
 
+use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function is_array;
+use function is_dir;
 use function json_decode;
 use function json_encode;
 use function mkdir;
-use function dirname;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 

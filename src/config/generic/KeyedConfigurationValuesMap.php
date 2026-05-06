@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\config\generic;
 
 use jasonw4331\LuckPerms\config\generic\key\ConfigKey;
+use function array_fill;
 
 /**
  * @template Tvalue of object

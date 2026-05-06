@@ -62,6 +62,7 @@ class KeyedConfiguration{
 		/** @var SimpleConfigKey[] $keys */
 		$keys = array_filter(
 			$keysClass::getAll(),
+			/** @phpstan-ignore-next-line */
 			fn($var) => $var instanceof SimpleConfigKey
 		);
 

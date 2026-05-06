@@ -7,4 +7,3 @@ namespace jasonw4331\LuckPerms\plugin\logging;
 abstract class PluginLogger{
 
 }
-

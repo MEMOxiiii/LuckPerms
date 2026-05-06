@@ -6,6 +6,8 @@ namespace jasonw4331\LuckPerms\model\manager\group;
 
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Group;
+use function array_values;
+use function strtolower;
 
 class StandardGroupManager{
 	/** @var array<string, Group> */

@@ -6,6 +6,7 @@ namespace jasonw4331\LuckPerms\context;
 
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
+use function count;
 
 final class ImmutableContextSetImpl extends ImmutableContextSet{
 
@@ -22,7 +23,7 @@ final class ImmutableContextSetImpl extends ImmutableContextSet{
 
 	public function __construct(array $contexts = []){
 		$this->array = $contexts;
-		$this->size = \count($this->array);
+		$this->size = count($this->array);
 	}
 
 	public function isImmutable() : bool{

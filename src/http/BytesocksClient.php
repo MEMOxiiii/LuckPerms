@@ -8,7 +8,14 @@ use pocketmine\utils\InternetException;
 use function ltrim;
 use function parse_url;
 use function rtrim;
+use function socket_create;
+use function socket_last_error;
+use function socket_strerror;
+use function trim;
+use const AF_INET;
 use const PHP_URL_HOST;
+use const SOCK_STREAM;
+use const SOL_TCP;
 
 class BytesocksClient extends AbstractHttpClient{
 

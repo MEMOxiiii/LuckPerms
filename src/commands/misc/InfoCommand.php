@@ -10,7 +10,6 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
 use function count;
 use function memory_get_usage;
-use function number_format;
 use function round;
 
 class InfoCommand extends BaseSubCommand{
@@ -19,6 +18,7 @@ class InfoCommand extends BaseSubCommand{
 		$this->setPermission('luckperms.info');
 	}
 
+	/** @param array<mixed> $args */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
 		$plugin = LuckPerms::getInstance();
 

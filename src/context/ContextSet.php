@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\context;
 use jasonw4331\LuckPerms\api\context\Context;
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
 use jasonw4331\LuckPerms\util\Optional;
+use function reset;
 
 /**
  * Abstract class ContextSet.

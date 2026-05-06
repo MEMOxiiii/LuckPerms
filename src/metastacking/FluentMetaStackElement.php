@@ -8,6 +8,8 @@ use jasonw4331\LuckPerms\api\metastacking\MetaStackElement;
 use jasonw4331\LuckPerms\api\node\ChatMetaType;
 use jasonw4331\LuckPerms\api\node\types\ChatMetaNode;
 use Ramsey\Collection\Map\AbstractTypedMap;
+use function array_map;
+use function implode;
 
 final class FluentMetaStackElement implements MetaStackElement{
 
@@ -42,6 +44,6 @@ final class FluentMetaStackElement implements MetaStackElement{
 	 * @param AbstractTypedMap<string, string> $params
 	 */
 	private static function formToString(string $name, AbstractTypedMap $params) : string{
-		return $name . "(" . \implode(', ', \array_map(static fn($p) => $p->getKey() . '=' . $p->getValue(), $params->toArray())) . ")";
+		return $name . "(" . implode(', ', array_map(static fn($p) => $p->getKey() . '=' . $p->getValue(), $params->toArray())) . ")";
 	}
 }

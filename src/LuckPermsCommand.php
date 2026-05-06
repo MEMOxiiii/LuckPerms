@@ -48,7 +48,7 @@ class LuckPermsCommand extends BaseCommand{
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
 		$plugin = LuckPerms::getInstance();
-		$cmd  = strtolower((string) ($args['cmd'] ?? ''));
+		$cmd = strtolower((string) ($args['cmd'] ?? ''));
 		$arg1 = isset($args['arg1']) ? (string) $args['arg1'] : null;
 
 		switch($cmd){
@@ -69,7 +69,7 @@ class LuckPermsCommand extends BaseCommand{
 				break;
 			case 'listgroups':
 				$groups = $plugin->getGroupManager()->getAll();
-				if(empty($groups)){ $sender->sendMessage(TF::YELLOW . 'No groups defined.'); return; }
+				if(count($groups) === 0){ $sender->sendMessage(TF::YELLOW . 'No groups defined.'); return; }
 				$sender->sendMessage(TF::GOLD . 'Groups (' . count($groups) . '): ' . TF::WHITE . implode(', ', array_map(static fn(Group $g) => $g->getName(), $groups)));
 				break;
 			case 'createtrack':
@@ -91,7 +91,7 @@ class LuckPermsCommand extends BaseCommand{
 				break;
 			case 'listtracks':
 				$tracks = $plugin->getTrackManager()->getAll();
-				if(empty($tracks)){ $sender->sendMessage(TF::YELLOW . 'No tracks defined.'); return; }
+				if(count($tracks) === 0){ $sender->sendMessage(TF::YELLOW . 'No tracks defined.'); return; }
 				$sender->sendMessage(TF::GOLD . 'Tracks (' . count($tracks) . '): ' . TF::WHITE . implode(', ', array_map(static fn(Track $t) => $t->getName(), $tracks)));
 				break;
 			case 'sync':

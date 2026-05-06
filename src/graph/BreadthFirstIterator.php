@@ -22,6 +22,7 @@ final class BreadthFirstIterator implements \Iterator{
 		return !$this->queue->isEmpty();
 	}
 
+	#[\ReturnTypeWillChange]
 	public function next() : Graph{
 		$current = $this->queue->remove();
 		foreach($this->graph->successors($current) as $neighbor){
@@ -35,10 +36,12 @@ final class BreadthFirstIterator implements \Iterator{
 		return $this->queue->peek();
 	}
 
+	#[\ReturnTypeWillChange]
 	public function key(){
 		throw new \Exception();
 	}
 
+	#[\ReturnTypeWillChange]
 	public function rewind(){
 		throw new \Exception();
 	}

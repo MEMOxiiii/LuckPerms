@@ -20,9 +20,7 @@ final class AbstractSender extends Sender{
 	private bool $isConsole;
 
 	/**
-	 * @param LuckPerms     $plugin
-	 * @param SenderFactory $senderFactory
-	 * @param Tvalue        $sender
+	 * @param Tvalue $sender
 	 */
 	public function __construct(private LuckPerms $plugin, private SenderFactory $factory, private CommandSender $sender){
 		$this->uniqueId = $this->factory->getUniqueID($sender);

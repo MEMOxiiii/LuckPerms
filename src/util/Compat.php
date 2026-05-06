@@ -8,6 +8,12 @@ use Ramsey\Collection\AbstractArray;
 use Ramsey\Collection\AbstractSet;
 use Ramsey\Collection\Map\AbstractTypedMap;
 use Ramsey\Collection\QueueInterface;
+use function array_pop;
+use function array_unshift;
+use function current;
+use function end;
+use function key;
+use function reset;
 
 /**
  * PHP 8.0-compatible replacement for Ramsey\Collection\Map\TypedMap

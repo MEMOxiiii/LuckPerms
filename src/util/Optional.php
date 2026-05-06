@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\util;
 
 use pocketmine\utils\Utils;
+use function crc32;
 use function hash;
+use function serialize;
 use function sprintf;
 
 /**
