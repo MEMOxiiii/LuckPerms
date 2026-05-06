@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ class TrackParentCommand extends BaseSubCommand{
 
 protected function prepare() : void{
 $this->setPermission('luckperms.command');
-$this->registerArgument(0, new RawStringArgument('track', false));
+$this->registerArgument(0, new RawStringArgument('track', true));
 $this->registerArgument(1, new RawStringArgument('action', true));
 $this->registerArgument(2, new RawStringArgument('arg1', true));
 $this->registerArgument(3, new RawStringArgument('arg2', true));

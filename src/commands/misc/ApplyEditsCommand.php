@@ -100,10 +100,18 @@ class ApplyEditsCommand extends BaseSubCommand{
                 }
 
                 foreach($response->tracks() as $track){
-			if(is_array($track) && isset($track['name'])){
-				$plugin->getTrackManager()->getOrMake((string) $track['name']);
-				$tracksApplied++;
+			if(!is_array($track)){
+				continue;
 			}
+			// web editor uses 'id', older format used 'name'
+			$trackName = isset($track['id']) ? (string) $track['id'] : (isset($track['name']) ? (string) $track['name'] : '');
+			if($trackName === '') continue;
+			$trackObj = $plugin->getTrackManager()->getOrMake($trackName);
+			if(isset($track['groups']) && is_array($track['groups'])){
+				$trackObj->setGroups(array_values(array_map('strval', $track['groups'])));
+			}
+			$plugin->getStorage()->saveTrack($trackObj);
+			$tracksApplied++;
 		}
 
 		foreach($response->userDeletions() as $id){

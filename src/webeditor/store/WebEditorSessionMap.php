@@ -4,23 +4,33 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\webeditor\store;
 
+/**
+ * Stores active web editor sessions keyed by their bytebin paste ID.
+ * Mirrors WebEditorSessionMap.java from the LuckPerms common module.
+ */
 class WebEditorSessionMap{
-	/** @var array<string, mixed> */
+	/** @var array<string, RemoteSession> */
 	private array $sessions = [];
 
-	public function set(string $id, mixed $session) : void{
-		$this->sessions[$id] = $session;
+	/**
+	 * Register a new session created by an editor upload.
+	 */
+	public function addNewSession(string $pasteId, mixed $request) : void{
+		$this->sessions[$pasteId] = new RemoteSession($pasteId, $request);
 	}
 
-	public function get(string $id) : mixed{
-		return $this->sessions[$id] ?? null;
+	/**
+	 * Retrieve a session by paste ID, or null if unknown.
+	 */
+	public function getSession(string $pasteId) : ?RemoteSession{
+		return $this->sessions[$pasteId] ?? null;
 	}
 
 	public function remove(string $id) : void{
 		unset($this->sessions[$id]);
 	}
 
-	/** @return array<string, mixed> */
+	/** @return array<string, RemoteSession> */
 	public function all() : array{
 		return $this->sessions;
 	}

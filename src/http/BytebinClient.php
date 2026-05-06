@@ -75,20 +75,38 @@ class BytebinClient extends AbstractHttpClient{
 	}
 
 	private function extractContentKey(InternetRequestResult $response) : ?string{
-		foreach(array_reverse($response->getHeaders()) as $headerGroup){
-			if(array_key_exists('location', $headerGroup)){
-				$location = $headerGroup['location'];
-				$location = basename($location);
-				if($location !== ''){
-					return $location;
+		$headers = $response->getHeaders();
+		// PocketMine 5 returns flat array<string, string> (header-name => value, lowercased).
+		// Older versions may return nested array<int, array<string, string>>.
+		if(is_array($headers)){
+			// Flat format (PM5 standard)
+			foreach(['location', 'Location'] as $k){
+				if(isset($headers[$k]) && is_string($headers[$k])){
+					$key = basename($headers[$k]);
+					if($key !== '') return $key;
+				}
+			}
+			// Nested format
+			foreach(array_reverse($headers) as $headerGroup){
+				if(is_array($headerGroup)){
+					foreach(['location', 'Location'] as $k){
+						if(isset($headerGroup[$k]) && is_string($headerGroup[$k])){
+							$key = basename($headerGroup[$k]);
+							if($key !== '') return $key;
+						}
+					}
 				}
 			}
 		}
-		// Fallback: bytebin may return the key in the JSON body as {"key":"..."}
+		// Fallback: bytebin may return the key in JSON body {"key":"..."} or {"url":"..."}
 		try{
 			$body = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
 			if(isset($body['key']) && is_string($body['key']) && $body['key'] !== ''){
 				return $body['key'];
+			}
+			if(isset($body['url']) && is_string($body['url'])){
+				$key = basename($body['url']);
+				if($key !== '') return $key;
 			}
 		}catch(\Throwable){}
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class GroupParentCommand extends BaseSubCommand{
 
 protected function prepare() : void{
 $this->setPermission('luckperms.command');
-$this->registerArgument(0, new RawStringArgument('group', false));
+$this->registerArgument(0, new RawStringArgument('group', true));
 $this->registerArgument(1, new RawStringArgument('action', true));
 $this->registerArgument(2, new RawStringArgument('sub', true));
 $this->registerArgument(3, new RawStringArgument('arg1', true));

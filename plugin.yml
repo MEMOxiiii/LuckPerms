@@ -11,7 +11,6 @@ website: https://luckperms.net
 commands:
   luckperms:
     description: Manage permissions
-    usage: /luckperms <user|group|track|editor|applyedits> ...
     aliases: [lp, perm, perms, permission, permissions]
     permission: luckperms.command
 
