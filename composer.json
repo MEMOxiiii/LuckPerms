@@ -7,11 +7,11 @@
 		"name": "jasonw4331",
 		"email": "jasonwynn10@gmail.com"
 	}],
-	"minimum-stability": "beta",
+	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"autoload": {
 		"psr-4": {
-			"jasonw4331\\LuckPerms\\": "/src"
+			"jasonw4331\\LuckPerms\\": "src"
 		}
 	},
 	"require": {
