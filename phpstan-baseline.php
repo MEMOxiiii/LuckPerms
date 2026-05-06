@@ -253,7 +253,7 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Cannot cast mixed to string\\.$#',
-	'count' => 5,
+	'count' => 6,
 	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
 ];
 $ignoreErrors[] = [
@@ -735,11 +735,6 @@ $ignoreErrors[] = [
 	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\listeners\\\\AutoOpListener has an unused parameter \\$param\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/listeners/AutoOpListener.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Constructor of class jasonw4331\\\\LuckPerms\\\\listeners\\\\PlatformListener has an unused parameter \\$param\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/listeners/PlatformListener.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to an undefined method jasonw4331\\\\LuckPerms\\\\LuckPerms\\:\\:getResourcePath\\(\\)\\.$#',
