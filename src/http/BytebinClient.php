@@ -6,13 +6,30 @@ namespace jasonw4331\LuckPerms\http;
 
 use pocketmine\utils\Internet;
 use pocketmine\utils\InternetException;
-use pocketmine\utils\InternetRequestResult;
-use function array_key_exists;
-use function array_reverse;
 use function basename;
+use function curl_close;
+use function curl_error;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_init;
+use function curl_setopt;
+use function explode;
 use function json_decode;
 use function ltrim;
 use function str_ends_with;
+use function stripos;
+use function substr;
+use function trim;
+use const CURLINFO_HEADER_SIZE;
+use const CURLINFO_HTTP_CODE;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HEADER;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_POST;
+use const CURLOPT_POSTFIELDS;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_SSL_VERIFYPEER;
+use const CURLOPT_TIMEOUT;
 use const JSON_OBJECT_AS_ARRAY;
 use const JSON_THROW_ON_ERROR;
 
@@ -42,23 +59,59 @@ class BytebinClient extends AbstractHttpClient{
 	 */
 	public function postContent(string $buffer, string $contentType, ?string $extraUserAgent = null) : Content {
 		$userAgent = $this->userAgent . ($extraUserAgent !== null ? "/$extraUserAgent" : "");
-		$headers = [
-			"User-Agent: {$userAgent}",
-			"Content-Type: {$contentType}",
+
+		// Use curl directly to avoid PocketMine's Internet class quirks
+		// (duplicate User-Agent header, FOLLOWLOCATION on POST, etc.)
+		$ch = curl_init($this->url . 'post');
+		if($ch === false){
+			throw new InternetException('Failed to initialise cURL');
+		}
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $buffer);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			"User-Agent: $userAgent",
+			"Content-Type: $contentType",
 			"Content-Encoding: gzip",
-		];
+		]);
 
-		$err = null;
-		$response = Internet::postURL($this->url . 'post', $buffer, 10, $headers, $err);
-		if($response === null){
-			throw new InternetException('Bytebin POST request failed: ' . (string) $err);
+		$raw = curl_exec($ch);
+		if($raw === false){
+			$err = curl_error($ch);
+			curl_close($ch);
+			throw new InternetException('Bytebin POST request failed: ' . $err);
+		}
+		$httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$headerSize = (int) curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$rawHeaders = substr($raw, 0, $headerSize);
+		$body = substr($raw, $headerSize);
+		curl_close($ch);
+
+		// Parse Location header from raw response headers
+		foreach(explode("\r\n", $rawHeaders) as $line){
+			if(stripos($line, 'location:') === 0){
+				$key = basename(trim(substr($line, 9)));
+				if($key !== '') return new Content($key);
+			}
 		}
 
-		$key = $this->extractContentKey($response);
-		if($key === null){
-			throw new InternetException('Bytebin did not return a content key in the Location header');
-		}
-		return new Content($key);
+		// Fallback: bytebin may return {"key":"..."} or {"url":"..."} in body
+		try{
+			$json = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+			if(isset($json['key']) && is_string($json['key']) && $json['key'] !== ''){
+				return new Content($json['key']);
+			}
+			if(isset($json['url']) && is_string($json['url'])){
+				$key = basename($json['url']);
+				if($key !== '') return new Content($key);
+			}
+		}catch(\Throwable){}
+
+		throw new InternetException("Bytebin did not return a content key. HTTP=$httpCode Body=" . substr($body, 0, 200));
 	}
 
 	/**
@@ -72,44 +125,5 @@ class BytebinClient extends AbstractHttpClient{
 	public function getJsonContent(string $id) : array {
 		$response = Internet::simpleCurl($this->url . ltrim($id, '/'), 10, ["User-Agent: {$this->userAgent}"]);
 		return json_decode($response->getBody(), true, flags: JSON_OBJECT_AS_ARRAY | JSON_THROW_ON_ERROR);
-	}
-
-	private function extractContentKey(InternetRequestResult $response) : ?string{
-		$headers = $response->getHeaders();
-		// PocketMine 5 returns flat array<string, string> (header-name => value, lowercased).
-		// Older versions may return nested array<int, array<string, string>>.
-		if(is_array($headers)){
-			// Flat format (PM5 standard)
-			foreach(['location', 'Location'] as $k){
-				if(isset($headers[$k]) && is_string($headers[$k])){
-					$key = basename($headers[$k]);
-					if($key !== '') return $key;
-				}
-			}
-			// Nested format
-			foreach(array_reverse($headers) as $headerGroup){
-				if(is_array($headerGroup)){
-					foreach(['location', 'Location'] as $k){
-						if(isset($headerGroup[$k]) && is_string($headerGroup[$k])){
-							$key = basename($headerGroup[$k]);
-							if($key !== '') return $key;
-						}
-					}
-				}
-			}
-		}
-		// Fallback: bytebin may return the key in JSON body {"key":"..."} or {"url":"..."}
-		try{
-			$body = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-			if(isset($body['key']) && is_string($body['key']) && $body['key'] !== ''){
-				return $body['key'];
-			}
-			if(isset($body['url']) && is_string($body['url'])){
-				$key = basename($body['url']);
-				if($key !== '') return $key;
-			}
-		}catch(\Throwable){}
-
-		return null;
 	}
 }

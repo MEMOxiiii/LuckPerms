@@ -195,8 +195,6 @@ class LuckPerms extends PluginBase{
 		}
 
 		$this->storage = $storageFactory->getInstance();
-		$this->storage->loadAllGroups();
-		$this->storage->loadAllTracks();
 		$this->messagingService = (new MessagingFactory($this))->getInstance();
 
 		$this->syncTaskBuffer = new Buffer($this);
@@ -224,6 +222,9 @@ class LuckPerms extends PluginBase{
 		$this->userManager = new StandardUserManager($this);
 		$this->groupManager = new StandardGroupManager($this);
 		$this->trackManager = new StandardTrackManager($this);
+
+		$this->storage->loadAllGroups();
+		$this->storage->loadAllTracks();
 
 		$this->calculatorFactory = new CalculatorFactory($this);
 
