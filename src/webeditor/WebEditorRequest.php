@@ -10,7 +10,6 @@ use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use function array_map;
-use function count;
 use function gzencode;
 use function json_encode;
 use function microtime;
@@ -68,21 +67,45 @@ class WebEditorRequest{
 			];
 		}
 
-		// Online users with their actual stored nodes
+		// All stored users (from disk) — online players get their in-memory nodes
+		// merged in so the most up-to-date data is always used.
+		$onlinePlayers = [];
 		foreach($plugin->getServer()->getOnlinePlayers() as $player){
-			$uuid = $player->getUniqueId();
-			$user = $plugin->getUserManager()->load($uuid, $player->getName());
-			// Try to load from storage if user has no nodes yet
-			if(count($user->getNodes()) === 0){
-				$loaded = $plugin->getStorage()->loadUser($uuid);
-				if($loaded !== null){
-					$user->setNodes($loaded->getNodes());
-				}
+			$onlinePlayers[$player->getUniqueId()->toString()] = $player;
+		}
+
+		$seenUuids = [];
+		foreach($plugin->getStorage()->loadAllUsers() as $storedUser){
+			$uuidStr = $storedUser->getUniqueId()->toString();
+			$seenUuids[$uuidStr] = true;
+
+			// If the player is online, prefer their current in-memory nodes
+			if(isset($onlinePlayers[$uuidStr])){
+				$onlinePlayer = $onlinePlayers[$uuidStr];
+				$liveUser = $plugin->getUserManager()->load($onlinePlayer->getUniqueId(), $onlinePlayer->getName());
+				$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $liveUser->getNodes());
+				$displayName = $onlinePlayer->getName();
+			}else{
+				$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $storedUser->getNodes());
+				$displayName = $storedUser->getUsername();
 			}
-			$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $user->getNodes());
+
 			$permissionHolders[] = [
 				'type' => 'user',
-				'id' => $uuid->toString(),
+				'id' => $uuidStr,
+				'displayName' => $displayName,
+				'nodes' => $nodes,
+			];
+		}
+
+		// Also include any online players who have no saved file yet
+		foreach($onlinePlayers as $uuidStr => $player){
+			if(isset($seenUuids[$uuidStr])) continue;
+			$liveUser = $plugin->getUserManager()->load($player->getUniqueId(), $player->getName());
+			$nodes = array_map(static fn(NodeEntry $n) => $n->toArray(), $liveUser->getNodes());
+			$permissionHolders[] = [
+				'type' => 'user',
+				'id' => $uuidStr,
 				'displayName' => $player->getName(),
 				'nodes' => $nodes,
 			];

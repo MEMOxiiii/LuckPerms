@@ -117,6 +117,31 @@ class Storage{
 		return $user;
 	}
 
+	/**
+	 * Load every user that has a saved JSON file on disk.
+	 *
+	 * @return User[]
+	 */
+	public function loadAllUsers() : array{
+		$dir = $this->getUserDir();
+		$scanResult = scandir($dir);
+		$users = [];
+		foreach(($scanResult !== false ? $scanResult : []) as $file){
+			if(!str_ends_with($file, '.json')) continue;
+			$uuidStr = basename($file, '.json');
+			try{
+				$uuid = Uuid::fromString($uuidStr);
+			}catch(\Throwable){
+				continue;
+			}
+			$user = $this->loadUser($uuid);
+			if($user !== null){
+				$users[] = $user;
+			}
+		}
+		return $users;
+	}
+
 	/* ─────────────── Groups ─────────────── */
 
 	public function saveGroup(Group $group) : void{
