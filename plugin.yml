@@ -8,12 +8,6 @@ author: jasonw4331, MEMOxiiii
 description: A permissions plugin for PocketMine-MP servers based on lucko/LuckPerms
 website: https://luckperms.net
 
-commands:
-  luckperms:
-    description: Manage permissions
-    aliases: [lp, perm, perms, permission, permissions]
-    permission: luckperms.command
-
 permissions:
   luckperms.command:
     description: Allows use of LuckPerms commands

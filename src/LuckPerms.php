@@ -563,4 +563,8 @@ class LuckPerms extends PluginBase{
 	public function getEventDispatcher() : EventDispatcher{
 		return $this->eventDispatcher;
 	}
+
+	public function getWebEditorStore() : WebEditorStore{
+		return $this->webEditorStore;
+	}
 }

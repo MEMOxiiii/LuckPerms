@@ -9,11 +9,18 @@ use CortexPE\Commando\BaseCommand;
 use jasonw4331\LuckPerms\commands\group\GroupParentCommand;
 use jasonw4331\LuckPerms\commands\log\LogParentCommand;
 use jasonw4331\LuckPerms\commands\misc\ApplyEditsCommand;
+use jasonw4331\LuckPerms\commands\misc\BulkUpdateCommand;
 use jasonw4331\LuckPerms\commands\misc\EditorCommand;
 use jasonw4331\LuckPerms\commands\misc\ExportCommand;
 use jasonw4331\LuckPerms\commands\misc\ImportCommand;
 use jasonw4331\LuckPerms\commands\misc\InfoCommand;
+use jasonw4331\LuckPerms\commands\misc\NetworkSyncCommand;
+use jasonw4331\LuckPerms\commands\misc\ReloadConfigCommand;
 use jasonw4331\LuckPerms\commands\misc\SearchCommand;
+use jasonw4331\LuckPerms\commands\misc\SyncCommand;
+use jasonw4331\LuckPerms\commands\misc\TranslationsCommand;
+use jasonw4331\LuckPerms\commands\misc\TreeCommand;
+use jasonw4331\LuckPerms\commands\misc\TrustEditorCommand;
 use jasonw4331\LuckPerms\commands\misc\VerboseCommand;
 use jasonw4331\LuckPerms\commands\track\TrackParentCommand;
 use jasonw4331\LuckPerms\commands\user\UserParentCommand;
@@ -34,6 +41,7 @@ class LuckPermsCommand extends BaseCommand{
 		$this->registerSubCommand(new GroupParentCommand('group', 'Manage a specific group'));
 		$this->registerSubCommand(new TrackParentCommand('track', 'Manage a specific track'));
 		$this->registerSubCommand(new EditorCommand('editor', 'Create a web editor session'));
+		$this->registerSubCommand(new TrustEditorCommand('trusteditor', 'Trust a web editor session key'));
 		$this->registerSubCommand(new ApplyEditsCommand('applyedits', 'Apply changes from web editor code'));
 		$this->registerSubCommand(new SearchCommand('search', 'Search for nodes'));
 		$this->registerSubCommand(new ExportCommand('export', 'Export data to a file'));
@@ -41,6 +49,12 @@ class LuckPermsCommand extends BaseCommand{
 		$this->registerSubCommand(new LogParentCommand('log', 'View the action log'));
 		$this->registerSubCommand(new InfoCommand('info', 'Show plugin info'));
 		$this->registerSubCommand(new VerboseCommand('verbose', 'Show effective permissions for a player/group'));
+		$this->registerSubCommand(new SyncCommand('sync', 'Reload all data from storage'));
+		$this->registerSubCommand(new NetworkSyncCommand('networksync', 'Sync data across the network'));
+		$this->registerSubCommand(new ReloadConfigCommand('reload', 'Reload the plugin configuration'));
+		$this->registerSubCommand(new TreeCommand('tree', 'View the permission tree'));
+		$this->registerSubCommand(new BulkUpdateCommand('bulkupdate', 'Perform a bulk update on permission nodes'));
+		$this->registerSubCommand(new TranslationsCommand('translations', 'View installed translations'));
 		// Extra arguments for top-level sub-commands handled in onRun
 		$this->registerArgument(0, new RawStringArgument('cmd', true));
 		$this->registerArgument(1, new RawStringArgument('arg1', true));
@@ -95,31 +109,24 @@ class LuckPermsCommand extends BaseCommand{
 				$sender->sendMessage(TF::GOLD . 'Tracks (' . count($tracks) . '): ' . TF::WHITE . implode(', ', array_map(static fn(Track $t) => $t->getName(), $tracks)));
 				break;
 			case 'sync':
-				try{ (new \jasonw4331\LuckPerms\tasks\SyncTask($plugin))->run(); $sender->sendMessage(TF::GREEN . 'Sync complete.'); }
-				catch(\Throwable $e){ $sender->sendMessage(TF::RED . 'Sync failed: ' . $e->getMessage()); }
-				break;
+				// handled by SyncCommand subcommand — fall through to help
 			case 'info':
-				$sender->sendMessage(TF::GOLD . '=== LuckPerms Info ===' );
-				$sender->sendMessage(TF::YELLOW . 'Version: ' . TF::WHITE . $plugin->getDescription()->getVersion());
-				$sender->sendMessage(TF::YELLOW . 'Groups loaded: ' . TF::WHITE . count($plugin->getGroupManager()->getAll()));
-				$sender->sendMessage(TF::YELLOW . 'Tracks loaded: ' . TF::WHITE . count($plugin->getTrackManager()->getAll()));
-				$sender->sendMessage(TF::YELLOW . 'Users cached: ' . TF::WHITE . count($plugin->getUserManager()->getAll()));
-				break;
+				// handled by InfoCommand subcommand — fall through to help
 			default:
 				$sender->sendMessage(TF::YELLOW . 'LuckPerms commands:');
 				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' user <name> <action> ...');
 				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' group <name> <action> ...');
 				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' track <name> <action> ...');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' editor');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' applyedits <code>');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' search <node|wildcard> [page]');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' log [recent|user <name>|group <name>]');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' verbose <player|group:<name>>');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' export [filename]');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' import <filename>');
 				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' creategroup|deletegroup|listgroups');
 				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' createtrack|deletetrack|listtracks');
-				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' sync | info');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' editor | trusteditor <key> | applyedits <code>');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' search <node>');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' log [recent|user <n>|group <n>]');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' verbose <player|group:<n>>');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' export [file] | import <file>');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' sync | networksync | reload | info');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' tree [scope] | translations');
+				$sender->sendMessage(TF::GOLD . '  /' . $aliasUsed . ' bulkupdate <all|user|group> <delete|replace> <node> [new]');
 		}
 	}
 

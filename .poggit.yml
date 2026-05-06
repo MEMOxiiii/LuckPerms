@@ -13,11 +13,4 @@ projects:
       - phpstan.neon.dist
       - phpstan-baseline.php
       - .php-cs-fixer.php
-    libs:
-      - src: CortexPE/Commando/Commando
-        version: ^3.0.0
-      - src: poggit/libasynql/libasynql
-        version: ^4.1.7
-      - src: sof3/await-generator/await-generator
-        version: ^3.5.2
 ...
