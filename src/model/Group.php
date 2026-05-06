@@ -6,6 +6,10 @@ namespace jasonw4331\LuckPerms\model;
 
 use jasonw4331\LuckPerms\cacheddata\GroupCachedDataManager;
 use jasonw4331\LuckPerms\node\NodeEntry;
+use function array_filter;
+use function array_values;
+use function count;
+use function time;
 
 class Group{
         private GroupCachedDataManager $cachedData;
@@ -57,6 +61,9 @@ class Group{
         }
 
         public function auditTemporaryNodes() : bool{
-		return false;
+		$now = time();
+		$before = count($this->nodes);
+		$this->nodes = array_values(array_filter($this->nodes, static fn(NodeEntry $n) => !$n->isTemporary() || $n->getExpiry() === null || $n->getExpiry() > $now));
+		return count($this->nodes) < $before;
 	}
 }

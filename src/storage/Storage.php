@@ -146,6 +146,8 @@ class Storage{
 			if($group !== null){
 				$loaded = $this->plugin->getGroupManager()->getOrMake($group->getName());
 				$loaded->setNodes($group->getNodes());
+				$loaded->setWeight($group->getWeight());
+				$loaded->setDisplayName($group->getDisplayName());
 			}
 		}
 	}

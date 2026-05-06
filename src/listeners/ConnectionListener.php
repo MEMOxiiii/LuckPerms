@@ -6,11 +6,13 @@ namespace jasonw4331\LuckPerms\listeners;
 
 use jasonw4331\LuckPerms\inject\permissible\PermissionHelper;
 use jasonw4331\LuckPerms\LuckPerms;
+use jasonw4331\LuckPerms\node\NodeEntry;
 use jasonw4331\LuckPerms\util\AbstractConnectionListener;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\scheduler\ClosureTask;
+use function strtolower;
 
 class ConnectionListener extends AbstractConnectionListener implements Listener{
 
@@ -31,6 +33,22 @@ class ConnectionListener extends AbstractConnectionListener implements Listener{
 					$user->setNodes($existingUser->getNodes());
 				}else{
 					$user = $this->loadUser($player->getUniqueId(), $player->getName());
+					// New user: assign to default group if it exists
+					if($user !== null){
+						$defaultGroupKey = 'group.default';
+						$hasDefault = false;
+						foreach($user->getNodes() as $node){
+							if(strtolower($node->getKey()) === $defaultGroupKey){
+								$hasDefault = true;
+								break;
+							}
+						}
+						if(!$hasDefault){
+							// Ensure 'default' group exists
+							$this->plugin->getGroupManager()->getOrMake('default');
+							$user->addNode(new NodeEntry($defaultGroupKey, true, [], null));
+						}
+					}
 				}
 				if($user !== null){
 					// Save with updated username

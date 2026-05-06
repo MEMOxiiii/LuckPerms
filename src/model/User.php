@@ -7,6 +7,10 @@ namespace jasonw4331\LuckPerms\model;
 use jasonw4331\LuckPerms\cacheddata\UserCachedDataManager;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use Ramsey\Uuid\UuidInterface;
+use function array_filter;
+use function array_values;
+use function count;
+use function time;
 
 class User{
         private UserCachedDataManager $cachedData;
@@ -43,7 +47,10 @@ class User{
         }
 
         public function auditTemporaryNodes() : bool{
-		return false;
+		$now = time();
+		$before = count($this->nodes);
+		$this->nodes = array_values(array_filter($this->nodes, static fn(NodeEntry $n) => !$n->isTemporary() || $n->getExpiry() === null || $n->getExpiry() > $now));
+		return count($this->nodes) < $before;
 	}
 
 }

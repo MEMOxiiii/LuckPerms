@@ -4,7 +4,7 @@ src-namespace-prefix: jasonw4331\LuckPerms
 version: 1.0.0
 api: [5.0.0]
 load: STARTUP
-author: jasonw4331
+author: jasonw4331, MEMOxiiii
 description: A permissions plugin for PocketMine-MP servers based on lucko/LuckPerms
 website: https://luckperms.net
 
@@ -116,4 +116,55 @@ permissions:
     default: op
   luckperms.group.meta.clear:
     description: Allows clearing meta for a group
+    default: op
+  luckperms.search:
+    description: Allows searching for permission nodes
+    default: op
+  luckperms.log:
+    description: Allows viewing the action log
+    default: op
+  luckperms.log.notify:
+    description: Receive live log notifications
+    default: op
+  luckperms.export:
+    description: Allows exporting data to a file
+    default: op
+  luckperms.import:
+    description: Allows importing data from a file
+    default: op
+  luckperms.verbose:
+    description: Allows viewing effective permissions for a player/group
+    default: op
+  luckperms.user.clear:
+    description: Allows clearing all permissions for a user
+    default: op
+  luckperms.user.clone:
+    description: Allows cloning a user
+    default: op
+  luckperms.user.promote:
+    description: Allows promoting a user on a track
+    default: op
+  luckperms.user.demote:
+    description: Allows demoting a user on a track
+    default: op
+  luckperms.group.clear:
+    description: Allows clearing all permissions for a group
+    default: op
+  luckperms.group.clone:
+    description: Allows cloning a group
+    default: op
+  luckperms.group.rename:
+    description: Allows renaming a group
+    default: op
+  luckperms.group.listmembers:
+    description: Allows listing members of a group
+    default: op
+  luckperms.track.clear:
+    description: Allows clearing a track
+    default: op
+  luckperms.track.clone:
+    description: Allows cloning a track
+    default: op
+  luckperms.track.rename:
+    description: Allows renaming a track
     default: op
