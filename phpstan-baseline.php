@@ -248,12 +248,12 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	'message' => '#^Call to function is_array\\(\\) with array will always evaluate to true\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Cannot cast mixed to string\\.$#',
-	'count' => 6,
+	'count' => 12,
 	'path' => __DIR__ . '/src/commands/misc/ApplyEditsCommand.php',
 ];
 $ignoreErrors[] = [

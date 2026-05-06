@@ -26,6 +26,7 @@ use function substr;
 use function trim;
 use const CURLINFO_HEADER_SIZE;
 use const CURLINFO_HTTP_CODE;
+use const CURLOPT_CUSTOMREQUEST;
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HEADER;
 use const CURLOPT_HTTPHEADER;
@@ -119,6 +120,51 @@ class BytebinClient extends AbstractHttpClient{
 		}catch(\Throwable){}
 
 		throw new InternetException("Bytebin did not return a content key. HTTP=$httpCode Body=" . substr($body, 0, 200));
+	}
+
+	/**
+	 * PATCHes (updates in-place) existing bytebin content at the given key.
+	 * This keeps the same URL/key so the editor session is refreshed without
+	 * generating a new link.
+	 *
+	 * @param string      $key            the existing content key
+	 * @param string      $buffer         the GZIP-compressed new content
+	 * @param string      $contentType    the MIME type
+	 * @param string|null $extraUserAgent extra string to append to the user agent
+	 */
+	public function patchContent(string $key, string $buffer, string $contentType, ?string $extraUserAgent = null) : void{
+		$userAgent = $this->userAgent . ($extraUserAgent !== null ? "/$extraUserAgent" : "");
+
+		$ch = curl_init($this->url . ltrim($key, '/'));
+		if($ch === false){
+			throw new InternetException('Failed to initialise cURL');
+		}
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $buffer);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			"User-Agent: $userAgent",
+			"Content-Type: $contentType",
+			"Content-Encoding: gzip",
+		]);
+
+		$raw = curl_exec($ch);
+		if($raw === false){
+			$err = curl_error($ch);
+			curl_close($ch);
+			throw new InternetException('Bytebin PATCH request failed: ' . $err);
+		}
+		$httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+
+		// 2xx = success; anything else is an error
+		if($httpCode < 200 || $httpCode >= 300){
+			throw new InternetException("Bytebin PATCH returned unexpected HTTP $httpCode for key $key");
+		}
 	}
 
 	/**
