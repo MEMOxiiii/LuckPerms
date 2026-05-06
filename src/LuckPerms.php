@@ -58,7 +58,9 @@ use jasonw4331\LuckPerms\util\AbstractConnectionListener;
 use jasonw4331\LuckPerms\verbose\VerboseHandler;
 use jasonw4331\LuckPerms\webeditor\store\WebEditorStore;
 use pocketmine\console\ConsoleCommandSender;
+use pocketmine\lang\Language;
 use pocketmine\permission\DefaultPermissions;
+use pocketmine\permission\Permission;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\ClosureTask;
@@ -116,10 +118,33 @@ class LuckPerms extends PluginBase{
 	public function onLoad() : void{
 		self::$instance = $this;
 
-		$reflection = new \ReflectionClass(Server::class);
-		$property = $reflection->getProperty("consoleSender"); // @see Server::$consoleSender
-		$property->setAccessible(true);
-		$this->consoleCommandSender = $property->getValue(Server::getInstance());
+		// load vendor autoloader for Commando and other dependencies
+		$vendorAutoload = $this->getFile() . 'vendor/autoload.php';
+		if(file_exists($vendorAutoload)){
+			// register simplepackethandler stub PSR-4 path manually before autoloader
+			spl_autoload_register(function(string $class) : void{
+				$prefix = 'muqsit\\simplepackethandler\\';
+				if(strncmp($class, $prefix, strlen($prefix)) !== 0){
+					return;
+				}
+				$relative = substr($class, strlen($prefix));
+				$file = __DIR__ . '/../vendor/muqsit/simplepackethandler/src/muqsit/simplepackethandler/' . str_replace('\\', '/', $relative) . '.php';
+				if(file_exists($file)){
+					require_once $file;
+				}
+			}, true, true);
+			require_once $vendorAutoload;
+			// Re-register Composer ClassLoader WITHOUT prepend so PocketMine's
+			// ThreadSafeClassLoader runs first and phar classes take priority over vendor copies
+			foreach(spl_autoload_functions() as $loader){
+				if(!is_array($loader)) continue;
+				$obj = $loader[0] ?? null;
+				if(!($obj instanceof \Composer\Autoload\ClassLoader)) continue;
+				spl_autoload_unregister($loader);
+				spl_autoload_register($loader, true, false);
+				break;
+			}
+		}
 
 		// load translations
 		$this->translationManager = new TranslationManager($this);
@@ -130,6 +155,9 @@ class LuckPerms extends PluginBase{
 	}
 
 	public function onEnable() : void{
+		// create a console sender directly (Server::$consoleSender is not exposed publicly)
+		$this->consoleCommandSender = new ConsoleCommandSender(Server::getInstance(), Server::getInstance()->getLanguage());
+
 		// load the sender factory instance
 		$this->senderFactory = new SenderFactory($this);
 
@@ -167,11 +195,20 @@ class LuckPerms extends PluginBase{
 		}
 
 		$this->storage = $storageFactory->getInstance();
+		$this->storage->loadAllGroups();
+		$this->storage->loadAllTracks();
 		$this->messagingService = (new MessagingFactory($this))->getInstance();
 
 		$this->syncTaskBuffer = new Buffer($this);
 
 		PacketHooker::register($this);
+
+		// register luckperms.command permission before creating the command
+		$permManager = \pocketmine\permission\PermissionManager::getInstance();
+		if($permManager->getPermission('luckperms.command') === null){
+			$permManager->addPermission(new Permission('luckperms.command', 'Allows use of LuckPerms commands'));
+		}
+
 		$this->getServer()->getCommandMap()->register($this->getName(),
 			new LuckPermsCommand(
 				$this,
@@ -216,7 +253,7 @@ class LuckPerms extends PluginBase{
 			GeneratedEventClass::preGenerate();
 		}));
 		ApiRegistrationUtil::registerProvider($this->apiProvider);
-		$this->registerApiOnPlatform($this->apiProvider); //TODO: nukkitx and bukkit have this feature, not pocketmine
+		// registerApiOnPlatform not supported in PocketMine
 
 		$this->extensionManager = new SimpleExtensionManager($this);
 		$this->extensionManager->loadExtensions($this->getDataFolder() . 'extensions' . DIRECTORY_SEPARATOR);
@@ -238,12 +275,11 @@ class LuckPerms extends PluginBase{
 		$this->getScheduler()->scheduleRepeatingTask(new ExpireTemporaryTask($this), 3 * 20);
 		$this->getScheduler()->scheduleRepeatingTask(new CacheHousekeepingTask($this), 2 * 20);
 
-		$pluginManager = $this->getServer()->getPluginManager();
-				$permDefault = ((bool) $this->getConfiguration()->get(ConfigKeys::COMMANDS_ALLOW_OP())) ? DefaultPermissions::ROOT_OPERATOR : null;
+		$permManager = \pocketmine\permission\PermissionManager::getInstance();
 		foreach(CommandPermission::getAll() as $permission){
-			$bukkitPermission = new Permission($permission->getPermission(), null, $permDefault);
-			$pluginManager->removePermission($bukkitPermission);
-			$pluginManager->addPermission($bukkitPermission);
+			$bukkitPermission = new Permission($permission->getPermission());
+			$permManager->removePermission($permission->getPermission());
+			$permManager->addPermission($bukkitPermission);
 		}
 
 				if(!(bool) $this->getConfiguration()->get(ConfigKeys::OPS_ENABLED())){
@@ -333,7 +369,7 @@ class LuckPerms extends PluginBase{
 
 		//TODO: shutdown async scheduler executor, pocketmine handles this for us
 
-		$this->getClassPathAppender()->close();
+		// getClassPathAppender not supported in PocketMine
 
 		$this->getLogger()->debug('Goodbye!');
 	}

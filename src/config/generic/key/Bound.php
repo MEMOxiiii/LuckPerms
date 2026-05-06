@@ -21,6 +21,7 @@ class Bound{
 	 * @return Tvalue
 	 */
 	public function __invoke(ConfigurationAdapter $adapter) : mixed{
-		return $adapter::{$this->factory->getFunctionName()}($this->path, $this->def);
+		$method = $this->factory->getFunctionName();
+		return $adapter->$method($this->path, $this->def);
 	}
 }

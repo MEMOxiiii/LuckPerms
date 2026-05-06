@@ -84,6 +84,13 @@ class BytebinClient extends AbstractHttpClient{
 				}
 			}
 		}
+		// Fallback: bytebin may return the key in the JSON body as {"key":"..."}
+		try{
+			$body = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+			if(isset($body['key']) && is_string($body['key']) && $body['key'] !== ''){
+				return $body['key'];
+			}
+		}catch(\Throwable){}
 
 		return null;
 	}

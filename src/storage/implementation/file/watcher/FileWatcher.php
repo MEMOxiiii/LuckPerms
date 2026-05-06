@@ -6,4 +6,5 @@ namespace jasonw4331\LuckPerms\storage\implementation\file\watcher;
 
 class FileWatcher{
 
+	public function close() : void{ }
 }

@@ -7,4 +7,6 @@ namespace jasonw4331\LuckPerms\event\gen;
 class GeneratedEventClass{
 
 	public function __construct(\Closure $param){ }
+
+	public static function preGenerate() : void{ }
 }

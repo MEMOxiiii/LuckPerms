@@ -62,7 +62,7 @@ class KeyedConfiguration{
 		/** @var SimpleConfigKey[] $keys */
 		$keys = array_filter(
 			$keysClass::getAll(),
-			fn($var) => $keysClass::$var() instanceof SimpleConfigKey
+			fn($var) => $var instanceof SimpleConfigKey
 		);
 
 		// set ordinal values
