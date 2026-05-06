@@ -1,113 +1,373 @@
-<?php
+﻿<?php
 
 declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\commands\user;
 
-use CortexPE\Commando\args\BooleanArgument;
-use CortexPE\Commando\args\IntegerArgument;
 use CortexPE\Commando\args\RawStringArgument;
-use CortexPE\Commando\args\StringEnumArgument;
-use CortexPE\Commando\args\TextArgument;
 use CortexPE\Commando\BaseSubCommand;
-use jasonw4331\LuckPerms\command\SingleValueEnum;
+use jasonw4331\LuckPerms\inject\permissible\PermissionHelper;
+use jasonw4331\LuckPerms\LuckPerms;
+use jasonw4331\LuckPerms\model\User;
+use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\TextFormat;
+use pocketmine\utils\TextFormat as TF;
+use Ramsey\Uuid\Uuid;
+use function array_filter;
+use function array_map;
+use function array_slice;
+use function array_values;
+use function count;
+use function implode;
+use function in_array;
+use function is_numeric;
+use function str_contains;
+use function str_starts_with;
+use function strtolower;
+use function substr;
+use function time;
 
 class UserParentCommand extends BaseSubCommand{
 
-	/**
-	 * Due to the way Minecraft accepts command arguments in the AvailableCommands packet, we have to register all the
-	 * arguments by order of longest chain before shorter chains. Commando does not support subcommands within
-	 * subcommands, so we have to do this manually.
-	 *
-	 * @throws \CortexPE\Commando\exception\ArgumentOrderException
-	 */
-	protected function prepare() : void{
-		$this->setPermission('luckperms.user.info;luckperms.user.editor;luckperms.user.promote;luckperms.user.demote;luckperms.user.showtracks;luckperms.user.clear;luckperms.user.clone;luckperms.user.permission.info;luckperms.user.permission.set;luckperms.user.permission.unset;luckperms.user.permission.settemp;luckperms.user.permission.unsettemp;luckperms.user.permission.check;luckperms.user.permission.clear;luckperms.user.parent.info;luckperms.user.parent.set;luckperms.user.parent.add;luckperms.user.parent.remove;luckperms.user.parent.settrack;luckperms.user.parent.addtemp;luckperms.user.parent.removetemp;luckperms.user.parent.clear;luckperms.user.parent.cleartrack;luckperms.user.parent.switchprimarygroup;luckperms.user.meta.info;luckperms.user.meta.set;luckperms.user.meta.unset;luckperms.user.meta.settemp;luckperms.user.meta.unsettemp;luckperms.user.meta.addprefix;luckperms.user.meta.addsuffix;luckperms.user.meta.setprefix;luckperms.user.meta.setsuffix;luckperms.user.meta.removeprefix;luckperms.user.meta.removesuffix;luckperms.user.meta.addtempprefix;luckperms.user.meta.addtempsuffix;luckperms.user.meta.settempprefix;luckperms.user.meta.settempsuffix;luckperms.user.meta.removetempprefix;luckperms.user.meta.removetempsuffix;luckperms.user.meta.clear');
+protected function prepare() : void{
+$this->setPermission('luckperms.command');
+$this->registerArgument(0, new RawStringArgument('user', false));
+$this->registerArgument(1, new RawStringArgument('action', true));
+$this->registerArgument(2, new RawStringArgument('sub', true));
+$this->registerArgument(3, new RawStringArgument('arg1', true));
+$this->registerArgument(4, new RawStringArgument('arg2', true));
+$this->registerArgument(5, new RawStringArgument('arg3', true));
+$this->registerArgument(6, new RawStringArgument('arg4', true));
+}
 
-		$this->registerArgument(0, new RawStringArgument('user', false)); // username or UUID
+public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+$plugin   = LuckPerms::getInstance();
+$username = (string) ($args['user'] ?? '');
+$action   = strtolower((string) ($args['action'] ?? ''));
+$sub      = strtolower((string) ($args['sub'] ?? ''));
+$arg1     = isset($args['arg1']) ? (string) $args['arg1'] : null;
+$arg2     = isset($args['arg2']) ? (string) $args['arg2'] : null;
+$arg3     = isset($args['arg3']) ? (string) $args['arg3'] : null;
 
-		// 7 deep after user
-		// /lp user <user> permission settemp <node> <true/false> <duration> [temporary modifier] [context...]
-		$this->registerArgument(1, new SingleValueEnum('permission'));
-		$this->registerArgument(2, new SingleValueEnum('settemp'));
-		$this->registerArgument(3, new RawStringArgument('node', false));
-		$this->registerArgument(4, new BooleanArgument('value', false));
-		$this->registerArgument(5, new IntegerArgument('duration', false)); // TODO: change to date validation
-		$this->registerArgument(6, new class('temporary modifier', false) extends StringEnumArgument{
-			protected const VALUES = ['accumulate' => 'accumulate', 'replace' => 'replace', 'deny' => 'deny'];
-			public function parse(string $argument, CommandSender $sender) : string{
-				return $argument;
-			}
-			public function getTypeName() : string{
-				return 'Temporary Modifier';
-			}
-		});
-		$this->registerArgument(7, new TextArgument('context', true));
+if($username === ''){
+$sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user <user> <action> ...');
+return;
+}
 
-		// 7 deep after user
-		// /lp user <user> meta settemp <key> <value> <duration> [temporary modifier] [context...]
-		$this->registerArgument(1, new SingleValueEnum('meta'));
-		$this->registerArgument(2, new SingleValueEnum('settemp'));
-		$this->registerArgument(3, new RawStringArgument('key', false));
-		$this->registerArgument(4, new RawStringArgument('value', false));
-		$this->registerArgument(5, new IntegerArgument('duration', false)); // TODO: change to date validation
-		$this->registerArgument(6, new class('temporary modifier', false) extends StringEnumArgument{
-			protected const VALUES = ['accumulate' => 'accumulate', 'replace' => 'replace', 'deny' => 'deny'];
-			public function parse(string $argument, CommandSender $sender) : string{
-				return $argument;
-			}
-			public function getTypeName() : string{
-				return 'Temporary Modifier';
-			}
-		});
-		$this->registerArgument(7, new TextArgument('context', true));
+$user = $this->resolveUser($username, $plugin);
+if($user === null){
+$sender->sendMessage(TF::RED . "User '$username' not found. They must have joined at least once.");
+return;
+}
 
-		// 6 deep after user
-		// /lp user <user> parent addtemp <group> <duration> [temporary modifier] [context...]
-		$this->registerArgument(1, new SingleValueEnum('parent'));
-		$this->registerArgument(2, new SingleValueEnum('addtemp'));
-		$this->registerArgument(3, new RawStringArgument('group', false)); // TODO: group name validation
-		$this->registerArgument(4, new IntegerArgument('duration', false)); // TODO: change to date validation
-		$this->registerArgument(5, new class('temporary modifier', false) extends StringEnumArgument{
-			protected const VALUES = ['accumulate' => 'accumulate', 'replace' => 'replace', 'deny' => 'deny'];
-			public function parse(string $argument, CommandSender $sender) : string{
-				return $argument;
-			}
-			public function getTypeName() : string{
-				return 'Temporary Modifier';
-			}
-		});
-		$this->registerArgument(6, new TextArgument('context', true));
+match($action){
+'', 'info'   => $this->cmdInfo($sender, $user, $plugin),
+'editor'     => $this->cmdEditor($sender, $user),
+'showtracks' => $this->cmdShowTracks($sender, $user, $plugin),
+'clear'      => $this->cmdClear($sender, $user, $plugin),
+'clone'      => $sub !== '' ? $this->cmdClone($sender, $user, $sub, $plugin) : $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user ' . $username . ' clone <target>'),
+'promote', 'demote' => $sub !== '' ? $this->cmdPromoteDemote($sender, $user, $action, $sub, $plugin) : $sender->sendMessage(TF::RED . 'Usage: /' . $aliasUsed . ' user ' . $username . ' ' . $action . ' <track>'),
+'permission' => $this->handlePermission($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $arg3, $plugin),
+'parent'     => $this->handleParent($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $plugin),
+'meta'       => $this->handleMeta($sender, $aliasUsed, $username, $user, $sub, $arg1, $arg2, $arg3, $plugin),
+default      => $sender->sendMessage(TF::RED . "Unknown action '$action'. Use: info, editor, showtracks, clear, clone, promote, demote, permission, parent, meta"),
+};
+}
 
-		$this->registerArgument(1, new SingleValueEnum('promote'));
-		$this->registerArgument(2, new RawStringArgument('track', false));
-		$this->registerArgument(3, new TextArgument('context', true));
+private function resolveUser(string $nameOrUuid, LuckPerms $plugin) : ?User{
+$player = $plugin->getServer()->getPlayerExact($nameOrUuid);
+if($player !== null){
+$user = $plugin->getUserManager()->getIfLoaded($player->getUniqueId());
+if($user !== null) return $user;
+$loaded = $plugin->getStorage()->loadUser($player->getUniqueId());
+if($loaded !== null){
+$u = $plugin->getUserManager()->load($player->getUniqueId(), $player->getName());
+$u->setNodes($loaded->getNodes());
+return $u;
+}
+return $plugin->getUserManager()->load($player->getUniqueId(), $player->getName());
+}
+try{
+$uuid = Uuid::fromString($nameOrUuid);
+$user = $plugin->getUserManager()->getIfLoaded($uuid);
+if($user !== null) return $user;
+return $plugin->getStorage()->loadUser($uuid);
+}catch(\Throwable){}
+$uuid = $plugin->getStorage()->getPlayerUniqueId($nameOrUuid);
+if($uuid !== null){
+$user = $plugin->getUserManager()->getIfLoaded($uuid);
+if($user !== null) return $user;
+return $plugin->getStorage()->loadUser($uuid);
+}
+return null;
+}
 
-		$this->registerArgument(1, new SingleValueEnum('demote'));
-		$this->registerArgument(2, new RawStringArgument('track', false));
-		$this->registerArgument(3, new TextArgument('context', true));
+private function saveAndRefresh(User $user, LuckPerms $plugin, CommandSender $sender) : void{
+$plugin->getStorage()->saveUser($user);
+$player = $plugin->getServer()->getPlayerExact($user->getUsername());
+if($player !== null) PermissionHelper::applyPermissions($player, $user, $plugin);
+}
 
-		$this->registerArgument(1, new SingleValueEnum('clear'));
-		$this->registerArgument(2, new TextArgument('context', true));
+private function removeNodeByKey(User $user, string $key) : bool{
+$key   = strtolower($key);
+$nodes = $user->getNodes();
+$new   = array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $key));
+$user->setNodes($new);
+return count($new) < count($nodes);
+}
 
-		$this->registerArgument(1, new SingleValueEnum('clone'));
-		$this->registerArgument(2, new RawStringArgument('user', false)); // username or UUID
+/* info */
+private function cmdInfo(CommandSender $sender, User $user, LuckPerms $plugin) : void{
+$nodes   = $user->getNodes();
+$parents = array_filter($nodes, static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.'));
+$perms   = array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'));
+$sender->sendMessage(TF::GOLD . '=== User Info: ' . TF::WHITE . $user->getUsername() . TF::GOLD . ' ===');
+$sender->sendMessage(TF::YELLOW . 'UUID: ' . TF::WHITE . $user->getUniqueId()->toString());
+if(count($parents) > 0){
+$list = implode(', ', array_map(static fn(NodeEntry $n) => substr($n->getKey(), 6), $parents));
+$sender->sendMessage(TF::YELLOW . 'Groups: ' . TF::WHITE . $list);
+}else{
+$sender->sendMessage(TF::YELLOW . 'Groups: ' . TF::GRAY . '(none)');
+}
+$sender->sendMessage(TF::YELLOW . 'Permissions: ' . TF::WHITE . count($perms) . ' node(s)');
+}
 
-		$this->registerArgument(1, new class('subcommand', false) extends StringEnumArgument{
-			protected const VALUES = ['info' => true, 'editor' => true, 'showtracks' => true];
-			public function parse(string $argument, CommandSender $sender) : mixed{
-				return $argument;
-			}
-			public function getTypeName() : string{
-				return 'subcommand';
-			}
-		});
-	}
+/* editor */
+private function cmdEditor(CommandSender $sender, User $user) : void{
+$sender->sendMessage(TF::YELLOW . 'Per-user editor: use ' . TF::WHITE . '/lp editor' . TF::YELLOW . ' for a full web editor session.');
+}
 
-	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$user = isset($args['user']) ? (string) $args['user'] : '<user>';
-		$sender->sendMessage(TextFormat::YELLOW . 'User command received for ' . $user . '.');
-	}
+/* showtracks */
+private function cmdShowTracks(CommandSender $sender, User $user, LuckPerms $plugin) : void{
+$tracks = $plugin->getTrackManager()->getAll();
+if(empty($tracks)){ $sender->sendMessage(TF::YELLOW . 'No tracks defined.'); return; }
+$userGroups = array_map(static fn(NodeEntry $n) => strtolower(substr($n->getKey(), 6)),
+array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
+foreach($tracks as $track){
+if(empty($track->getGroups())) continue;
+$rendered = array_map(static fn(string $g) => (in_array(strtolower($g), array_values($userGroups), true) ? TF::GREEN : TF::GRAY) . $g . TF::RESET, $track->getGroups());
+$sender->sendMessage(TF::YELLOW . $track->getName() . ': ' . implode(TF::WHITE . ' > ', $rendered));
+}
+}
+
+/* clear */
+private function cmdClear(CommandSender $sender, User $user, LuckPerms $plugin) : void{
+$count = count($user->getNodes());
+$user->setNodes([]);
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . "Cleared $count node(s) from " . $user->getUsername() . '.');
+}
+
+/* clone */
+private function cmdClone(CommandSender $sender, User $user, string $targetName, LuckPerms $plugin) : void{
+$target = $this->resolveUser($targetName, $plugin);
+if($target === null){ $sender->sendMessage(TF::RED . "Target user '$targetName' not found."); return; }
+$target->setNodes($user->getNodes());
+$this->saveAndRefresh($target, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Cloned permissions from ' . $user->getUsername() . ' to ' . $target->getUsername() . '.');
+}
+
+/* promote / demote */
+private function cmdPromoteDemote(CommandSender $sender, User $user, string $dir, string $trackName, LuckPerms $plugin) : void{
+$track = null;
+foreach($plugin->getTrackManager()->getAll() as $t){
+if(strtolower($t->getName()) === strtolower($trackName)){ $track = $t; break; }
+}
+if($track === null){ $sender->sendMessage(TF::RED . "Track '$trackName' not found."); return; }
+$groups = $track->getGroups();
+if(empty($groups)){ $sender->sendMessage(TF::RED . "Track '$trackName' has no groups."); return; }
+$currentIdx = -1;
+foreach($user->getNodes() as $node){
+if(!str_starts_with(strtolower($node->getKey()), 'group.')) continue;
+$g   = strtolower(substr($node->getKey(), 6));
+$idx = $track->indexOf($g);
+if($idx !== -1) $currentIdx = $idx;
+}
+if($dir === 'promote'){
+$next = $currentIdx + 1;
+if($next >= count($groups)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' is already at the top.'); return; }
+if($currentIdx !== -1) $this->removeNodeByKey($user, 'group.' . strtolower($groups[$currentIdx]));
+$user->addNode(new NodeEntry('group.' . strtolower($groups[$next]), true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Promoted ' . $user->getUsername() . ' to ' . TF::WHITE . $groups[$next] . TF::GREEN . ' on track ' . $track->getName() . '.');
+}else{
+if($currentIdx <= 0){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' is already at the bottom.'); return; }
+$this->removeNodeByKey($user, 'group.' . strtolower($groups[$currentIdx]));
+$user->addNode(new NodeEntry('group.' . strtolower($groups[$currentIdx - 1]), true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Demoted ' . $user->getUsername() . ' to ' . TF::WHITE . $groups[$currentIdx - 1] . TF::GREEN . ' on track ' . $track->getName() . '.');
+}
+}
+
+/* ─── permission ─── */
+private function handlePermission(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
+switch($sub){
+case '', 'info':
+$page  = is_numeric($a1) ? (int) $a1 : 1;
+$nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.')));
+if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no permission nodes.'); return; }
+$perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
+$sender->sendMessage(TF::GOLD . '--- Permissions (' . $user->getUsername() . ') [' . $page . '/' . $pages . '] ---');
+foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n){
+$sender->sendMessage(($n->getValue() ? TF::GREEN : TF::RED) . '  ' . $n->getKey() . ($n->isTemporary() ? TF::GRAY . ' (' . date('Y-m-d H:i', $n->getExpiry() ?? 0) . ')' : ''));
+}
+break;
+case 'set':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' permission set <node> [true|false]'); return; }
+$val = ($a2 === null || strtolower($a2) !== 'false');
+$this->removeNodeByKey($user, $a1);
+$user->addNode(new NodeEntry($a1, $val, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set ' . TF::WHITE . $a1 . TF::GREEN . ' = ' . ($val ? 'true' : 'false') . ' for ' . $user->getUsername() . '.');
+break;
+case 'unset':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' permission unset <node>'); return; }
+if($this->removeNodeByKey($user, $a1)){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Unset ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
+else $sender->sendMessage(TF::YELLOW . 'Node ' . TF::WHITE . $a1 . TF::YELLOW . ' not found on ' . $user->getUsername() . '.');
+break;
+case 'settemp':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' permission settemp <node> <true|false> <seconds>'); return; }
+$val = strtolower($a2) !== 'false'; $dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+$this->removeNodeByKey($user, $a1);
+$user->addNode(new NodeEntry($a1, $val, [], time() + $dur));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set temp ' . TF::WHITE . $a1 . TF::GREEN . ' (' . $dur . 's) for ' . $user->getUsername() . '.');
+break;
+case 'unsettemp':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' permission unsettemp <node>'); return; }
+$nodes = $user->getNodes(); $before = count($nodes);
+$user->setNodes(array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== strtolower($a1) || !$n->isTemporary())));
+if(count($user->getNodes()) < $before){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Removed temp node ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
+else $sender->sendMessage(TF::YELLOW . 'No matching temporary node found.');
+break;
+case 'check':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' permission check <node>'); return; }
+$eff = PermissionHelper::resolveEffectivePermissions($user, $plugin);
+$has = $eff[strtolower($a1)] ?? false;
+$sender->sendMessage(TF::YELLOW . $user->getUsername() . ' -> ' . $a1 . ': ' . ($has ? TF::GREEN . 'true' : TF::RED . 'false'));
+break;
+case 'clear':
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.'))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Cleared permission nodes from ' . $user->getUsername() . '.');
+break;
+default:
+$sender->sendMessage(TF::RED . "Unknown: 'permission $sub'. Use: info, set, unset, settemp, unsettemp, check, clear");
+}
+}
+
+/* ─── parent ─── */
+private function handleParent(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, LuckPerms $plugin) : void{
+switch($sub){
+case '', 'info':
+$page  = is_numeric($a1) ? (int) $a1 : 1;
+$nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
+if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no parent groups.'); return; }
+$perPage = 12; $pages = (int) ceil(count($nodes) / $perPage); $page = max(1, min($page, $pages));
+$sender->sendMessage(TF::GOLD . '--- Parents (' . $user->getUsername() . ') [' . $page . '/' . $pages . '] ---');
+foreach(array_slice($nodes, ($page - 1) * $perPage, $perPage) as $n){
+$g = substr($n->getKey(), 6);
+$sender->sendMessage(TF::GREEN . '  - ' . $g . ($n->isTemporary() ? TF::GRAY . ' (' . date('Y-m-d H:i', $n->getExpiry() ?? 0) . ')' : ''));
+}
+break;
+case 'add':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent add <group>'); return; }
+$plugin->getGroupManager()->getOrMake($a1);
+$nk = 'group.' . strtolower($a1);
+$this->removeNodeByKey($user, $nk);
+$user->addNode(new NodeEntry($nk, true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Added ' . $user->getUsername() . ' to group ' . TF::WHITE . $a1 . TF::GREEN . '.');
+break;
+case 'remove':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent remove <group>'); return; }
+if($this->removeNodeByKey($user, 'group.' . strtolower($a1))){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Removed ' . $user->getUsername() . ' from group ' . TF::WHITE . $a1 . TF::GREEN . '.'); }
+else $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' is not in group ' . TF::WHITE . $a1 . TF::YELLOW . '.');
+break;
+case 'set':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent set <group>'); return; }
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'))));
+$plugin->getGroupManager()->getOrMake($a1);
+$user->addNode(new NodeEntry('group.' . strtolower($a1), true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set ' . $user->getUsername() . "'s primary group to " . TF::WHITE . $a1 . TF::GREEN . '.');
+break;
+case 'clear':
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.'))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Cleared all parent groups from ' . $user->getUsername() . '.');
+break;
+case 'addtemp':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent addtemp <group> <seconds>'); return; }
+$dur = is_numeric($a2) ? (int) $a2 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+$plugin->getGroupManager()->getOrMake($a1);
+$nk = 'group.' . strtolower($a1);
+$this->removeNodeByKey($user, $nk);
+$user->addNode(new NodeEntry($nk, true, [], time() + $dur));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Added ' . $user->getUsername() . ' to group ' . TF::WHITE . $a1 . TF::GREEN . ' (' . $dur . 's).');
+break;
+case 'removetemp':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent removetemp <group>'); return; }
+$nk = 'group.' . strtolower($a1); $nodes = $user->getNodes(); $before = count($nodes);
+$user->setNodes(array_values(array_filter($nodes, static fn(NodeEntry $n) => strtolower($n->getKey()) !== $nk || !$n->isTemporary())));
+if(count($user->getNodes()) < $before){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Removed temp group ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
+else $sender->sendMessage(TF::YELLOW . 'No matching temporary group found.');
+break;
+default:
+$sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, set, clear, addtemp, removetemp");
+}
+}
+
+/* ─── meta ─── */
+private function handleMeta(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
+switch($sub){
+case '', 'info':
+$nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'meta.') || str_starts_with(strtolower($n->getKey()), 'prefix.') || str_starts_with(strtolower($n->getKey()), 'suffix.')));
+if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no meta.'); return; }
+$sender->sendMessage(TF::GOLD . '--- Meta (' . $user->getUsername() . ') ---');
+foreach($nodes as $n) $sender->sendMessage(TF::YELLOW . '  - ' . TF::WHITE . $n->getKey());
+break;
+case 'set':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta set <key> <value>'); return; }
+$nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.')));
+$user->setNodes($nodes);
+$user->addNode(new NodeEntry('meta.' . $a1 . '.' . $a2, true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set meta ' . TF::WHITE . $a1 . TF::GREEN . ' = ' . TF::WHITE . $a2 . TF::GREEN . ' for ' . $user->getUsername() . '.');
+break;
+case 'unset':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta unset <key>'); return; }
+$nodes = $user->getNodes(); $before = count($nodes);
+$user->setNodes(array_values(array_filter($nodes, static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.'))));
+if(count($user->getNodes()) < $before){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Unset meta ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
+else $sender->sendMessage(TF::YELLOW . 'Meta key ' . TF::WHITE . $a1 . TF::YELLOW . ' not found.');
+break;
+case 'clear':
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.') && !str_starts_with(strtolower($n->getKey()), 'prefix.') && !str_starts_with(strtolower($n->getKey()), 'suffix.'))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Cleared all meta from ' . $user->getUsername() . '.');
+break;
+case 'addprefix': case 'setprefix':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <value>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0;
+if(str_starts_with($sub, 'set')){ $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'prefix.')))); }
+$user->addNode(new NodeEntry('prefix.' . $pri . '.' . $a2, true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set prefix ' . TF::WHITE . $a2 . TF::GREEN . ' (priority ' . $pri . ') for ' . $user->getUsername() . '.');
+break;
+case 'addsuffix': case 'setsuffix':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <value>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0;
+if(str_starts_with($sub, 'set')){ $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'suffix.')))); }
+$user->addNode(new NodeEntry('suffix.' . $pri . '.' . $a2, true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set suffix ' . TF::WHITE . $a2 . TF::GREEN . ' (priority ' . $pri . ') for ' . $user->getUsername() . '.');
+break;
+default:
+$sender->sendMessage(TF::RED . "Unknown: 'meta $sub'. Use: info, set, unset, clear, addprefix, addsuffix, setprefix, setsuffix");
+}
+}
 }

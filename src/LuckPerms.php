@@ -195,6 +195,8 @@ class LuckPerms extends PluginBase{
 		}
 
 		$this->storage = $storageFactory->getInstance();
+		$this->storage->loadAllGroups();
+		$this->storage->loadAllTracks();
 		$this->messagingService = (new MessagingFactory($this))->getInstance();
 
 		$this->syncTaskBuffer = new Buffer($this);
