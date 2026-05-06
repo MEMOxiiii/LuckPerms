@@ -202,7 +202,8 @@ $sender->sendMessage(TF::GREEN . 'Demoted ' . $user->getUsername() . ' to ' . TF
 /* ─── permission ─── */
 private function handlePermission(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $page  = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no permission nodes.'); return; }
@@ -260,7 +261,8 @@ $sender->sendMessage(TF::RED . "Unknown: 'permission $sub'. Use: info, set, unse
 /* ─── parent ─── */
 private function handleParent(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $page  = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no parent groups.'); return; }
@@ -324,7 +326,8 @@ $sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, 
 /* ─── meta ─── */
 private function handleMeta(CommandSender $sender, string $al, string $un, User $user, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $nodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'meta.') || str_starts_with(strtolower($n->getKey()), 'prefix.') || str_starts_with(strtolower($n->getKey()), 'suffix.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . $user->getUsername() . ' has no meta.'); return; }
 $sender->sendMessage(TF::GOLD . '--- Meta (' . $user->getUsername() . ') ---');
@@ -350,7 +353,8 @@ $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry
 $this->saveAndRefresh($user, $plugin, $sender);
 $sender->sendMessage(TF::GREEN . 'Cleared all meta from ' . $user->getUsername() . '.');
 break;
-case 'addprefix': case 'setprefix':
+case 'addprefix':
+				case 'setprefix':
 if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <value>'); return; }
 $pri = is_numeric($a1) ? (int) $a1 : 0;
 if(str_starts_with($sub, 'set')){ $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'prefix.')))); }
@@ -358,7 +362,8 @@ $user->addNode(new NodeEntry('prefix.' . $pri . '.' . $a2, true, [], null));
 $this->saveAndRefresh($user, $plugin, $sender);
 $sender->sendMessage(TF::GREEN . 'Set prefix ' . TF::WHITE . $a2 . TF::GREEN . ' (priority ' . $pri . ') for ' . $user->getUsername() . '.');
 break;
-case 'addsuffix': case 'setsuffix':
+case 'addsuffix':
+				case 'setsuffix':
 if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <value>'); return; }
 $pri = is_numeric($a1) ? (int) $a1 : 0;
 if(str_starts_with($sub, 'set')){ $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'suffix.')))); }

@@ -45,7 +45,8 @@ return;
 }
 
 switch($action){
-case '', 'info':
+case '':
+				case 'info':
 $this->cmdInfo($sender, $track); break;
 case 'editor':
 $sender->sendMessage(TF::YELLOW . 'Use ' . TF::WHITE . '/lp editor' . TF::YELLOW . ' for a full web editor session.'); break;

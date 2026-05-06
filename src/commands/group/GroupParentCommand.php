@@ -60,7 +60,8 @@ return;
 }
 
 switch($action){
-case '', 'info':
+case '':
+				case 'info':
 $this->cmdInfo($sender, $group, $plugin); break;
 case 'editor':
 $sender->sendMessage(TF::YELLOW . 'Use ' . TF::WHITE . '/lp editor' . TF::YELLOW . ' for a full web editor session.'); break;
@@ -169,7 +170,8 @@ if(!$found) $sender->sendMessage(TF::YELLOW . 'Group ' . $group->getName() . ' i
 /* ─── permission ─── */
 private function handlePermission(CommandSender $sender, string $al, string $gn, Group $group, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no permission nodes."); return; }
@@ -226,7 +228,8 @@ $sender->sendMessage(TF::RED . "Unknown: 'permission $sub'. Use: info, set, unse
 /* ─── parent ─── */
 private function handleParent(CommandSender $sender, string $al, string $gn, Group $group, string $sub, ?string $a1, ?string $a2, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $page = is_numeric($a1) ? (int) $a1 : 1;
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no parent groups."); return; }
@@ -280,7 +283,8 @@ $sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, 
 /* ─── meta ─── */
 private function handleMeta(CommandSender $sender, string $al, string $gn, Group $group, string $sub, ?string $a1, ?string $a2, ?string $a3, LuckPerms $plugin) : void{
 switch($sub){
-case '', 'info':
+case '':
+				case 'info':
 $nodes = array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'meta.') || str_starts_with(strtolower($n->getKey()), 'prefix.') || str_starts_with(strtolower($n->getKey()), 'suffix.')));
 if(empty($nodes)){ $sender->sendMessage(TF::YELLOW . "Group $gn has no meta."); return; }
 $sender->sendMessage(TF::GOLD . "--- Meta ($gn) ---");
@@ -305,7 +309,8 @@ $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEnt
 $this->saveAndRefresh($group, $plugin);
 $sender->sendMessage(TF::GREEN . "Cleared all meta from group $gn.");
 break;
-case 'addprefix': case 'setprefix':
+case 'addprefix':
+				case 'setprefix':
 if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta ' . $sub . ' <priority> <value>'); return; }
 $pri = is_numeric($a1) ? (int) $a1 : 0;
 if(str_starts_with($sub, 'set')) $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'prefix.'))));
@@ -313,7 +318,8 @@ $group->addNode(new NodeEntry('prefix.' . $pri . '.' . $a2, true, [], null));
 $this->saveAndRefresh($group, $plugin);
 $sender->sendMessage(TF::GREEN . "Set prefix '$a2' (priority $pri) for group $gn.");
 break;
-case 'addsuffix': case 'setsuffix':
+case 'addsuffix':
+				case 'setsuffix':
 if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta ' . $sub . ' <priority> <value>'); return; }
 $pri = is_numeric($a1) ? (int) $a1 : 0;
 if(str_starts_with($sub, 'set')) $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'suffix.'))));
