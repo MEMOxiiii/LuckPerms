@@ -8,11 +8,14 @@ use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Group;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use pocketmine\command\CommandSender;
+use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
+use function array_keys;
 use function array_map;
 use function gzencode;
 use function json_encode;
 use function microtime;
+use function sort;
 use function sprintf;
 use function strcmp;
 use function usort;
@@ -138,10 +141,23 @@ class WebEditorRequest{
 			],
 			'permissionHolders' => $permissionHolders,
 			'tracks' => $tracksData,
-			'knownPermissions' => $plugin->getPermissionRegistry()->rootAsList(),
+			'knownPermissions' => self::buildKnownPermissions(),
 			'potentialContexts' => [],
 		];
 
 		return new self($payload);
+	}
+
+	/**
+	 * Returns a sorted flat list of all permissions currently registered with PocketMine.
+	 * Reading live at session-generation time ensures permissions from all plugins are included,
+	 * regardless of plugin load order.
+	 *
+	 * @return string[]
+	 */
+	private static function buildKnownPermissions() : array{
+		$names = array_keys(PermissionManager::getInstance()->getPermissions());
+		sort($names);
+		return $names;
 	}
 }
