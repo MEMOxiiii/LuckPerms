@@ -18,10 +18,7 @@
     "php": "^8.1",
     "cortexpe/commando": "dev-master"
 },
-"replace": {
-    "pocketmine/pocketmine-mp": "5.42.1",
-    "muqsit/simplepackethandler": "3.0.0"
-},
+
 "require-dev": {
     "sof3/libasynql": "4.2.3",
     "sof3/await-generator": "3.5.2",

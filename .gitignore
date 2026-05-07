@@ -22,8 +22,11 @@ Desktop.ini
 /docs/build/
 !/docs/requirements.txt
 
-# Composer
-vendor/*
+# Composer - exclude dev-only tools and PM-provided packages (available from server at runtime)
+vendor/bin/
+vendor/phpstan/
+vendor/friendsofphp/
+vendor/pocketmine/
 
 # Travis files
 test_data/*
