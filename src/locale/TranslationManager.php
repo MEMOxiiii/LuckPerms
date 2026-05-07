@@ -74,7 +74,7 @@ final class TranslationManager{
 
 	private function loadBuiltinTranslations() : void{
 		$file = $this->plugin->getResourcePath('luckperms_en.properties');
-		if($file !== null && file_exists($file)){
+		if(file_exists($file)){
 			$this->loadTranslationFile($file);
 		}
 	}
