@@ -15,11 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup PHP and tools
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          tools: phpstan
           coverage: none
 
       - name: Get composer cache directory
@@ -37,7 +36,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
       - name: Run PhpStan
-        run: phpstan analyze --no-progress src -c phpstan.neon.dist
+        run: composer exec phpstan analyze --no-progress src -c phpstan.neon.dist
 
   codestyle:
     name: Code Style checks
