@@ -15,7 +15,7 @@
 		}
 	},
 	"require": {
-		"cortexpe/commando": "^3.0",
+		"cortexpe/commando": "dev-master",
 		"sof3/libasynql": "^4.1",
 		"sof3/await-generator": "^3.5.2"
 	},
