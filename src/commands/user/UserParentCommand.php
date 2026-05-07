@@ -26,6 +26,7 @@ use function is_numeric;
 use function max;
 use function min;
 use function str_starts_with;
+use function strlen;
 use function strtolower;
 use function substr;
 use function time;
@@ -321,8 +322,44 @@ $user->setNodes(array_values(array_filter($nodes, static fn(NodeEntry $n) => str
 if(count($user->getNodes()) < $before){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Removed temp group ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
 else $sender->sendMessage(TF::YELLOW . 'No matching temporary group found.');
 break;
+case 'settrack':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent settrack <track> <group>'); return; }
+$trackObj = null;
+foreach($plugin->getTrackManager()->getAll() as $t){ if(strtolower($t->getName()) === strtolower($a1)){ $trackObj = $t; break; } }
+if($trackObj === null){ $sender->sendMessage(TF::RED . "Track '$a1' not found."); return; }
+if(!in_array(strtolower($a2), array_map('strtolower', $trackObj->getGroups()), true)){ $sender->sendMessage(TF::RED . "Group '$a2' is not in track '$a1'."); return; }
+$trackGroups = array_map('strtolower', $trackObj->getGroups());
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.') || !in_array(strtolower(substr($n->getKey(), 6)), $trackGroups, true))));
+$plugin->getGroupManager()->getOrMake($a2);
+$user->addNode(new NodeEntry('group.' . strtolower($a2), true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set ' . $user->getUsername() . ' to group ' . TF::WHITE . $a2 . TF::GREEN . " on track $a1.");
+break;
+case 'cleartrack':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent cleartrack <track>'); return; }
+$trackObj2 = null;
+foreach($plugin->getTrackManager()->getAll() as $t){ if(strtolower($t->getName()) === strtolower($a1)){ $trackObj2 = $t; break; } }
+if($trackObj2 === null){ $sender->sendMessage(TF::RED . "Track '$a1' not found."); return; }
+$trackGroups2 = array_map('strtolower', $trackObj2->getGroups());
+$beforeCt = count($user->getNodes());
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.') || !in_array(strtolower(substr($n->getKey(), 6)), $trackGroups2, true))));
+$removed = $beforeCt - count($user->getNodes());
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . "Removed $removed group(s) on track $a1 from " . $user->getUsername() . '.');
+break;
+case 'switchprimarygroup':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' parent switchprimarygroup <group>'); return; }
+$parentNodes = array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => str_starts_with(strtolower($n->getKey()), 'group.')));
+if(count($parentNodes) === 1) $this->removeNodeByKey($user, $parentNodes[0]->getKey());
+$plugin->getGroupManager()->getOrMake($a1);
+$nkSp = 'group.' . strtolower($a1);
+$this->removeNodeByKey($user, $nkSp);
+$user->addNode(new NodeEntry($nkSp, true, [], null));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Switched ' . $user->getUsername() . "'s primary group to " . TF::WHITE . $a1 . TF::GREEN . '.');
+break;
 default:
-$sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, set, clear, addtemp, removetemp");
+$sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, set, clear, addtemp, removetemp, settrack, cleartrack, switchprimarygroup");
 }
 }
 
@@ -374,8 +411,72 @@ $user->addNode(new NodeEntry('suffix.' . $pri . '.' . $a2, true, [], null));
 $this->saveAndRefresh($user, $plugin, $sender);
 $sender->sendMessage(TF::GREEN . 'Set suffix ' . TF::WHITE . $a2 . TF::GREEN . ' (priority ' . $pri . ') for ' . $user->getUsername() . '.');
 break;
+case 'settemp':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta settemp <key> <value> <seconds>'); return; }
+$dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.'))));
+$user->addNode(new NodeEntry('meta.' . $a1 . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set temp meta ' . TF::WHITE . $a1 . TF::GREEN . ' = ' . TF::WHITE . $a2 . TF::GREEN . " ({$dur}s) for " . $user->getUsername() . '.');
+break;
+case 'unsettemp':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta unsettemp <key>'); return; }
+$bfMt = count($user->getNodes());
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.') || !$n->isTemporary())));
+if(count($user->getNodes()) < $bfMt){ $this->saveAndRefresh($user, $plugin, $sender); $sender->sendMessage(TF::GREEN . 'Removed temp meta ' . TF::WHITE . $a1 . TF::GREEN . ' from ' . $user->getUsername() . '.'); }
+else $sender->sendMessage(TF::YELLOW . 'No matching temporary meta found.');
+break;
+case 'removeprefix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta removeprefix <priority> [prefix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $pfxStr = 'prefix.' . $pri . '.';
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), strtolower($pfxStr)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($pfxStr))) !== strtolower($a2)))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Removed prefix (priority ' . $pri . ') from ' . $user->getUsername() . '.');
+break;
+case 'removesuffix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta removesuffix <priority> [suffix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $sfxStr = 'suffix.' . $pri . '.';
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), strtolower($sfxStr)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($sfxStr))) !== strtolower($a2)))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Removed suffix (priority ' . $pri . ') from ' . $user->getUsername() . '.');
+break;
+case 'addtempprefix':
+				case 'settempprefix':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <prefix> <seconds>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+if(str_starts_with($sub, 'set')) $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'prefix.') || !$n->isTemporary())));
+$user->addNode(new NodeEntry('prefix.' . $pri . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set temp prefix ' . TF::WHITE . $a2 . TF::GREEN . " (priority $pri, {$dur}s) for " . $user->getUsername() . '.');
+break;
+case 'addtempsuffix':
+				case 'settempsuffix':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta ' . $sub . ' <priority> <suffix> <seconds>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+if(str_starts_with($sub, 'set')) $user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'suffix.') || !$n->isTemporary())));
+$user->addNode(new NodeEntry('suffix.' . $pri . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Set temp suffix ' . TF::WHITE . $a2 . TF::GREEN . " (priority $pri, {$dur}s) for " . $user->getUsername() . '.');
+break;
+case 'removetempprefix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta removetempprefix <priority> [prefix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $pfxStr2 = 'prefix.' . $pri . '.';
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !$n->isTemporary() || !str_starts_with(strtolower($n->getKey()), strtolower($pfxStr2)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($pfxStr2))) !== strtolower($a2)))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Removed temp prefix (priority ' . $pri . ') from ' . $user->getUsername() . '.');
+break;
+case 'removetempsuffix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' user ' . $un . ' meta removetempsuffix <priority> [suffix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $sfxStr2 = 'suffix.' . $pri . '.';
+$user->setNodes(array_values(array_filter($user->getNodes(), static fn(NodeEntry $n) => !$n->isTemporary() || !str_starts_with(strtolower($n->getKey()), strtolower($sfxStr2)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($sfxStr2))) !== strtolower($a2)))));
+$this->saveAndRefresh($user, $plugin, $sender);
+$sender->sendMessage(TF::GREEN . 'Removed temp suffix (priority ' . $pri . ') from ' . $user->getUsername() . '.');
+break;
 default:
-$sender->sendMessage(TF::RED . "Unknown: 'meta $sub'. Use: info, set, unset, clear, addprefix, addsuffix, setprefix, setsuffix");
+$sender->sendMessage(TF::RED . "Unknown: 'meta $sub'. Use: info, set, unset, settemp, unsettemp, clear, addprefix, addsuffix, setprefix, setsuffix, removeprefix, removesuffix, addtempprefix, addtempsuffix, settempprefix, settempsuffix, removetempprefix, removetempsuffix");
 }
 }
 }

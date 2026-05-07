@@ -25,6 +25,7 @@ use function is_numeric;
 use function max;
 use function min;
 use function str_starts_with;
+use function strlen;
 use function strtolower;
 use function substr;
 use function time;
@@ -280,8 +281,33 @@ $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEnt
 $this->saveAndRefresh($group, $plugin);
 $sender->sendMessage(TF::GREEN . "Cleared all parent groups from group $gn.");
 break;
+case 'settrack':
+if($a1 === null || $a2 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' parent settrack <track> <group>'); return; }
+$trackObj = null;
+foreach($plugin->getTrackManager()->getAll() as $t){ if(strtolower($t->getName()) === strtolower($a1)){ $trackObj = $t; break; } }
+if($trackObj === null){ $sender->sendMessage(TF::RED . "Track '$a1' not found."); return; }
+if(!in_array(strtolower($a2), array_map('strtolower', $trackObj->getGroups()), true)){ $sender->sendMessage(TF::RED . "Group '$a2' is not in track '$a1'."); return; }
+$trackGroups = array_map('strtolower', $trackObj->getGroups());
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.') || !in_array(strtolower(substr($n->getKey(), 6)), $trackGroups, true))));
+$plugin->getGroupManager()->getOrMake($a2);
+$group->addNode(new NodeEntry('group.' . strtolower($a2), true, [], null));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Set group $gn to inherit " . TF::WHITE . $a2 . TF::GREEN . " on track $a1.");
+break;
+case 'cleartrack':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' parent cleartrack <track>'); return; }
+$trackObj2 = null;
+foreach($plugin->getTrackManager()->getAll() as $t){ if(strtolower($t->getName()) === strtolower($a1)){ $trackObj2 = $t; break; } }
+if($trackObj2 === null){ $sender->sendMessage(TF::RED . "Track '$a1' not found."); return; }
+$trackGroups2 = array_map('strtolower', $trackObj2->getGroups());
+$beforeCt = count($group->getNodes());
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'group.') || !in_array(strtolower(substr($n->getKey(), 6)), $trackGroups2, true))));
+$removed = $beforeCt - count($group->getNodes());
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Removed $removed group(s) on track $a1 from group $gn.");
+break;
 default:
-$sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, addtemp, removetemp, clear");
+$sender->sendMessage(TF::RED . "Unknown: 'parent $sub'. Use: info, add, remove, addtemp, removetemp, clear, settrack, cleartrack");
 }
 }
 
@@ -332,8 +358,72 @@ $group->addNode(new NodeEntry('suffix.' . $pri . '.' . $a2, true, [], null));
 $this->saveAndRefresh($group, $plugin);
 $sender->sendMessage(TF::GREEN . "Set suffix '$a2' (priority $pri) for group $gn.");
 break;
+case 'settemp':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta settemp <key> <value> <seconds>'); return; }
+$dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.'))));
+$group->addNode(new NodeEntry('meta.' . $a1 . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Set temp meta $a1 = $a2 ({$dur}s) for group $gn.");
+break;
+case 'unsettemp':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta unsettemp <key>'); return; }
+$bfMt = count($group->getNodes());
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'meta.' . strtolower($a1) . '.') || !$n->isTemporary())));
+if(count($group->getNodes()) < $bfMt){ $this->saveAndRefresh($group, $plugin); $sender->sendMessage(TF::GREEN . "Removed temp meta $a1 from group $gn."); }
+else $sender->sendMessage(TF::YELLOW . 'No matching temporary meta found.');
+break;
+case 'removeprefix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta removeprefix <priority> [prefix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $pfxStr = 'prefix.' . $pri . '.';
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), strtolower($pfxStr)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($pfxStr))) !== strtolower($a2)))));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Removed prefix (priority $pri) from group $gn.");
+break;
+case 'removesuffix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta removesuffix <priority> [suffix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $sfxStr = 'suffix.' . $pri . '.';
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), strtolower($sfxStr)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($sfxStr))) !== strtolower($a2)))));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Removed suffix (priority $pri) from group $gn.");
+break;
+case 'addtempprefix':
+				case 'settempprefix':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta ' . $sub . ' <priority> <prefix> <seconds>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+if(str_starts_with($sub, 'set')) $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'prefix.') || !$n->isTemporary())));
+$group->addNode(new NodeEntry('prefix.' . $pri . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Set temp prefix '$a2' (priority $pri, {$dur}s) for group $gn.");
+break;
+case 'addtempsuffix':
+				case 'settempsuffix':
+if($a1 === null || $a2 === null || $a3 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta ' . $sub . ' <priority> <suffix> <seconds>'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $dur = is_numeric($a3) ? (int) $a3 : 0;
+if($dur <= 0){ $sender->sendMessage(TF::RED . 'Duration must be positive.'); return; }
+if(str_starts_with($sub, 'set')) $group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !str_starts_with(strtolower($n->getKey()), 'suffix.') || !$n->isTemporary())));
+$group->addNode(new NodeEntry('suffix.' . $pri . '.' . $a2, true, [], time() + $dur));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Set temp suffix '$a2' (priority $pri, {$dur}s) for group $gn.");
+break;
+case 'removetempprefix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta removetempprefix <priority> [prefix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $pfxStr2 = 'prefix.' . $pri . '.';
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !$n->isTemporary() || !str_starts_with(strtolower($n->getKey()), strtolower($pfxStr2)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($pfxStr2))) !== strtolower($a2)))));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Removed temp prefix (priority $pri) from group $gn.");
+break;
+case 'removetempsuffix':
+if($a1 === null){ $sender->sendMessage(TF::RED . 'Usage: /' . $al . ' group ' . $gn . ' meta removetempsuffix <priority> [suffix]'); return; }
+$pri = is_numeric($a1) ? (int) $a1 : 0; $sfxStr2 = 'suffix.' . $pri . '.';
+$group->setNodes(array_values(array_filter($group->getNodes(), static fn(NodeEntry $n) => !$n->isTemporary() || !str_starts_with(strtolower($n->getKey()), strtolower($sfxStr2)) || ($a2 !== null && strtolower(substr($n->getKey(), strlen($sfxStr2))) !== strtolower($a2)))));
+$this->saveAndRefresh($group, $plugin);
+$sender->sendMessage(TF::GREEN . "Removed temp suffix (priority $pri) from group $gn.");
+break;
 default:
-$sender->sendMessage(TF::RED . "Unknown: 'meta $sub'. Use: info, set, unset, clear, addprefix, addsuffix, setprefix, setsuffix");
+$sender->sendMessage(TF::RED . "Unknown: 'meta $sub'. Use: info, set, unset, settemp, unsettemp, clear, addprefix, addsuffix, setprefix, setsuffix, removeprefix, removesuffix, addtempprefix, addtempsuffix, settempprefix, settempsuffix, removetempprefix, removetempsuffix");
 }
 }
 }
