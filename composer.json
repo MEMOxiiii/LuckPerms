@@ -16,6 +16,7 @@
 	},
 	"require": {
 		"cortexpe/commando": "dev-master",
+		"muqsit/simple-packet-handler": "^1.1",
 		"sof3/libasynql": "^4.1",
 		"sof3/await-generator": "^3.5.2"
 	},
