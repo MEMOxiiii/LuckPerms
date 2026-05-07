@@ -19,7 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          tools: phpstan
+          tools: composer
           coverage: none
 
       - name: Get composer cache directory
@@ -37,7 +37,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
       - name: Run PhpStan
-        run: phpstan analyze --no-progress src -c phpstan.neon.dist
+        run: ./vendor/bin/phpstan analyze --no-progress src -c phpstan.neon.dist
 
   codestyle:
     name: Code Style checks
@@ -51,6 +51,7 @@ jobs:
       - name: Setup PHP and tools
         uses: shivammathur/setup-php@v2
         with:
+          php-version: 8.1
           tools: php-cs-fixer
           coverage: none
 
