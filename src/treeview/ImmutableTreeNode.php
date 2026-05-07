@@ -33,9 +33,9 @@ class ImmutableTreeNode{
 			// add self
 			$results[] = $value;
 
-			// add child nodes, incrementing their level & appending their prefix node
-			foreach($node->getNodeEndings() as $key => $childNode){
-				$results[$key + 1] = $value . "." . $childNode;
+			// add child nodes with their full dotted path
+			foreach($node->getNodeEndings() as $childNode){
+				$results[] = $value . "." . $childNode;
 			}
 		}
 
