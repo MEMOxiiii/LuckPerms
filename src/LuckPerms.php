@@ -79,6 +79,7 @@ use function strlen;
 use function strncmp;
 use function strtolower;
 use function substr;
+use function rtrim;
 use const DIRECTORY_SEPARATOR;
 
 class LuckPerms extends PluginBase{
@@ -127,7 +128,8 @@ class LuckPerms extends PluginBase{
 		self::$instance = $this;
 
 		// load vendor autoloader for Commando and other dependencies
-		$vendorAutoload = $this->getFile() . 'vendor/autoload.php';
+		$pluginPath = rtrim($this->getFile(), "\\/") . '/';
+		$vendorAutoload = $pluginPath . 'vendor/autoload.php';
 		if(file_exists($vendorAutoload)){
 			// register simplepackethandler stub PSR-4 path manually before autoloader
 			spl_autoload_register(function(string $class) : void{
