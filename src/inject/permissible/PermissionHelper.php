@@ -190,6 +190,36 @@ class PermissionHelper {
 	}
 
 	/**
+	 * Legacy compatibility method: resolve effective permissions as boolean array.
+	 * This is used by the "permission check" command and other admin utilities.
+	 *
+	 * @return array<string, bool>
+	 */
+	public static function resolveEffectivePermissions(User $user, LuckPerms $plugin) : array {
+		$effectiveNodes = self::collectEffectiveNodes($user, $plugin);
+		$result = [];
+		foreach($effectiveNodes as $key => $node) {
+			$result[$key] = $node->getValue();
+		}
+		return $result;
+	}
+
+	/**
+	 * Legacy compatibility method: resolve group permissions as boolean array.
+	 * This is used by verbose command and other admin utilities.
+	 *
+	 * @return array<string, bool>
+	 */
+	public static function resolveGroupPermissions(string $groupName, LuckPerms $plugin) : array {
+		$groupNodes = self::collectGroupNodes($groupName, $plugin);
+		$result = [];
+		foreach($groupNodes as $key => $node) {
+			$result[$key] = $node->getValue();
+		}
+		return $result;
+	}
+
+	/**
 	 * Check if a player has a specific permission using the calculator.
 	 * This is called during permission checks if the calculator is available.
 	 */
