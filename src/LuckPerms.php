@@ -127,22 +127,35 @@ class LuckPerms extends PluginBase{
 	public function onLoad() : void{
 		self::$instance = $this;
 
+		// always autoload embedded runtime libs from src/libs for PHAR builds
+		spl_autoload_register(function(string $class) : void{
+			$prefix = 'CortexPE\\Commando\\';
+			if(strncmp($class, $prefix, strlen($prefix)) !== 0){
+				return;
+			}
+			$relative = substr($class, strlen($prefix));
+			$file = __DIR__ . '/libs/CortexPE/Commando/' . str_replace('\\', '/', $relative) . '.php';
+			if(file_exists($file)){
+				require_once $file;
+			}
+		}, true, true);
+
+		spl_autoload_register(function(string $class) : void{
+			$prefix = 'muqsit\\simplepackethandler\\';
+			if(strncmp($class, $prefix, strlen($prefix)) !== 0){
+				return;
+			}
+			$relative = substr($class, strlen($prefix));
+			$file = __DIR__ . '/libs/muqsit/simplepackethandler/' . str_replace('\\', '/', $relative) . '.php';
+			if(file_exists($file)){
+				require_once $file;
+			}
+		}, true, true);
+
 		// load vendor autoloader for Commando and other dependencies
 		$pluginPath = rtrim($this->getFile(), "\\/") . '/';
 		$vendorAutoload = $pluginPath . 'vendor/autoload.php';
 		if(file_exists($vendorAutoload)){
-			// register simplepackethandler stub PSR-4 path manually before autoloader
-			spl_autoload_register(function(string $class) : void{
-				$prefix = 'muqsit\\simplepackethandler\\';
-				if(strncmp($class, $prefix, strlen($prefix)) !== 0){
-					return;
-				}
-				$relative = substr($class, strlen($prefix));
-				$file = __DIR__ . '/../vendor/muqsit/simplepackethandler/src/muqsit/simplepackethandler/' . str_replace('\\', '/', $relative) . '.php';
-				if(file_exists($file)){
-					require_once $file;
-				}
-			}, true, true);
 			require_once $vendorAutoload;
 			// Re-register Composer ClassLoader WITHOUT prepend so PocketMine's
 			// ThreadSafeClassLoader runs first and phar classes take priority over vendor copies

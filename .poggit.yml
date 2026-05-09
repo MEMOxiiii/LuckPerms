@@ -3,8 +3,6 @@ projects:
   LuckPerms:
     path: ""
     icon: "icon.png"
-    libs:
-      - src: CortexPE/Commando/Commando
     excludeDirs:
       - .github
       - build
