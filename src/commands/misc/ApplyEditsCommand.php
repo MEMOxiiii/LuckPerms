@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\commands\misc;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
 use jasonw4331\LuckPerms\config\ConfigKeys;
+use jasonw4331\LuckPerms\inject\permissible\PermissionHelper;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use jasonw4331\LuckPerms\webeditor\WebEditorRequest;
@@ -61,6 +62,7 @@ class ApplyEditsCommand extends BaseSubCommand{
 		$usersDeleted = 0;
 		$groupsDeleted = 0;
 		$tracksDeleted = 0;
+		$needsGlobalPermissionRefresh = false;
 
 		foreach($response->permissionHolders() as $holder){
 			if(!is_array($holder)){
@@ -95,6 +97,12 @@ class ApplyEditsCommand extends BaseSubCommand{
 					$plugin->getStorage()->saveUser($user);
 					$usersApplied++;
 
+					// Apply updated permissions immediately if the user is online.
+					$online = $plugin->getServer()->getPlayerExact($user->getUsername());
+					if($online !== null){
+						PermissionHelper::applyPermissions($online, $user, $plugin);
+					}
+
 					// Build and show diff
 					$newKeys = [];
 					foreach($nodes as $n){
@@ -126,6 +134,7 @@ class ApplyEditsCommand extends BaseSubCommand{
 				$group->setNodes($nodes);
 				$plugin->getStorage()->saveGroup($group);
 				$groupsApplied++;
+				$needsGlobalPermissionRefresh = true;
 
 				// Build and show diff
 				$newKeys = [];
@@ -163,12 +172,18 @@ class ApplyEditsCommand extends BaseSubCommand{
 		foreach($response->groupDeletions() as $name){
 			$plugin->getGroupManager()->delete($name);
 			$groupsDeleted++;
+			$needsGlobalPermissionRefresh = true;
 			$sender->sendMessage(TextFormat::DARK_GRAY . '> ' . TextFormat::RED . 'Deleted group ' . TextFormat::WHITE . $name);
 		}
 		foreach($response->trackDeletions() as $name){
 			$plugin->getTrackManager()->delete($name);
 			$tracksDeleted++;
 			$sender->sendMessage(TextFormat::DARK_GRAY . '> ' . TextFormat::RED . 'Deleted track ' . TextFormat::WHITE . $name);
+		}
+
+		// If any group changed, refresh all online users because group inheritance may affect many players.
+		if($needsGlobalPermissionRefresh){
+			PermissionHelper::refreshAll($plugin);
 		}
 
 		$sender->sendMessage(TextFormat::GREEN . 'Successfully applied changes from editor session ' . TextFormat::WHITE . $code . TextFormat::GREEN . '.');
