@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\calculator\result;
 
-use function strtoupper;
-
 /**
  * Represents a tristate permission result: True, False, or Undefined
  */

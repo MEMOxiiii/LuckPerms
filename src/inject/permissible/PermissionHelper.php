@@ -19,7 +19,7 @@ use function time;
 
 /**
  * Applies LuckPerms permission nodes to PocketMine players via PermissionAttachment.
- * 
+ *
  * This implementation matches the Java LuckPerms architecture:
  * - Uses a processor-based calculator system
  * - Properly handles permission inheritance through group hierarchies
@@ -121,7 +121,7 @@ class PermissionHelper {
 
 	/**
 	 * Apply (or refresh) permissions for an online player using the calculator system.
-	 * 
+	 *
 	 * This method:
 	 * 1. Collects all effective nodes (user + inherited from groups)
 	 * 2. Creates a calculator with those nodes

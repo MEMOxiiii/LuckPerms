@@ -8,7 +8,10 @@ parameters:
 	excludePaths:
 		analyse:
 			- src/libs/*
+	ignoreErrors:
+		-
+			identifier: missingType.iterableValue
+		-
+			identifier: missingType.generics
 	reportUnmatchedIgnoredErrors: false
-	checkGenericClassInNonGenericObjectType: false
 	treatPhpDocTypesAsCertain: false
-	checkMissingIterableValueType: false

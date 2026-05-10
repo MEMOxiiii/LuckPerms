@@ -6,9 +6,10 @@ namespace jasonw4331\LuckPerms\calculator\processor;
 
 use jasonw4331\LuckPerms\calculator\result\TristateResult;
 use jasonw4331\LuckPerms\node\NodeEntry;
+use function strlen;
+use function strrpos;
 use function strtolower;
 use function substr;
-use function strrpos;
 
 /**
  * Processor that handles wildcard permission matches
@@ -30,7 +31,7 @@ class WildcardProcessor implements PermissionProcessor {
 		// Process wildcard permissions
 		foreach($sourceMap as $key => $node) {
 			$key = strtolower($key);
-			
+
 			// Check for wildcard permissions
 			if($this->isWildcardPermission($key)) {
 				if($this->isRootWildcard($key)) {
@@ -78,7 +79,7 @@ class WildcardProcessor implements PermissionProcessor {
 	}
 
 	private function isWildcardPermission(string $permission) : bool {
-		return $this->isRootWildcard($permission) || 
+		return $this->isRootWildcard($permission) ||
 			   (substr($permission, -2) === self::WILDCARD_SUFFIX && strlen($permission) > 2);
 	}
 }

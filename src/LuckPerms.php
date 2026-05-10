@@ -254,7 +254,7 @@ class LuckPerms extends PluginBase{
 		$this->storage->loadAllGroups();
 		$this->storage->loadAllTracks();
 
-		$this->calculatorFactory = new CalculatorFactory($this);
+		$this->calculatorFactory = new CalculatorFactory();
 
 		$this->contextManager = new ContextManager($this);
 

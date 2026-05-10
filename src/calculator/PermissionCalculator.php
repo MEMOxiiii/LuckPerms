@@ -29,12 +29,12 @@ class PermissionCalculator {
 	/**
 	 * Performs a permission check against this calculator.
 	 *
-	 * @param permission the permission to check
-	 * @return the result
+	 * @param string $permission the permission to check
+	 * @return TristateResult the result
 	 */
 	public function checkPermission(string $permission) : TristateResult {
 		$permissionLower = strtolower($permission);
-		
+
 		// Check cache first
 		if(isset($this->cache[$permissionLower])) {
 			return $this->cache[$permissionLower];
