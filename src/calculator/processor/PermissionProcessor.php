@@ -16,8 +16,8 @@ interface PermissionProcessor {
 	/**
 	 * Returns the permission value determined by this processor.
 	 *
-	 * @param TristateResult $prev the result of the previous processor in the chain
-	 * @param string $permission the permission
+	 * @param TristateResult $prev       the result of the previous processor in the chain
+	 * @param string         $permission the permission
 	 * @return TristateResult a tristate
 	 */
 	public function hasPermission(TristateResult $prev, string $permission) : TristateResult;
