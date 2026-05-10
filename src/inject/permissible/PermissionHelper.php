@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\inject\permissible;
 
 use jasonw4331\LuckPerms\calculator\CalculatorFactory;
+use jasonw4331\LuckPerms\calculator\PermissionCalculator;
 use jasonw4331\LuckPerms\calculator\result\TristateResult;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\User;
@@ -28,6 +29,9 @@ use function time;
 class PermissionHelper {
 	/** @var array<string, PermissionAttachment> keyed by UUID string */
 	private static array $attachments = [];
+
+	/** @var array<string, PermissionCalculator> keyed by UUID string */
+	private static array $calculators = [];
 
 	/**
 	 * Collect all permission nodes for a user, including inherited ones through groups.
@@ -148,8 +152,8 @@ class PermissionHelper {
 		}
 
 		// Store the calculator on the player for real-time checks
-		// This allows hasPermission checks to use the calculator for wildcard and advanced permission calculations
-		$player->setMetadata('luckperms_calculator', new \pocketmine\metadata\MetadataValue($plugin, $calculator));
+		// This allows hasPermission checks to use the calculator for wildcard and advanced permission calculations.
+		self::$calculators[$player->getUniqueId()->toString()] = $calculator;
 	}
 
 	/**
@@ -187,11 +191,11 @@ class PermissionHelper {
 	 * This is called during permission checks if the calculator is available.
 	 */
 	public static function checkPermission(Player $player, string $permission) : ?TristateResult {
-		$metadata = $player->getMetadata('luckperms_calculator');
-		if(empty($metadata)) {
+		$uuidStr = $player->getUniqueId()->toString();
+		if(!isset(self::$calculators[$uuidStr])) {
 			return null;
 		}
-		$calculator = $metadata[0]->getValue();
+		$calculator = self::$calculators[$uuidStr];
 		return $calculator->checkPermission($permission);
 	}
 
@@ -206,10 +210,7 @@ class PermissionHelper {
 			} catch(\Throwable) {}
 			unset(self::$attachments[$uuidStr]);
 		}
-		// Also clear the metadata
-		try {
-			$player->removeMetadata('luckperms_calculator', $plugin);
-		} catch(\Throwable) {}
+		unset(self::$calculators[$uuidStr]);
 	}
 
 	/**

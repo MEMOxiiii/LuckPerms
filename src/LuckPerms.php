@@ -71,6 +71,7 @@ use function array_merge;
 use function file_exists;
 use function is_array;
 use function microtime;
+use function rtrim;
 use function spl_autoload_functions;
 use function spl_autoload_register;
 use function spl_autoload_unregister;
@@ -79,7 +80,6 @@ use function strlen;
 use function strncmp;
 use function strtolower;
 use function substr;
-use function rtrim;
 use const DIRECTORY_SEPARATOR;
 
 class LuckPerms extends PluginBase{

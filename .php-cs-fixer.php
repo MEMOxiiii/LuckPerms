@@ -2,7 +2,8 @@
 
 $finder = PhpCsFixer\Finder::create()
 	->in(__DIR__ . '/src')
-	->in(__DIR__ . '/build');
+	->in(__DIR__ . '/build')
+	->notPath('libs');
 
 return (new PhpCsFixer\Config)
 	->setRiskyAllowed(true)
