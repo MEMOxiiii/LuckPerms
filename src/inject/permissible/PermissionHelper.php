@@ -137,17 +137,9 @@ class PermissionHelper {
 		$attachment = $player->addAttachment($plugin);
 		self::$attachments[$player->getUniqueId()->toString()] = $attachment;
 
-		// Get all unique permission nodes (not wildcards)
-		$nonWildcardPerms = [];
-		foreach($effectiveNodes as $key => $node) {
-			// Skip wildcard nodes - they're handled by the calculator
-			if(strpos($key, '*') === false) {
-				$nonWildcardPerms[$key] = $node;
-			}
-		}
-
-		// Apply non-wildcard permissions directly
-		foreach($nonWildcardPerms as $perm => $node) {
+		// Apply all permissions to the attachment
+		// The attachment will handle permission checks via PocketMine's permission system
+		foreach($effectiveNodes as $perm => $node) {
 			try {
 				$attachment->setPermission($perm, $node->getValue());
 			} catch(\Throwable $e) {
@@ -155,38 +147,9 @@ class PermissionHelper {
 			}
 		}
 
-		// Now we need to handle wildcard permissions
-		// Create a list of "important" permissions that we need to calculate
-		// This includes all permissions that might be checked by the server
-		$allServerPermissions = self::getAllServerPermissions($plugin);
-
-		// For each server permission, check if it should be granted via calculator
-		foreach($allServerPermissions as $serverPerm) {
-			$result = $calculator->checkPermission($serverPerm);
-			if($result->isDefined()) {
-				try {
-					$attachment->setPermission($serverPerm, $result->toBoolean() ?? false);
-				} catch(\Throwable $e) {
-					// Ignore
-				}
-			}
-		}
-
 		// Store the calculator on the player for real-time checks
-		// This allows hasPermission checks to use the calculator
+		// This allows hasPermission checks to use the calculator for wildcard and advanced permission calculations
 		$player->setMetadata('luckperms_calculator', new \pocketmine\metadata\MetadataValue($plugin, $calculator));
-	}
-
-	/**
-	 * Get all permissions registered on the server
-	 */
-	private static function getAllServerPermissions(LuckPerms $plugin) : array {
-		// Get permissions from PocketMine's permission registry
-		$perms = [];
-		foreach($plugin->getServer()->getPermissionManager()->getPermissions() as $perm) {
-			$perms[] = $perm->getName();
-		}
-		return $perms;
 	}
 
 	/**
