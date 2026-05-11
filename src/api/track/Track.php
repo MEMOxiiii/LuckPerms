@@ -6,7 +6,7 @@ namespace jasonw4331\LuckPerms\api\track;
 
 use jasonw4331\LuckPerms\api\context\ContextSet;
 use jasonw4331\LuckPerms\api\model\data\DataMutateResult;
-use jasonw4331\LuckPerms\api\model\group\Group;
+use jasonw4331\LuckPerms\api\Group;
 use jasonw4331\LuckPerms\api\model\user\User;
 
 /**

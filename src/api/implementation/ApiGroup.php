@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\api\implementation;
 
-use jasonw4331\LuckPerms\api\model\group\Group as GroupInterface;
+use jasonw4331\LuckPerms\api\Group as GroupInterface;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Group as InternalGroup;
 

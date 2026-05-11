@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\api\node\types;
 
-use jasonw4331\LuckPerms\api\model\group\Group;
+use jasonw4331\LuckPerms\api\Group;
 use jasonw4331\LuckPerms\api\node\NodeType;
 use jasonw4331\LuckPerms\api\node\ScopedNode;
 

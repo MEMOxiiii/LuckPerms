@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace jasonw4331\LuckPerms;
+namespace jasonw4331\LuckPerms\storage\implementation\file\loader;
 
 class JsonLoader{
 

@@ -62,7 +62,7 @@ interface PermissionHolder
     public function resolveDistinctInheritedNodes(QueryOptions $queryOptions): array;
 
     /**
-     * @return \jasonw4331\LuckPerms\api\model\group\Group[]
+     * @return \jasonw4331\LuckPerms\api\Group[]
      */
     public function getInheritedGroups(QueryOptions $queryOptions): array;
 }

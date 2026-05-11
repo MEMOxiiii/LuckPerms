@@ -12,7 +12,10 @@
     "autoload": {
         "psr-4": {
             "jasonw4331\\LuckPerms\\": "src"
-        }
+        },
+        "exclude-from-classmap": [
+            "src/libs/"
+        ]
     },
 "require": {
     "php": "^8.1",
