@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\cacheddata;
 
-class UserCachedDataManager{
-	public function invalidate() : void{
-	}
-
-	public function performCacheCleanup() : void{
-	}
-
+/**
+ * Cached data manager specifically for {@link User} objects.
+ */
+class UserCachedDataManager extends HolderCachedDataManager{
+	// inherits invalidate() + performCacheCleanup() + permission/meta cache
 }
+
