@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace jasonw4331\LuckPerms;
+namespace jasonw4331\LuckPerms\dependencies;
 
-class DependencyDownloadException{
+use RuntimeException;
 
+class DependencyDownloadException extends RuntimeException{
 }

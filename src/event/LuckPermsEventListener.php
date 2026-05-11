@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\event;
 
-abstract class LuckPermsEventListener{
+use pocketmine\event\Listener;
 
+interface LuckPermsEventListener extends Listener{
 }
