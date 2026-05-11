@@ -4,22 +4,32 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\event;
 
-use jasonw4331\LuckPerms\EventBus;
-use jasonw4331\LuckPerms\api\event\LuckPermsEvent;
+use jasonw4331\LuckPerms\api\event\EventBus;
 use jasonw4331\LuckPerms\api\event\EventSubscription;
-use Closure;
-use function is_a;
+use jasonw4331\LuckPerms\api\event\LuckPermsEvent;
 
 abstract class AbstractEventBus implements EventBus{
-/** @var array<class-string, list<array{handler: Closure, plugin: mixed}>> */
+/** @var array<class-string, list<array{handler: callable, plugin: ?object}>> */
 private array $subscriptions = [];
 
-public function subscribe(string $eventClass, Closure $handler, mixed $plugin = null) : EventSubscription{
+public function subscribe(string $eventClass, callable $handler) : EventSubscription{
+$this->subscriptions[$eventClass][] = ['handler' => $handler, 'plugin' => null];
+return new LuckPermsEventSubscription($this, $eventClass, $handler);
+}
+
+public function subscribeWithPlugin(object $plugin, string $eventClass, callable $handler) : EventSubscription{
 $this->subscriptions[$eventClass][] = ['handler' => $handler, 'plugin' => $plugin];
 return new LuckPermsEventSubscription($this, $eventClass, $handler);
 }
 
-public function unsubscribe(string $eventClass, Closure $handler) : void{
+public function getSubscriptions(string $eventClass) : array{
+return array_map(
+fn($s) => new LuckPermsEventSubscription($this, $eventClass, $s['handler']),
+$this->subscriptions[$eventClass] ?? []
+);
+}
+
+public function unsubscribe(string $eventClass, callable $handler) : void{
 if(isset($this->subscriptions[$eventClass])){
 $this->subscriptions[$eventClass] = array_values(
 array_filter($this->subscriptions[$eventClass], fn($s) => $s['handler'] !== $handler)

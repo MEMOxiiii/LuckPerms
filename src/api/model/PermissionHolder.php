@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\api\model;
 use jasonw4331\LuckPerms\api\cacheddata\CachedDataManager;
 use jasonw4331\LuckPerms\api\model\data\DataType;
 use jasonw4331\LuckPerms\api\model\data\NodeMap;
+use jasonw4331\LuckPerms\api\model\PermissionHolder\Identifier;
 use jasonw4331\LuckPerms\api\node\Node;
 use jasonw4331\LuckPerms\api\node\NodeType;
 use jasonw4331\LuckPerms\api\query\QueryOptions;
@@ -16,18 +17,6 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
  */
 interface PermissionHolder
 {
-    /**
-     * Represents a way to identify distinct PermissionHolders.
-     */
-    interface Identifier
-    {
-        public const USER_TYPE = 'user';
-        public const GROUP_TYPE = 'group';
-
-        public function getName(): string;
-        public function getType(): string;
-    }
-
     public function getIdentifier(): Identifier;
 
     public function getFriendlyName(): string;
