@@ -306,9 +306,9 @@ class LuckPerms extends PluginBase{
 
 		$permManager = \pocketmine\permission\PermissionManager::getInstance();
 		foreach(CommandPermission::getAll() as $permission){
-			$bukkitPermission = new Permission($permission->getPermission());
+			$pmPermission = new Permission($permission->getPermission());
 			$permManager->removePermission($permission->getPermission());
-			$permManager->addPermission($bukkitPermission);
+			$permManager->addPermission($pmPermission);
 		}
 
 				if(!(bool) $this->getConfiguration()->get(ConfigKeys::OPS_ENABLED())){

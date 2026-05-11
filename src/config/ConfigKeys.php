@@ -50,9 +50,9 @@ use function preg_match;
  * @method static SimpleConfigKey APPLYING_SHORTHAND()
  * @method static SimpleConfigKey APPLYING_WILDCARDS()
  * @method static SimpleConfigKey APPLY_ATTACHMENT_PERMISSIONS()
- * @method static SimpleConfigKey APPLY_BUKKIT_ATTACHMENT_PERMISSIONS()
- * @method static SimpleConfigKey APPLY_BUKKIT_CHILD_PERMISSIONS()
- * @method static SimpleConfigKey APPLY_BUKKIT_DEFAULT_PERMISSIONS()
+ * @method static SimpleConfigKey APPLY_POCKETMINE_ATTACHMENT_PERMISSIONS()
+ * @method static SimpleConfigKey APPLY_POCKETMINE_CHILD_PERMISSIONS()
+ * @method static SimpleConfigKey APPLY_POCKETMINE_DEFAULT_PERMISSIONS()
  * @method static SimpleConfigKey APPLY_BUNGEE_CONFIG_PERMISSIONS()
  * @method static SimpleConfigKey APPLY_CHILD_PERMISSIONS()
  * @method static SimpleConfigKey APPLY_DEFAULT_NEGATIONS_BEFORE_WILDCARDS()
@@ -63,24 +63,37 @@ use function preg_match;
  * @method static SimpleConfigKey AUTO_PUSH_UPDATES()
  * @method static SimpleConfigKey BROADCAST_RECEIVED_LOG_ENTRIES()
  * @method static SimpleConfigKey BYTEBIN_URL()
+ * @method static SimpleConfigKey BYTESOCKS_URL()
  * @method static SimpleConfigKey CANCEL_FAILED_LOGINS()
  * @method static SimpleConfigKey COMMANDS_ALLOW_OP()
+ * @method static SimpleConfigKey COMMANDS_RATE_LIMIT()
  * @method static SimpleConfigKey CONTEXT_SATISFY_MODE()
  * @method static SimpleConfigKey DATABASE_VALUES()
  * @method static SimpleConfigKey DEBUG_LOGINS()
+ * @method static SimpleConfigKey DISABLE_BULKUPDATE()
+ * @method static SimpleConfigKey DISABLE_LUCKPERMS_COMMANDS_CONSOLE()
+ * @method static SimpleConfigKey DISABLE_LUCKPERMS_COMMANDS_PLAYERS()
  * @method static SimpleConfigKey DISABLED_CONTEXTS()
  * @method static SimpleConfigKey DISABLED_CONTEXT_CALCULATORS()
- * @method static SimpleConfigKey FABRIC_INTEGRATED_SERVER_OWNER_BYPASSS_CHECKS()
+ * @method static SimpleConfigKey EDITOR_LAZILY_GENERATE_KEY()
+ * @method static SimpleConfigKey INTEGRATED_SERVER_OWNER_BYPASSES_CHECKS()
  * @method static SimpleConfigKey GLOBAL_QUERY_OPTIONS()
  * @method static SimpleConfigKey GROUP_NAME_REWRITES()
  * @method static SimpleConfigKey GROUP_WEIGHTS()
  * @method static SimpleConfigKey INHERITANCE_TRAVERSAL_ALGORITHM()
  * @method static SimpleConfigKey LOG_NOTIFY()
  * @method static SimpleConfigKey LOG_NOTIFY_FILTERED_DESCRIPTIONS()
+ * @method static SimpleConfigKey LOG_SYNCHRONOUSLY_IN_COMMANDS()
  * @method static SimpleConfigKey MESSAGING_SERVICE()
  * @method static SimpleConfigKey META_VALUE_SELECTOR()
  * @method static SimpleConfigKey MONGODB_COLLECTION_PREFIX()
  * @method static SimpleConfigKey MONGODB_CONNECTION_URI()
+ * @method static SimpleConfigKey NATS_ADDRESS()
+ * @method static SimpleConfigKey NATS_ENABLED()
+ * @method static SimpleConfigKey NATS_PASSWORD()
+ * @method static SimpleConfigKey NATS_SSL()
+ * @method static SimpleConfigKey NATS_TOKEN()
+ * @method static SimpleConfigKey NATS_USERNAME()
  * @method static SimpleConfigKey OPS_ENABLED()
  * @method static SimpleConfigKey POST_TRAVERSAL_INHERITANCE_SORT()
  * @method static SimpleConfigKey PREFIX_FORMATTING_OPTIONS()
@@ -93,10 +106,14 @@ use function preg_match;
  * @method static SimpleConfigKey RABBITMQ_PASSWORD()
  * @method static SimpleConfigKey RABBITMQ_USERNAME()
  * @method static SimpleConfigKey RABBITMQ_VIRTUAL_HOST()
+ * @method static SimpleConfigKey READ_ONLY_MODE_CONSOLE()
+ * @method static SimpleConfigKey READ_ONLY_MODE_PLAYERS()
  * @method static SimpleConfigKey REDIS_ADDRESS()
+ * @method static SimpleConfigKey REDIS_ADDRESSES()
  * @method static SimpleConfigKey REDIS_ENABLED()
  * @method static SimpleConfigKey REDIS_PASSWORD()
  * @method static SimpleConfigKey REDIS_SSL()
+ * @method static SimpleConfigKey REDIS_USERNAME()
  * @method static SimpleConfigKey REGISTER_COMMAND_LIST_DATA()
  * @method static SimpleConfigKey REQUIRE_SENDER_GROUP_MEMBERSHIP_TO_MODIFY()
  * @method static SimpleConfigKey RESOLVE_COMMAND_SELECTORS()
@@ -117,7 +134,7 @@ use function preg_match;
  * @method static SimpleConfigKey VAULT_GROUP_USE_DISPLAYNAMES()
  * @method static SimpleConfigKey VAULT_IGNORE_WORLD()
  * @method static SimpleConfigKey VAULT_INCLUDING_GLOBAL()
- * @method static SimpleConfigKey VAULT_NPC_GROUPS()
+ * @method static SimpleConfigKey VAULT_NPC_GROUP()
  * @method static SimpleConfigKey VAULT_NPC_OP_STATUS()
  * @method static SimpleConfigKey VAULT_SERVER()
  * @method static SimpleConfigKey VAULT_UNSAFE_LOOKUPS()
@@ -211,9 +228,9 @@ final class ConfigKeys{
 		self::register("apply_default_negations_before_wildcards", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-default-negated-permissions-before-wildcards', false)));
 		self::register("applying_regex", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-regex', true)));
 		self::register("applying_shorthand", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-shorthand', true)));
-		self::register("apply_bukkit_child_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-bukkit-child-permissions', true)));
-		self::register("apply_bukkit_default_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-bukkit-default-permissions', true)));
-		self::register("apply_bukkit_attachment_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-bukkit-attachment-permissions', true)));
+		self::register("apply_pocketmine_child_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-pocketmine-child-permissions', true)));
+		self::register("apply_pocketmine_default_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-pocketmine-default-permissions', true)));
+		self::register("apply_pocketmine_attachment_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-pocketmine-attachment-permissions', true)));
 		self::register("apply_child_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-child-permissions', true)));
 		self::register("apply_default_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-default-permissions', true)));
 		self::register("apply_attachment_permissions", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('apply-attachment-permissions', true)));
@@ -273,13 +290,13 @@ final class ConfigKeys{
 		self::register("commands_allow_op", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('commands-allow-op', true)));
 		self::register("vault_unsafe_lookups", ConfigKeyFactory::booleanKey('vault-unsafe-lookups', false));
 		self::register("vault_group_use_displaynames", ConfigKeyFactory::booleanKey('vault-group-use-displaynames', true));
-		self::register("vault_npc_groups", ConfigKeyFactory::stringKey('vault-npc-group', 'default'));
+		self::register("vault_npc_group", ConfigKeyFactory::stringKey('vault-npc-group', 'default'));
 		self::register("vault_npc_op_status", ConfigKeyFactory::booleanKey('vault-npc-op-status', false));
 		self::register("use_vault_server", ConfigKeyFactory::booleanKey('use-vault-server', false));
 		self::register("vault_server", ConfigKeyFactory::lowercaseStringKey('server', 'global'));
 		self::register("vault_including_global", ConfigKeyFactory::booleanKey('vault-include-global', true));
 		self::register("vault_ignore_world", ConfigKeyFactory::booleanKey('vault-ignore-world', false));
-		self::register("fabric_integrated_server_owner_bypasss_checks", ConfigKeyFactory::booleanKey('integrated-server-owner-bypasses-checks', true));
+		self::register("integrated_server_owner_bypasses_checks", ConfigKeyFactory::booleanKey('integrated-server-owner-bypasses-checks', true));
 		self::register("disabled_context_calculators", ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : array => array_map(static fn(string $value) : string => mb_strtolower($value), $c->getStringList('disabled-context-calculators', []))));
 		self::register("world_rewrites", ConfigKeyFactory::key(static function(ConfigurationAdapter $c) : WorldNameRewriter{
 			$rawMap = $c->getStringMap('world-rewrite', []);
@@ -330,12 +347,29 @@ final class ConfigKeys{
 		self::register("redis_password", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('redis.password', '')));
 		self::register("redis_ssl", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('redis.ssl', false)));
 		self::register("rabbitmq_enabled", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('rabbitmq.enabled', false)));
-		self::register("rabbitmq_address", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('rabbitmq.address', false)));
+		self::register("rabbitmq_address", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('rabbitmq.address', 'localhost')));
 		self::register("rabbitmq_virtual_host", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('rabbitmq.vhost', '/')));
 		self::register("rabbitmq_username", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('rabbitmq.username', 'guest')));
 		self::register("rabbitmq_password", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('rabbitmq.password', 'guest')));
-		self::register("bytebin_url", ConfigKeyFactory::stringKey('bytebin-url', 'https://bytebin.lucko.me/'));
+		self::register("nats_enabled", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('nats.enabled', false)));
+		self::register("nats_address", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('nats.address', 'localhost')));
+		self::register("nats_username", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('nats.username', '')));
+		self::register("nats_password", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('nats.password', '')));
+		self::register("nats_token", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('nats.token', '')));
+		self::register("nats_ssl", ConfigKeyFactory::notReloadable(ConfigKeyFactory::booleanKey('nats.ssl', false)));
+		self::register("redis_username", ConfigKeyFactory::notReloadable(ConfigKeyFactory::stringKey('redis.username', '')));
+		self::register("redis_addresses", ConfigKeyFactory::notReloadable(ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : array => $c->getStringList('redis.addresses', []))));
+		self::register("bytebin_url", ConfigKeyFactory::stringKey('bytebin-url', 'https://usercontent.luckperms.net/'));
+		self::register("bytesocks_url", ConfigKeyFactory::stringKey('bytesocks-url', 'wss://bytesocks.lucko.me/'));
 		self::register("web_editor_url_pattern", ConfigKeyFactory::stringKey('web-editor-url', 'https://luckperms.net/editor/'));
+		self::register("editor_lazily_generate_key", ConfigKeyFactory::booleanKey('editor-lazily-generate-key', false));
+		self::register("log_synchronously_in_commands", ConfigKeyFactory::booleanKey('log-synchronously-in-commands', false));
+		self::register("disable_bulkupdate", ConfigKeyFactory::booleanKey('disable-bulkupdate', false));
+		self::register("read_only_mode_players", ConfigKeyFactory::booleanKey('commands-read-only-mode.players', false));
+		self::register("read_only_mode_console", ConfigKeyFactory::booleanKey('commands-read-only-mode.console', false));
+		self::register("disable_luckperms_commands_players", ConfigKeyFactory::booleanKey('disable-luckperms-commands.players', false));
+		self::register("disable_luckperms_commands_console", ConfigKeyFactory::booleanKey('disable-luckperms-commands.console', false));
+		self::register("commands_rate_limit", ConfigKeyFactory::key(static fn(ConfigurationAdapter $c) : int => $c->getInteger('commands-rate-limit', 0)));
 		self::register("verbose_viewer_url_pattern", ConfigKeyFactory::stringKey('verbose-viewer-url', 'https://luckperms.net/verbose/'));
 		self::register("tree_viewer_url_pattern", ConfigKeyFactory::stringKey('tree-viewer-url', 'https://luckperms.net/treeview/'));
 
