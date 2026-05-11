@@ -4,44 +4,32 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\api\util;
 
-use pocketmine\utils\EnumTrait;
-
 /**
- * This doc-block is generated automatically, do not modify it manually.
- * This must be regenerated whenever registry members are added, removed or changed.
- * @see build/generate-registry-annotations.php
- * @generate-registry-docblock
- *
- * @method static Tristate FALSE()
- * @method static Tristate TRUE()
- * @method static Tristate UNDEFINED()
+ * Represents a three-state boolean: TRUE, FALSE, or UNDEFINED.
  */
-final class Tristate{
-	use EnumTrait {
-		__construct as Enum___construct;
-	}
+enum Tristate: string
+{
+    case TRUE      = 'TRUE';
+    case FALSE     = 'FALSE';
+    case UNDEFINED = 'UNDEFINED';
 
-	protected static function setup() : void{
-		self::registerAll(
-			new self("true", true),
-			new self("false", false),
-			new self("undefined", false)
-		);
-	}
+    public function asBoolean(): ?bool
+    {
+        return match ($this) {
+            self::TRUE      => true,
+            self::FALSE     => false,
+            self::UNDEFINED => null,
+        };
+    }
 
-	private bool $booleanValue;
+    public static function fromBoolean(bool $value): self
+    {
+        return $value ? self::TRUE : self::FALSE;
+    }
 
-	private function __construct(string $name, bool $booleanValue){
-		$this->Enum___construct($name);
-		$this->booleanValue = $booleanValue;
-	}
-
-	public function of(?bool $value) : Tristate{
-		return $value === null ? Tristate::UNDEFINED() : ($value ? Tristate::TRUE() : Tristate::FALSE());
-	}
-
-	public function asBoolean() : bool{
-		return $this->booleanValue;
-	}
-
+    public static function fromNullableBoolean(?bool $value): self
+    {
+        if ($value === null) return self::UNDEFINED;
+        return $value ? self::TRUE : self::FALSE;
+    }
 }
