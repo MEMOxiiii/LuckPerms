@@ -11,15 +11,15 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface ActionFilterFactory
 {
-    public function any(): ActionFilter;
+	public function any() : ActionFilter;
 
-    public function source(UuidInterface $uniqueId): ActionFilter;
+	public function source(UuidInterface $uniqueId) : ActionFilter;
 
-    public function user(UuidInterface $uniqueId): ActionFilter;
+	public function user(UuidInterface $uniqueId) : ActionFilter;
 
-    public function group(string $name): ActionFilter;
+	public function group(string $name) : ActionFilter;
 
-    public function track(string $name): ActionFilter;
+	public function track(string $name) : ActionFilter;
 
-    public function search(string $query): ActionFilter;
+	public function search(string $query) : ActionFilter;
 }

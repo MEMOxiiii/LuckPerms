@@ -11,19 +11,19 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
  */
 interface CachedDataManager
 {
-    public function permissionData(): CachedDataContainer;
+	public function permissionData() : CachedDataContainer;
 
-    public function metaData(): CachedDataContainer;
+	public function metaData() : CachedDataContainer;
 
-    public function getPermissionData(QueryOptions $queryOptions): CachedPermissionData;
+	public function getPermissionData(QueryOptions $queryOptions) : CachedPermissionData;
 
-    public function getMetaData(QueryOptions $queryOptions): CachedMetaData;
+	public function getMetaData(QueryOptions $queryOptions) : CachedMetaData;
 
-    public function getPermissionDataDefault(): CachedPermissionData;
+	public function getPermissionDataDefault() : CachedPermissionData;
 
-    public function getMetaDataDefault(): CachedMetaData;
+	public function getMetaDataDefault() : CachedMetaData;
 
-    public function invalidate(): void;
+	public function invalidate() : void;
 
-    public function invalidatePermissionCalculators(): void;
+	public function invalidatePermissionCalculators() : void;
 }

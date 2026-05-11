@@ -13,13 +13,13 @@ use jasonw4331\LuckPerms\api\node\Node;
  */
 interface Result
 {
-    /**
-     * Gets the underlying result.
-     */
-    public function result(): mixed;
+	/**
+	 * Gets the underlying result.
+	 */
+	public function result() : mixed;
 
-    /**
-     * Gets the node that caused the result.
-     */
-    public function node(): ?Node;
+	/**
+	 * Gets the node that caused the result.
+	 */
+	public function node() : ?Node;
 }

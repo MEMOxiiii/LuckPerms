@@ -10,6 +10,7 @@ use jasonw4331\LuckPerms\messaging\message\UpdateMessageImpl;
 use jasonw4331\LuckPerms\messaging\message\UserUpdateMessageImpl;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use function is_array;
 use function json_decode;
 use function json_encode;
 use function time;
@@ -65,7 +66,6 @@ class LuckPermsMessagingService extends InternalMessagingService{
 	/**
 	 * Handle a decoded message payload.
 	 *
-	 * @param array $data
 	 * @return bool true if the message was new (not a duplicate)
 	 */
 	public function consumeIncomingMessage(array $data) : bool{
@@ -124,8 +124,6 @@ class LuckPermsMessagingService extends InternalMessagingService{
 	/**
 	 * Send an outgoing message payload via the configured messenger.
 	 * Subclasses or the platform bridge should override/extend to actually transmit.
-	 *
-	 * @param array $payload
 	 */
 	protected function sendOutgoing(array $payload) : void{
 		// Implementation depends on the active messenger (Redis, RabbitMQ, SQL, etc.)
@@ -141,4 +139,3 @@ class LuckPermsMessagingService extends InternalMessagingService{
 		return 'LuckPermsMessaging';
 	}
 }
-

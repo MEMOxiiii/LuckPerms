@@ -11,10 +11,10 @@ namespace jasonw4331\LuckPerms\api\node;
  */
 interface HeldNode
 {
-    /**
-     * Gets the holder's identifier (UUID string or group name).
-     */
-    public function getHolder(): mixed;
+	/**
+	 * Gets the holder's identifier (UUID string or group name).
+	 */
+	public function getHolder() : mixed;
 
-    public function getNode(): Node;
+	public function getNode() : Node;
 }

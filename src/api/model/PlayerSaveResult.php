@@ -9,17 +9,17 @@ namespace jasonw4331\LuckPerms\api\model;
  */
 interface PlayerSaveResult
 {
-    /**
-     * @return Outcome[]
-     */
-    public function getOutcomes(): array;
+	/**
+	 * @return Outcome[]
+	 */
+	public function getOutcomes() : array;
 
-    public function includes(Outcome $outcome): bool;
+	public function includes(Outcome $outcome) : bool;
 
-    public function getPreviousUsername(): ?string;
+	public function getPreviousUsername() : ?string;
 
-    /**
-     * @return string[]|null
-     */
-    public function getOtherUniqueIds(): ?array;
+	/**
+	 * @return string[]|null
+	 */
+	public function getOtherUniqueIds() : ?array;
 }

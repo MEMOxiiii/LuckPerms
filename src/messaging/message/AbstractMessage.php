@@ -19,4 +19,3 @@ abstract class AbstractMessage{
 	/** Serialize this message to a JSON-encodable array. */
 	abstract public function toJsonArray() : array;
 }
-

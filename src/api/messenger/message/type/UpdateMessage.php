@@ -8,5 +8,5 @@ use jasonw4331\LuckPerms\api\messenger\message\Message;
 
 interface UpdateMessage extends Message
 {
-    // No additional methods beyond Message
+	// No additional methods beyond Message
 }

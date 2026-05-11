@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\api\implementation;
 
 use jasonw4331\LuckPerms\LuckPerms;
+use function count;
 
 class ApiPlatform extends ApiAbstractManager{
 public function __construct(LuckPerms $plugin){

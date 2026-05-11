@@ -9,7 +9,7 @@ namespace jasonw4331\LuckPerms\api\extension;
  */
 interface Extension
 {
-    public function load(): void;
+	public function load() : void;
 
-    public function unload(): void;
+	public function unload() : void;
 }

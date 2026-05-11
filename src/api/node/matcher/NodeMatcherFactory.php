@@ -13,15 +13,15 @@ use jasonw4331\LuckPerms\api\node\NodeType;
  */
 interface NodeMatcherFactory
 {
-    public function key(string $key): NodeMatcher;
+	public function key(string $key) : NodeMatcher;
 
-    public function keyFromNode(Node $node): NodeMatcher;
+	public function keyFromNode(Node $node) : NodeMatcher;
 
-    public function keyStartsWith(string $startingWith): NodeMatcher;
+	public function keyStartsWith(string $startingWith) : NodeMatcher;
 
-    public function equals(Node $other, NodeEqualityPredicate $predicate): NodeMatcher;
+	public function equals(Node $other, NodeEqualityPredicate $predicate) : NodeMatcher;
 
-    public function metaKey(string $metaKey): NodeMatcher;
+	public function metaKey(string $metaKey) : NodeMatcher;
 
-    public function type(NodeType $type): NodeMatcher;
+	public function type(NodeType $type) : NodeMatcher;
 }

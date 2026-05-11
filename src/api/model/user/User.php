@@ -13,11 +13,11 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface User extends PermissionHolder
 {
-    public function getUniqueId(): UuidInterface;
+	public function getUniqueId() : UuidInterface;
 
-    public function getUsername(): ?string;
+	public function getUsername() : ?string;
 
-    public function getPrimaryGroup(): string;
+	public function getPrimaryGroup() : string;
 
-    public function setPrimaryGroup(string $group): DataMutateResult;
+	public function setPrimaryGroup(string $group) : DataMutateResult;
 }

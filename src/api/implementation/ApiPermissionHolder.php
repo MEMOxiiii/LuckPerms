@@ -8,8 +8,6 @@ use jasonw4331\LuckPerms\api\model\PermissionHolder as PermissionHolderInterface
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\PermissionHolder as InternalHolder;
 use jasonw4331\LuckPerms\node\NodeEntry;
-use function array_map;
-use function array_values;
 
 abstract class ApiPermissionHolder implements PermissionHolderInterface{
 protected LuckPerms $plugin;

@@ -11,5 +11,5 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface Message
 {
-    public function getId(): UuidInterface;
+	public function getId() : UuidInterface;
 }

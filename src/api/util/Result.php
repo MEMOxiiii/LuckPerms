@@ -9,5 +9,5 @@ namespace jasonw4331\LuckPerms\api\util;
  */
 interface Result
 {
-    public function wasSuccessful(): bool;
+	public function wasSuccessful() : bool;
 }

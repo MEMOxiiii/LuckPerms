@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\inject\server;
 
 use pocketmine\permission\Permission;
+use function strtolower;
 
 class LuckPermsPermissionMap{
 /** @var array<string, Permission> */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\inject\permissible;
 
-use pocketmine\permission\PermissibleBase;
 use function call_user_func;
 
 class MonitoredPermissibleBase{

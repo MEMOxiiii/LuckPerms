@@ -9,5 +9,5 @@ namespace jasonw4331\LuckPerms\api\messenger\message;
  */
 interface OutgoingMessage extends Message
 {
-    public function asEncodedString(): string;
+	public function asEncodedString() : string;
 }

@@ -9,10 +9,10 @@ namespace jasonw4331\LuckPerms\api\model\PermissionHolder;
  */
 interface Identifier
 {
-    public const USER_TYPE = 'user';
-    public const GROUP_TYPE = 'group';
+	public const USER_TYPE = 'user';
+	public const GROUP_TYPE = 'group';
 
-    public function getName(): string;
+	public function getName() : string;
 
-    public function getType(): string;
+	public function getType() : string;
 }

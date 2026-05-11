@@ -12,4 +12,3 @@ class NodeMapMutable extends NodeMapBase{
 	// All methods are inherited from NodeMapBase.
 	// Additional mutation helpers can be added here.
 }
-

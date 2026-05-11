@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\cacheddata\type;
 
 use jasonw4331\LuckPerms\cacheddata\result\TristateResult;
+use function count;
 
 /**
  * Stores the resolved permission check results for a single query-options context.
@@ -30,4 +31,3 @@ class PermissionCache{
 		return count($this->data);
 	}
 }
-

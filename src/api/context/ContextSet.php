@@ -9,40 +9,40 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 interface ContextSet
 {
-    public function isImmutable(): bool;
+	public function isImmutable() : bool;
 
-    public function immutableCopy(): ImmutableContextSet;
+	public function immutableCopy() : ImmutableContextSet;
 
-    public function mutableCopy(): MutableContextSet;
+	public function mutableCopy() : MutableContextSet;
 
-    /**
-     * @return array<string, string[]>
-     */
-    public function toSet(): array;
+	/**
+	 * @return array<string, string[]>
+	 */
+	public function toSet() : array;
 
-    /**
-     * @return array<string, string[]>
-     */
-    public function toMap(): array;
+	/**
+	 * @return array<string, string[]>
+	 */
+	public function toMap() : array;
 
-    /**
-     * @deprecated
-     * @return array<string, string>
-     */
-    public function toFlattenedMap(): array;
+	/**
+	 * @deprecated
+	 * @return array<string, string>
+	 */
+	public function toFlattenedMap() : array;
 
-    public function containsKey(string $key): bool;
+	public function containsKey(string $key) : bool;
 
-    /**
-     * @return string[]
-     */
-    public function getValues(string $key): array;
+	/**
+	 * @return string[]
+	 */
+	public function getValues(string $key) : array;
 
-    public function getAnyValue(string $key): ?string;
+	public function getAnyValue(string $key) : ?string;
 
-    public function contains(string $key, string $value): bool;
+	public function contains(string $key, string $value) : bool;
 
-    public function isEmpty(): bool;
+	public function isEmpty() : bool;
 
-    public function size(): int;
+	public function size() : int;
 }

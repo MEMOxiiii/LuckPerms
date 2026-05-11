@@ -27,7 +27,6 @@ class Filter{
 	/**
 	 * Evaluate the filter against a value.
 	 *
-	 * @param mixed $value
 	 * @return bool true if the value satisfies this filter
 	 */
 	public function evaluate(mixed $value) : bool{

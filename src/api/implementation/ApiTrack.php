@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\api\implementation;
 use jasonw4331\LuckPerms\api\track\Track as TrackInterface;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\model\Track as InternalTrack;
+use function count;
 
 class ApiTrack extends ApiAbstractManager implements TrackInterface{
 private InternalTrack $handle;

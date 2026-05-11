@@ -13,14 +13,14 @@ use jasonw4331\LuckPerms\api\node\metadata\NodeMetadataKey;
  */
 interface InheritanceOriginMetadata
 {
-    /**
-     * The metadata key for InheritanceOriginMetadata.
-     */
-    public static function key(): NodeMetadataKey;
+	/**
+	 * The metadata key for InheritanceOriginMetadata.
+	 */
+	public static function key() : NodeMetadataKey;
 
-    public function getOrigin(): PermissionHolder\Identifier;
+	public function getOrigin() : PermissionHolder\Identifier;
 
-    public function getDataType(): DataType;
+	public function getDataType() : DataType;
 
-    public function wasInherited(PermissionHolder\Identifier $holder): bool;
+	public function wasInherited(PermissionHolder\Identifier $holder) : bool;
 }

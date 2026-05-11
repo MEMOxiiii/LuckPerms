@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\verbose;
 
 use jasonw4331\LuckPerms\verbose\event\VerboseEvent;
-use function preg_match;
+use function method_exists;
+use function str_contains;
+use function str_starts_with;
 use function strtolower;
+use function substr;
 
 /**
  * Represents a verbose filter expression.
@@ -107,4 +110,3 @@ final class VerboseFilter{
 		return $this->isBlank() ? 'any' : $this->expression;
 	}
 }
-

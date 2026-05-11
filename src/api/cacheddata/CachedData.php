@@ -11,5 +11,5 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
  */
 interface CachedData
 {
-    public function getQueryOptions(): QueryOptions;
+	public function getQueryOptions() : QueryOptions;
 }

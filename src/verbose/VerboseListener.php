@@ -8,7 +8,9 @@ use jasonw4331\LuckPerms\sender\Sender;
 use jasonw4331\LuckPerms\verbose\event\MetaCheckEvent;
 use jasonw4331\LuckPerms\verbose\event\PermissionCheckEvent;
 use jasonw4331\LuckPerms\verbose\event\VerboseEvent;
+use function array_filter;
 use function count;
+use function method_exists;
 use function microtime;
 
 /**
@@ -146,4 +148,3 @@ class VerboseListener{
 		return $this->startTime;
 	}
 }
-

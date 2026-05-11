@@ -9,18 +9,18 @@ namespace jasonw4331\LuckPerms\api\query;
  */
 interface OptionKey
 {
-    /**
-     * Creates a new OptionKey for the given name and type.
-     */
-    public static function of(string $name, string $type): self;
+	/**
+	 * Creates a new OptionKey for the given name and type.
+	 */
+	public static function of(string $name, string $type) : self;
 
-    /**
-     * Gets a name describing the key type.
-     */
-    public function name(): string;
+	/**
+	 * Gets a name describing the key type.
+	 */
+	public function name() : string;
 
-    /**
-     * Gets the type class name of the key.
-     */
-    public function type(): string;
+	/**
+	 * Gets the type class name of the key.
+	 */
+	public function type() : string;
 }

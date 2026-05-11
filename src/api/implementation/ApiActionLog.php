@@ -7,7 +7,7 @@ namespace jasonw4331\LuckPerms\api\implementation;
 use jasonw4331\LuckPerms\actionlog\Log;
 use jasonw4331\LuckPerms\api\actionlog\ActionLog;
 use jasonw4331\LuckPerms\LuckPerms;
-use Ramsey\Uuid\UuidInterface;
+use const PHP_INT_MAX;
 
 class ApiActionLog extends ApiAbstractManager implements ActionLog{
 private Log $handle;

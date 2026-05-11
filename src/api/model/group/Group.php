@@ -12,11 +12,11 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
  */
 interface Group extends PermissionHolder
 {
-    public function getName(): string;
+	public function getName() : string;
 
-    public function getDisplayName(): ?string;
+	public function getDisplayName() : ?string;
 
-    public function getDisplayNameWithOptions(QueryOptions $queryOptions): ?string;
+	public function getDisplayNameWithOptions(QueryOptions $queryOptions) : ?string;
 
-    public function getWeight(): ?int;
+	public function getWeight() : ?int;
 }

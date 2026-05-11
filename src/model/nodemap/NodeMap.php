@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\model\nodemap;
 
 use jasonw4331\LuckPerms\node\NodeEntry;
+use function count;
 
 /**
  * Base interface/contract for a node map — a collection of {@link NodeEntry} objects
@@ -30,4 +31,3 @@ abstract class NodeMap{
 		return count($this->asList()) === 0;
 	}
 }
-

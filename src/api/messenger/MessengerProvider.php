@@ -9,7 +9,7 @@ namespace jasonw4331\LuckPerms\api\messenger;
  */
 interface MessengerProvider
 {
-    public function getName(): string;
+	public function getName() : string;
 
-    public function obtain(IncomingMessageConsumer $incomingMessageConsumer): Messenger;
+	public function obtain(IncomingMessageConsumer $incomingMessageConsumer) : Messenger;
 }

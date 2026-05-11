@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\context;
 
 use jasonw4331\LuckPerms\api\context\ContextSatisfyMode;
+use function in_array;
 
 /**
  * Abstract base providing shared context-set logic.
@@ -14,8 +15,6 @@ abstract class AbstractContextSet extends ContextSet{
 	 * Checks whether this context set is satisfied by another context set.
 	 *
 	 * @param array<string, array<string>> $other the contexts of the other set (key => [values])
-	 * @param ContextSatisfyMode $mode
-	 * @return bool
 	 */
 	public function isSatisfiedBy(array $other, ContextSatisfyMode $mode) : bool{
 		foreach($this->toMultimap() as $key => $values){
@@ -48,4 +47,3 @@ abstract class AbstractContextSet extends ContextSet{
 	/** @return array<string, array<string>> key => [values] */
 	abstract public function toMultimap() : array;
 }
-

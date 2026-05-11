@@ -11,8 +11,6 @@ class ConstraintFactory{
 	/**
 	 * Create a string constraint using the given comparison and value.
 	 *
-	 * @param Comparison $comparison
-	 * @param string $value
 	 * @return Constraint<string>
 	 */
 	public static function forString(Comparison $comparison, string $value) : Constraint{
@@ -23,7 +21,6 @@ class ConstraintFactory{
 	 * Parse a constraint from comparison symbol + value.
 	 *
 	 * @param string $comparisonSymbol e.g. "==", "!=", "~~", "!~"
-	 * @param string $value
 	 * @return Constraint<string>|null null if the symbol is not recognized
 	 */
 	public static function parse(string $comparisonSymbol, string $value) : ?Constraint{

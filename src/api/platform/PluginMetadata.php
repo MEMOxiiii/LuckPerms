@@ -9,7 +9,7 @@ namespace jasonw4331\LuckPerms\api\platform;
  */
 interface PluginMetadata
 {
-    public function getVersion(): string;
+	public function getVersion() : string;
 
-    public function getApiVersion(): string;
+	public function getApiVersion() : string;
 }

@@ -9,5 +9,5 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 interface ContextConsumer
 {
-    public function accept(string $key, string $value): void;
+	public function accept(string $key, string $value) : void;
 }

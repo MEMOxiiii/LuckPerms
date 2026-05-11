@@ -11,9 +11,9 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface ActionTarget
 {
-    public function getUniqueId(): ?UuidInterface;
+	public function getUniqueId() : ?UuidInterface;
 
-    public function getName(): string;
+	public function getName() : string;
 
-    public function getType(): ActionTargetType;
+	public function getType() : ActionTargetType;
 }

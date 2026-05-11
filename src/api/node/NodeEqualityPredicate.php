@@ -9,12 +9,12 @@ namespace jasonw4331\LuckPerms\api\node;
  */
 interface NodeEqualityPredicate
 {
-    public function areEqual(Node $o1, Node $o2): bool;
+	public function areEqual(Node $o1, Node $o2) : bool;
 
-    /**
-     * Returns a callable that checks if a given node equals $node per this predicate.
-     *
-     * @return callable(Node): bool
-     */
-    public function equalTo(Node $node): callable;
+	/**
+	 * Returns a callable that checks if a given node equals $node per this predicate.
+	 *
+	 * @return callable(Node): bool
+	 */
+	public function equalTo(Node $node) : callable;
 }

@@ -9,11 +9,11 @@ namespace jasonw4331\LuckPerms\api\event;
  */
 interface EventSubscription
 {
-    public function getEventClass(): string;
+	public function getEventClass() : string;
 
-    public function isActive(): bool;
+	public function isActive() : bool;
 
-    public function close(): void;
+	public function close() : void;
 
-    public function getHandler(): callable;
+	public function getHandler() : callable;
 }

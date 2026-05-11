@@ -23,9 +23,6 @@ abstract class FilterField{
 
 	/**
 	 * Create a filter using this field with the given constraint.
-	 *
-	 * @param Constraint $constraint
-	 * @return Filter
 	 */
 	public function filter(Constraint $constraint) : Filter{
 		return new Filter($this, $constraint);

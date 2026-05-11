@@ -27,15 +27,13 @@ class InheritanceComparator{
 	public static function getFor(mixed $origin) : callable{
 		if($origin instanceof User){
 			$comparator = new self($origin);
-			return static fn(Group $a, Group $b): int => -$comparator->compare($a, $b);
+			return static fn(Group $a, Group $b) : int => -$comparator->compare($a, $b);
 		}
 		$comparator = new self(null);
-		return static fn(Group $a, Group $b): int => -$comparator->compare($a, $b);
+		return static fn(Group $a, Group $b) : int => -$comparator->compare($a, $b);
 	}
 
 	/**
-	 * @param Group $o1
-	 * @param Group $o2
 	 * @return int negative if o1 < o2, 0 if equal, positive if o1 > o2
 	 */
 	public function compare(Group $o1, Group $o2) : int{
@@ -54,4 +52,3 @@ class InheritanceComparator{
 		return 0;
 	}
 }
-

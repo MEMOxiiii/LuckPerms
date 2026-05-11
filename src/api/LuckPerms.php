@@ -27,52 +27,52 @@ use jasonw4331\LuckPerms\api\track\TrackManager;
  */
 interface LuckPerms
 {
-    public function getServerName(): string;
+	public function getServerName() : string;
 
-    public function getUserManager(): UserManager;
+	public function getUserManager() : UserManager;
 
-    public function getGroupManager(): GroupManager;
+	public function getGroupManager() : GroupManager;
 
-    public function getTrackManager(): TrackManager;
+	public function getTrackManager() : TrackManager;
 
-    /**
-     * Gets the PlayerAdapter for the given player class name.
-     * In PHP (PocketMine), pass the FQCN of the player class.
-     */
-    public function getPlayerAdapter(string $playerClass): PlayerAdapter;
+	/**
+	 * Gets the PlayerAdapter for the given player class name.
+	 * In PHP (PocketMine), pass the FQCN of the player class.
+	 */
+	public function getPlayerAdapter(string $playerClass) : PlayerAdapter;
 
-    public function getPlatform(): Platform;
+	public function getPlatform() : Platform;
 
-    public function getPluginMetadata(): PluginMetadata;
+	public function getPluginMetadata() : PluginMetadata;
 
-    public function getEventBus(): EventBus;
+	public function getEventBus() : EventBus;
 
-    public function getMessagingService(): ?MessagingService;
+	public function getMessagingService() : ?MessagingService;
 
-    public function getActionLogger(): ActionLogger;
+	public function getActionLogger() : ActionLogger;
 
-    public function getContextManager(): ContextManager;
+	public function getContextManager() : ContextManager;
 
-    public function getNodeBuilderRegistry(): NodeBuilderRegistry;
+	public function getNodeBuilderRegistry() : NodeBuilderRegistry;
 
-    public function getQueryOptionsRegistry(): QueryOptionsRegistry;
+	public function getQueryOptionsRegistry() : QueryOptionsRegistry;
 
-    public function getNodeMatcherFactory(): NodeMatcherFactory;
+	public function getNodeMatcherFactory() : NodeMatcherFactory;
 
-    public function getActionFilterFactory(): ActionFilterFactory;
+	public function getActionFilterFactory() : ActionFilterFactory;
 
-    /**
-     * Schedules the execution of an update task, causing all data to be reloaded.
-     */
-    public function runUpdateTask(): void;
+	/**
+	 * Schedules the execution of an update task, causing all data to be reloaded.
+	 */
+	public function runUpdateTask() : void;
 
-    /**
-     * Runs a health check on LuckPerms.
-     */
-    public function runHealthCheck(): Health;
+	/**
+	 * Runs a health check on LuckPerms.
+	 */
+	public function runHealthCheck() : Health;
 
-    /**
-     * Registers a messenger provider with LuckPerms.
-     */
-    public function registerMessengerProvider(MessengerProvider $messengerProvider): void;
+	/**
+	 * Registers a messenger provider with LuckPerms.
+	 */
+	public function registerMessengerProvider(MessengerProvider $messengerProvider) : void;
 }

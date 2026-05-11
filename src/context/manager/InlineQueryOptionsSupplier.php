@@ -22,4 +22,3 @@ class InlineQueryOptionsSupplier extends QueryOptionsSupplier{
 		return ($this->supplier)();
 	}
 }
-

@@ -8,7 +8,7 @@ use jasonw4331\LuckPerms\api\messenger\message\Message;
 
 interface CustomMessage extends Message
 {
-    public function getChannelId(): string;
+	public function getChannelId() : string;
 
-    public function getPayload(): string;
+	public function getPayload() : string;
 }

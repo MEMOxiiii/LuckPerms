@@ -10,4 +10,3 @@ namespace jasonw4331\LuckPerms\cacheddata;
 class GroupCachedDataManager extends HolderCachedDataManager{
 	// inherits invalidate() + performCacheCleanup() + permission/meta cache
 }
-

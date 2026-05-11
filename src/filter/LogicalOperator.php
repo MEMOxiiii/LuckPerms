@@ -15,8 +15,6 @@ enum LogicalOperator{
 	 * Evaluate whether the given filters match the value using this operator.
 	 *
 	 * @param Filter[] $filters
-	 * @param mixed $value
-	 * @return bool
 	 */
 	public function match(array $filters, mixed $value) : bool{
 		return match ($this) {

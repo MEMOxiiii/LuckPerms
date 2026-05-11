@@ -9,8 +9,8 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 interface StaticContextCalculator extends ContextCalculator
 {
-    /**
-     * Appends static contexts into the consumer. No subject required.
-     */
-    public function calculateStatic(ContextConsumer $consumer): void;
+	/**
+	 * Appends static contexts into the consumer. No subject required.
+	 */
+	public function calculateStatic(ContextConsumer $consumer) : void;
 }

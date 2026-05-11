@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\cacheddata;
 
+use function array_key_exists;
+use function count;
+
 /**
  * Cached data manager for a generic permission holder.
  * Extends {@link AbstractCachedDataManager} with common holder-specific logic.
@@ -31,9 +34,6 @@ abstract class HolderCachedDataManager extends AbstractCachedDataManager{
 
 	/**
 	 * Cache a permission lookup result.
-	 *
-	 * @param string $permission
-	 * @param bool|null $result
 	 */
 	public function cachePermission(string $permission, ?bool $result) : void{
 		$this->permissionCache[$permission] = $result;
@@ -42,7 +42,6 @@ abstract class HolderCachedDataManager extends AbstractCachedDataManager{
 	/**
 	 * Look up a cached permission result.
 	 *
-	 * @param string $permission
 	 * @return bool|null null means not cached
 	 */
 	public function getCachedPermission(string $permission) : ?bool{
@@ -51,9 +50,6 @@ abstract class HolderCachedDataManager extends AbstractCachedDataManager{
 
 	/**
 	 * Cache a meta value.
-	 *
-	 * @param string $key
-	 * @param string|null $value
 	 */
 	public function cacheMeta(string $key, ?string $value) : void{
 		$this->metaCache[$key] = $value;
@@ -63,7 +59,6 @@ abstract class HolderCachedDataManager extends AbstractCachedDataManager{
 	 * Look up a cached meta value.
 	 * Returns false if not cached; null if cached as absent.
 	 *
-	 * @param string $key
 	 * @return string|null|false false = not in cache
 	 */
 	public function getCachedMeta(string $key) : string|null|false{
@@ -73,4 +68,3 @@ abstract class HolderCachedDataManager extends AbstractCachedDataManager{
 		return $this->metaCache[$key];
 	}
 }
-

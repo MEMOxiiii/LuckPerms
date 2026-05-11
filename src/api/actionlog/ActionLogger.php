@@ -12,23 +12,23 @@ use jasonw4331\LuckPerms\api\util\Page;
  */
 interface ActionLogger
 {
-    public function actionBuilder(): ActionBuilder;
+	public function actionBuilder() : ActionBuilder;
 
-    /**
-     * @deprecated Use queryActions() instead.
-     */
-    public function getLog(): ActionLog;
+	/**
+	 * @deprecated Use queryActions() instead.
+	 */
+	public function getLog() : ActionLog;
 
-    /**
-     * @return Action[]
-     */
-    public function queryActions(ActionFilter $filter): array;
+	/**
+	 * @return Action[]
+	 */
+	public function queryActions(ActionFilter $filter) : array;
 
-    public function queryActionsPage(ActionFilter $filter, int $pageSize, int $pageNumber): Page;
+	public function queryActionsPage(ActionFilter $filter, int $pageSize, int $pageNumber) : Page;
 
-    public function submit(Action $entry): void;
+	public function submit(Action $entry) : void;
 
-    public function submitToStorage(Action $entry): void;
+	public function submitToStorage(Action $entry) : void;
 
-    public function broadcastAction(Action $entry): void;
+	public function broadcastAction(Action $entry) : void;
 }

@@ -12,17 +12,17 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface ActionFilter
 {
-    public function test(Action $action): bool;
+	public function test(Action $action) : bool;
 
-    public static function any(): self;
+	public static function any() : self;
 
-    public static function source(UuidInterface $uniqueId): self;
+	public static function source(UuidInterface $uniqueId) : self;
 
-    public static function user(UuidInterface $uniqueId): self;
+	public static function user(UuidInterface $uniqueId) : self;
 
-    public static function group(string $name): self;
+	public static function group(string $name) : self;
 
-    public static function track(string $name): self;
+	public static function track(string $name) : self;
 
-    public static function search(string $query): self;
+	public static function search(string $query) : self;
 }

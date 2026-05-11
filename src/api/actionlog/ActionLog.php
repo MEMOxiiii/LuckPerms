@@ -13,28 +13,28 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface ActionLog
 {
-    /**
-     * @return Action[]
-     */
-    public function getContent(): array;
+	/**
+	 * @return Action[]
+	 */
+	public function getContent() : array;
 
-    /**
-     * @return Action[]
-     */
-    public function getContentByActor(UuidInterface $actor): array;
+	/**
+	 * @return Action[]
+	 */
+	public function getContentByActor(UuidInterface $actor) : array;
 
-    /**
-     * @return Action[]
-     */
-    public function getUserHistory(UuidInterface $uniqueId): array;
+	/**
+	 * @return Action[]
+	 */
+	public function getUserHistory(UuidInterface $uniqueId) : array;
 
-    /**
-     * @return Action[]
-     */
-    public function getGroupHistory(string $name): array;
+	/**
+	 * @return Action[]
+	 */
+	public function getGroupHistory(string $name) : array;
 
-    /**
-     * @return Action[]
-     */
-    public function getTrackHistory(string $name): array;
+	/**
+	 * @return Action[]
+	 */
+	public function getTrackHistory(string $name) : array;
 }

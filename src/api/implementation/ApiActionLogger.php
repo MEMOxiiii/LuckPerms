@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\api\implementation;
 
-use jasonw4331\LuckPerms\actionlog\ActionComparator;
 use jasonw4331\LuckPerms\actionlog\LogDispatcher;
 use jasonw4331\LuckPerms\api\actionlog\ActionLogger;
 use jasonw4331\LuckPerms\LuckPerms;

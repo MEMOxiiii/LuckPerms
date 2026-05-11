@@ -9,12 +9,12 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 final class DefaultContextKeys
 {
-    public const SERVER_KEY         = 'server';
-    public const WORLD_KEY          = 'world';
-    public const DIMENSION_TYPE_KEY = 'dimension-type';
-    public const GAMEMODE_KEY       = 'gamemode';
+	public const SERVER_KEY = 'server';
+	public const WORLD_KEY = 'world';
+	public const DIMENSION_TYPE_KEY = 'dimension-type';
+	public const GAMEMODE_KEY = 'gamemode';
 
-    private function __construct()
-    {
-    }
+	private function __construct()
+	{
+	}
 }

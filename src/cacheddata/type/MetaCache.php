@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\cacheddata\type;
 
+use function array_key_exists;
+
 /**
  * Stores resolved meta (prefix/suffix/meta-key) lookups for a single query-options context.
  */
@@ -61,4 +63,3 @@ class MetaCache{
 		$this->primaryGroup = null;
 	}
 }
-

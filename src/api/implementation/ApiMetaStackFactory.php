@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\api\implementation;
 
 use jasonw4331\LuckPerms\api\metastacking\MetaStackDefinition;
-use jasonw4331\LuckPerms\api\metastacking\MetaStackElement;
 use jasonw4331\LuckPerms\LuckPerms;
 use jasonw4331\LuckPerms\metastacking\SimpleMetaStackDefinition;
 use jasonw4331\LuckPerms\metastacking\StandardStackElements;
-use function array_map;
+use function explode;
+use function trim;
 
 class ApiMetaStackFactory extends ApiAbstractManager{
 public function __construct(LuckPerms $plugin){

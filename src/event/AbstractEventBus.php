@@ -7,6 +7,10 @@ namespace jasonw4331\LuckPerms\event;
 use jasonw4331\LuckPerms\api\event\EventBus;
 use jasonw4331\LuckPerms\api\event\EventSubscription;
 use jasonw4331\LuckPerms\api\event\LuckPermsEvent;
+use function array_filter;
+use function array_map;
+use function array_values;
+use function is_a;
 
 abstract class AbstractEventBus implements EventBus{
 /** @var array<class-string, list<array{handler: callable, plugin: ?object}>> */

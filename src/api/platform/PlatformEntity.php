@@ -11,9 +11,9 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface PlatformEntity
 {
-    public function getUniqueId(): ?UuidInterface;
+	public function getUniqueId() : ?UuidInterface;
 
-    public function getName(): string;
+	public function getName() : string;
 
-    public function getType(): PlatformEntityType;
+	public function getType() : PlatformEntityType;
 }

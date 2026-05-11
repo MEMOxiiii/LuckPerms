@@ -15,4 +15,3 @@ abstract class AbstractCachedDataManager{
 	/** Removes cached data that is no longer actively used. */
 	abstract public function performCacheCleanup() : void;
 }
-

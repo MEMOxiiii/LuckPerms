@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\model\nodemap;
 
 use jasonw4331\LuckPerms\node\NodeEntry;
+use function count;
 
 /**
  * A node map that records the source (holder name) of each node.
@@ -34,4 +35,3 @@ class RecordedNodeMap extends NodeMapBase{
 		$this->sources = [];
 	}
 }
-

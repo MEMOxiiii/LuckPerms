@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace jasonw4331\LuckPerms\filter;
 
+use function ceil;
+use function max;
+
 /**
  * Pagination parameters for paginated query results.
  * Mirrors Java's PageParameters.

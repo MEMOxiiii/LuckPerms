@@ -11,14 +11,14 @@ use jasonw4331\LuckPerms\api\util\Tristate;
  */
 interface CachedPermissionData extends CachedData
 {
-    public function queryPermission(string $permission): Result;
+	public function queryPermission(string $permission) : Result;
 
-    public function checkPermission(string $permission): Tristate;
+	public function checkPermission(string $permission) : Tristate;
 
-    public function invalidateCache(): void;
+	public function invalidateCache() : void;
 
-    /**
-     * @return array<string, bool>
-     */
-    public function getPermissionMap(): array;
+	/**
+	 * @return array<string, bool>
+	 */
+	public function getPermissionMap() : array;
 }

@@ -7,6 +7,7 @@ namespace jasonw4331\LuckPerms\model\nodemap;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use function array_filter;
 use function array_values;
+use function count;
 use function time;
 
 /**
@@ -58,4 +59,3 @@ abstract class NodeMapBase extends NodeMap{
 		return count($this->nodes) < $before;
 	}
 }
-

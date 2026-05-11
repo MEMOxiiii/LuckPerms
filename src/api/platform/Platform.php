@@ -11,17 +11,17 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface Platform
 {
-    public function getType(): PlatformType;
+	public function getType() : PlatformType;
 
-    /**
-     * @return UuidInterface[]
-     */
-    public function getUniqueConnections(): array;
+	/**
+	 * @return UuidInterface[]
+	 */
+	public function getUniqueConnections() : array;
 
-    /**
-     * @return string[]
-     */
-    public function getKnownPermissions(): array;
+	/**
+	 * @return string[]
+	 */
+	public function getKnownPermissions() : array;
 
-    public function getStartTime(): \DateTimeImmutable;
+	public function getStartTime() : \DateTimeImmutable;
 }

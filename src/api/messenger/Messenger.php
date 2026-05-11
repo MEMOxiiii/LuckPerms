@@ -11,7 +11,7 @@ use jasonw4331\LuckPerms\api\messenger\message\OutgoingMessage;
  */
 interface Messenger
 {
-    public function sendOutgoingMessage(OutgoingMessage $outgoingMessage): void;
+	public function sendOutgoingMessage(OutgoingMessage $outgoingMessage) : void;
 
-    public function close(): void;
+	public function close() : void;
 }

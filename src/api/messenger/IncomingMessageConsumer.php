@@ -11,7 +11,7 @@ use jasonw4331\LuckPerms\api\messenger\message\Message;
  */
 interface IncomingMessageConsumer
 {
-    public function consumeIncomingMessage(Message $message): bool;
+	public function consumeIncomingMessage(Message $message) : bool;
 
-    public function consumeIncomingMessageAsString(string $encodedString): bool;
+	public function consumeIncomingMessageAsString(string $encodedString) : bool;
 }

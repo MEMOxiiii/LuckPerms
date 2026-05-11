@@ -6,5 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'poggit\\libasynql\\' => array($vendorDir . '/sof3/libasynql/libasynql/src'),
+    'SOFe\\AwaitGenerator\\' => array($vendorDir . '/sof3/await-generator/await-generator/src'),
     'JsonMapper' => array($vendorDir . '/netresearch/jsonmapper/src'),
 );

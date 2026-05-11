@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\api\implementation;
 
 use jasonw4331\LuckPerms\LuckPerms;
+use function method_exists;
+use function str_starts_with;
+use function strtolower;
 
 class ApiNodeMatcherFactory extends ApiAbstractManager{
 public function __construct(LuckPerms $plugin){

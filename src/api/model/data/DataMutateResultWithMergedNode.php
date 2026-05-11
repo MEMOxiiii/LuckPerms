@@ -11,7 +11,7 @@ use jasonw4331\LuckPerms\api\node\Node;
  */
 interface DataMutateResultWithMergedNode
 {
-    public function getResult(): DataMutateResult;
+	public function getResult() : DataMutateResult;
 
-    public function getMergedNode(): Node;
+	public function getMergedNode() : Node;
 }

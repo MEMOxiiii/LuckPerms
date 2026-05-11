@@ -9,14 +9,14 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 interface ImmutableContextSetBuilder
 {
-    public function add(string $key, string $value): self;
+	public function add(string $key, string $value) : self;
 
-    /**
-     * @param iterable<array{string, string}> $iterable
-     */
-    public function addAll(iterable $iterable): self;
+	/**
+	 * @param iterable<array{string, string}> $iterable
+	 */
+	public function addAll(iterable $iterable) : self;
 
-    public function addAllFromContextSet(ContextSet $contextSet): self;
+	public function addAllFromContextSet(ContextSet $contextSet) : self;
 
-    public function build(): ImmutableContextSet;
+	public function build() : ImmutableContextSet;
 }

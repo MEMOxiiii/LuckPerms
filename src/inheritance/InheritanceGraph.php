@@ -8,7 +8,8 @@ use jasonw4331\LuckPerms\graph\Graph;
 use jasonw4331\LuckPerms\graph\TraversalAlgorithm;
 use jasonw4331\LuckPerms\model\Group;
 use jasonw4331\LuckPerms\model\User;
-use jasonw4331\LuckPerms\node\NodeEntry;
+use function str_starts_with;
+use function substr;
 use function usort;
 
 /**
@@ -74,4 +75,3 @@ class InheritanceGraph implements Graph{
 		return $result;
 	}
 }
-

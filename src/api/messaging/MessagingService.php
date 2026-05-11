@@ -11,11 +11,11 @@ use jasonw4331\LuckPerms\api\model\user\User;
  */
 interface MessagingService
 {
-    public function getName(): string;
+	public function getName() : string;
 
-    public function pushUpdate(): void;
+	public function pushUpdate() : void;
 
-    public function pushUserUpdate(User $user): void;
+	public function pushUserUpdate(User $user) : void;
 
-    public function sendCustomMessage(string $channelId, string $payload): void;
+	public function sendCustomMessage(string $channelId, string $payload) : void;
 }

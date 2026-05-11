@@ -14,44 +14,44 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface UserManager
 {
-    public function loadUser(UuidInterface $uniqueId, ?string $username = null): User;
+	public function loadUser(UuidInterface $uniqueId, ?string $username = null) : User;
 
-    public function lookupUniqueId(string $username): ?UuidInterface;
+	public function lookupUniqueId(string $username) : ?UuidInterface;
 
-    public function lookupUsername(UuidInterface $uniqueId): ?string;
+	public function lookupUsername(UuidInterface $uniqueId) : ?string;
 
-    public function saveUser(User $user): void;
+	public function saveUser(User $user) : void;
 
-    public function modifyUser(UuidInterface $uniqueId, callable $action): void;
+	public function modifyUser(UuidInterface $uniqueId, callable $action) : void;
 
-    public function savePlayerData(UuidInterface $uniqueId, string $username): PlayerSaveResult;
+	public function savePlayerData(UuidInterface $uniqueId, string $username) : PlayerSaveResult;
 
-    public function deletePlayerData(UuidInterface $uniqueId): void;
+	public function deletePlayerData(UuidInterface $uniqueId) : void;
 
-    /**
-     * @return UuidInterface[]
-     */
-    public function getUniqueUsers(): array;
+	/**
+	 * @return UuidInterface[]
+	 */
+	public function getUniqueUsers() : array;
 
-    /**
-     * @return array<string, array<\jasonw4331\LuckPerms\api\node\Node>>
-     */
-    public function searchAll(NodeMatcher $matcher): array;
+	/**
+	 * @return array<string, array<\jasonw4331\LuckPerms\api\node\Node>>
+	 */
+	public function searchAll(NodeMatcher $matcher) : array;
 
-    /**
-     * @deprecated Use searchAll() instead
-     * @return HeldNode[]
-     */
-    public function getWithPermission(string $permission): array;
+	/**
+	 * @deprecated Use searchAll() instead
+	 * @return HeldNode[]
+	 */
+	public function getWithPermission(string $permission) : array;
 
-    public function getUser(UuidInterface|string $identifier): ?User;
+	public function getUser(UuidInterface|string $identifier) : ?User;
 
-    /**
-     * @return User[]
-     */
-    public function getLoadedUsers(): array;
+	/**
+	 * @return User[]
+	 */
+	public function getLoadedUsers() : array;
 
-    public function isLoaded(UuidInterface $uniqueId): bool;
+	public function isLoaded(UuidInterface $uniqueId) : bool;
 
-    public function cleanupUser(User $user): void;
+	public function cleanupUser(User $user) : void;
 }

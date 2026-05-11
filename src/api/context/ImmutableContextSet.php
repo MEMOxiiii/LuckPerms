@@ -9,9 +9,9 @@ namespace jasonw4331\LuckPerms\api\context;
  */
 interface ImmutableContextSet extends ContextSet
 {
-    public static function builder(): ImmutableContextSetBuilder;
+	public static function builder() : ImmutableContextSetBuilder;
 
-    public static function empty(): self;
+	public static function empty() : self;
 
-    public static function of(string $key, string $value): self;
+	public static function of(string $key, string $value) : self;
 }

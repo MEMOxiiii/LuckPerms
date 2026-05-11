@@ -29,4 +29,3 @@ class UpdateMessageImpl extends AbstractMessage{
 		return new self($id);
 	}
 }
-

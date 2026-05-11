@@ -6,6 +6,7 @@ namespace jasonw4331\LuckPerms\filter;
 
 use function array_map;
 use function implode;
+use function strtolower;
 
 /**
  * A list of {@link Filter}s combined with a logical operator (AND or OR).
@@ -25,8 +26,6 @@ class FilterList{
 
 	/**
 	 * Create an empty filter list (matches everything).
-	 *
-	 * @return self
 	 */
 	public static function empty() : self{
 		return new self(LogicalOperator::AND, []);
@@ -34,9 +33,6 @@ class FilterList{
 
 	/**
 	 * Create an AND filter list.
-	 *
-	 * @param Filter ...$filters
-	 * @return self
 	 */
 	public static function and(Filter ...$filters) : self{
 		return new self(LogicalOperator::AND, $filters);
@@ -44,9 +40,6 @@ class FilterList{
 
 	/**
 	 * Create an OR filter list.
-	 *
-	 * @param Filter ...$filters
-	 * @return self
 	 */
 	public static function or(Filter ...$filters) : self{
 		return new self(LogicalOperator::OR, $filters);
@@ -64,9 +57,6 @@ class FilterList{
 	/**
 	 * Evaluate the filter list against a value.
 	 * An empty list matches everything.
-	 *
-	 * @param mixed $value
-	 * @return bool
 	 */
 	public function evaluate(mixed $value) : bool{
 		if(empty($this->filters)){

@@ -11,11 +11,11 @@ use jasonw4331\LuckPerms\api\util\Result;
  */
 interface PromotionResult extends Result
 {
-    public function getStatus(): PromotionStatus;
+	public function getStatus() : PromotionStatus;
 
-    public function wasSuccessful(): bool;
+	public function wasSuccessful() : bool;
 
-    public function getGroupFrom(): ?string;
+	public function getGroupFrom() : ?string;
 
-    public function getGroupTo(): ?string;
+	public function getGroupTo() : ?string;
 }

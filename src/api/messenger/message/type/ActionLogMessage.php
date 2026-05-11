@@ -9,5 +9,5 @@ use jasonw4331\LuckPerms\api\messenger\message\Message;
 
 interface ActionLogMessage extends Message
 {
-    public function getAction(): Action;
+	public function getAction() : Action;
 }

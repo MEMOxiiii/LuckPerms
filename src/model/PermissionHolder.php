@@ -9,7 +9,7 @@ use jasonw4331\LuckPerms\model\nodemap\NodeMapMutable;
 use jasonw4331\LuckPerms\node\NodeEntry;
 use function array_filter;
 use function array_values;
-use function time;
+use function str_starts_with;
 
 /**
  * Base class for both {@link User} and {@link Group}.
@@ -83,9 +83,7 @@ abstract class PermissionHolder{
 		return InheritanceComparator::getFor($this);
 	}
 
-	/** @return NodeMapMutable */
 	protected function getNodeMap() : NodeMapMutable{
 		return $this->data;
 	}
 }
-

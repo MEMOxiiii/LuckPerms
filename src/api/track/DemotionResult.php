@@ -11,11 +11,11 @@ use jasonw4331\LuckPerms\api\util\Result;
  */
 interface DemotionResult extends Result
 {
-    public function getStatus(): DemotionStatus;
+	public function getStatus() : DemotionStatus;
 
-    public function wasSuccessful(): bool;
+	public function wasSuccessful() : bool;
 
-    public function getGroupFrom(): ?string;
+	public function getGroupFrom() : ?string;
 
-    public function getGroupTo(): ?string;
+	public function getGroupTo() : ?string;
 }

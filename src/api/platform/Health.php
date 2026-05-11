@@ -9,10 +9,10 @@ namespace jasonw4331\LuckPerms\api\platform;
  */
 interface Health
 {
-    public function isHealthy(): bool;
+	public function isHealthy() : bool;
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getDetails(): array;
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getDetails() : array;
 }

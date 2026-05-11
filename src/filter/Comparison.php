@@ -5,20 +5,27 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\filter;
 
 use function preg_quote;
-use function preg_replace;
 use function str_replace;
 
 /**
  * A method of comparing two strings (maps to SQL comparison operators).
  */
-enum Comparison: string{
-	/** Exact equality. */
+enum Comparison : string{
+	/**
+	 * Exact equality.
+	 */
 	case EQUAL = '==';
-	/** Not equal. */
+	/**
+	 * Not equal.
+	 */
 	case NOT_EQUAL = '!=';
-	/** SQL LIKE pattern (% and _ wildcards). */
+	/**
+	 * SQL LIKE pattern (% and _ wildcards).
+	 */
 	case SIMILAR = '~~';
-	/** SQL NOT LIKE pattern. */
+	/**
+	 * SQL NOT LIKE pattern.
+	 */
 	case NOT_SIMILAR = '!~';
 
 	public const WILDCARD = '%';

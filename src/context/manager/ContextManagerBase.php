@@ -7,6 +7,9 @@ namespace jasonw4331\LuckPerms\context\manager;
 use jasonw4331\LuckPerms\api\implementation\ApiContextSetFactory;
 use jasonw4331\LuckPerms\context\ImmutableContextSetImpl;
 use jasonw4331\LuckPerms\query\QueryOptions;
+use function array_filter;
+use function array_values;
+use function method_exists;
 
 /**
  * Base implementation of context manager functionality.
@@ -23,8 +26,6 @@ abstract class ContextManagerBase{
 
 	/**
 	 * Register a new context calculator.
-	 *
-	 * @param object $calculator
 	 */
 	public function registerCalculator(object $calculator) : void{
 		$this->calculators[] = $calculator;
@@ -32,8 +33,6 @@ abstract class ContextManagerBase{
 
 	/**
 	 * Unregister a context calculator.
-	 *
-	 * @param object $calculator
 	 */
 	public function unregisterCalculator(object $calculator) : void{
 		$this->calculators = array_filter($this->calculators, static fn(object $c) => $c !== $calculator);
@@ -50,9 +49,6 @@ abstract class ContextManagerBase{
 
 	/**
 	 * Build a context set for the given subject by running all calculators.
-	 *
-	 * @param mixed $subject
-	 * @return ImmutableContextSetImpl
 	 */
 	public function buildContexts(mixed $subject) : ImmutableContextSetImpl{
 		$contexts = [];
@@ -66,9 +62,6 @@ abstract class ContextManagerBase{
 
 	/**
 	 * Returns the {@link QueryOptions} for the given subject.
-	 *
-	 * @param mixed $subject
-	 * @return QueryOptions
 	 */
 	abstract public function getQueryOptions(mixed $subject = null) : QueryOptions;
 }

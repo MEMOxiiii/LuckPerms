@@ -9,10 +9,10 @@ namespace jasonw4331\LuckPerms\api\util;
  */
 interface Page
 {
-    /**
-     * @return array<mixed>
-     */
-    public function entries(): array;
+	/**
+	 * @return array<mixed>
+	 */
+	public function entries() : array;
 
-    public function overallSize(): int;
+	public function overallSize() : int;
 }

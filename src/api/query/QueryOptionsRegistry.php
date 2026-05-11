@@ -9,13 +9,13 @@ namespace jasonw4331\LuckPerms\api\query;
  */
 interface QueryOptionsRegistry
 {
-    /**
-     * Gets the default contextual query options.
-     */
-    public function defaultContextualOptions(): QueryOptions;
+	/**
+	 * Gets the default contextual query options.
+	 */
+	public function defaultContextualOptions() : QueryOptions;
 
-    /**
-     * Gets the default non-contextual query options.
-     */
-    public function defaultNonContextualOptions(): QueryOptions;
+	/**
+	 * Gets the default non-contextual query options.
+	 */
+	public function defaultNonContextualOptions() : QueryOptions;
 }

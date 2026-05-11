@@ -25,4 +25,3 @@ class QueryOptionsCache{
 		$this->cached = null;
 	}
 }
-

@@ -11,7 +11,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface ActionSource
 {
-    public function getUniqueId(): UuidInterface;
+	public function getUniqueId() : UuidInterface;
 
-    public function getName(): string;
+	public function getName() : string;
 }

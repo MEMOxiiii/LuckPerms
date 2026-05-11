@@ -9,5 +9,5 @@ use Ramsey\Uuid\UuidInterface;
 
 interface UserUpdateMessage extends Message
 {
-    public function getUserUniqueId(): UuidInterface;
+	public function getUserUniqueId() : UuidInterface;
 }

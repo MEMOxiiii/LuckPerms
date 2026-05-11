@@ -39,4 +39,3 @@ class ActionLogMessageImpl extends AbstractMessage{
 		return new self($id, $logEntry);
 	}
 }
-

@@ -35,4 +35,3 @@ class UserUpdateMessageImpl extends AbstractMessage{
 		return new self($id, $userUuid);
 	}
 }
-

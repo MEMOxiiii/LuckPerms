@@ -15,13 +15,13 @@ use jasonw4331\LuckPerms\api\query\QueryOptions;
  */
 interface PlayerAdapter
 {
-    public function getUser(mixed $player): User;
+	public function getUser(mixed $player) : User;
 
-    public function getContext(mixed $player): ImmutableContextSet;
+	public function getContext(mixed $player) : ImmutableContextSet;
 
-    public function getQueryOptions(mixed $player): QueryOptions;
+	public function getQueryOptions(mixed $player) : QueryOptions;
 
-    public function getPermissionData(mixed $player): CachedPermissionData;
+	public function getPermissionData(mixed $player) : CachedPermissionData;
 
-    public function getMetaData(mixed $player): CachedMetaData;
+	public function getMetaData(mixed $player) : CachedMetaData;
 }

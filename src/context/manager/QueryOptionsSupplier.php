@@ -12,4 +12,3 @@ use jasonw4331\LuckPerms\query\QueryOptions;
 abstract class QueryOptionsSupplier{
 	abstract public function getQueryOptions() : QueryOptions;
 }
-

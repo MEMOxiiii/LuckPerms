@@ -9,7 +9,7 @@ namespace jasonw4331\LuckPerms\api\event;
  */
 interface LuckPermsEvent
 {
-    public function getLuckPerms(): \jasonw4331\LuckPerms\api\LuckPerms;
+	public function getLuckPerms() : \jasonw4331\LuckPerms\api\LuckPerms;
 
-    public function getEventType(): string;
+	public function getEventType() : string;
 }

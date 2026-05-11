@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\filter;
 
 use function preg_match;
-use function strtolower;
 
 /**
  * A constraint that evaluates a value against a {@link Comparison} and a target value.
@@ -17,8 +16,7 @@ class Constraint{
 	private $predicate;
 
 	/**
-	 * @param Comparison $comparison
-	 * @param T $value
+	 * @param T                 $value
 	 * @param callable(T): bool $predicate
 	 */
 	public function __construct(
@@ -40,7 +38,6 @@ class Constraint{
 
 	/**
 	 * @param T $value
-	 * @return bool
 	 */
 	public function evaluate(mixed $value) : bool{
 		return ($this->predicate)($value);

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace jasonw4331\LuckPerms\inject\server;
 
 use pocketmine\permission\Permissible;
+use function array_filter;
+use function array_values;
 
 class LuckPermsSubscriptionMap{
 /** @var array<string, list<Permissible>> */
